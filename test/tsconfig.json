@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "module": "commonjs",
+        "jsx": "react",
+        "target": "es6"
+    }
+}
