@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 export const IfChildElements = ({ shouldRenderLinks }) => (
     <div>
         <h1>useful links</h1>
