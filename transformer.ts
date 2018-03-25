@@ -83,7 +83,7 @@ const transformForNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts
             ts.createLogicalAnd(
                 cnd.getChildAt(1) as ts.Expression,
                 ts.createArrayLiteral(
-                    nodeChild[0].getChildren().filter(ts.isJsxElement) as ts.Expression[]
+                    nodeChild[0].getChildren().filter(node => ts.isJsxElement(node) || ts.isJsxExpression(node)) as ts.Expression[]
                 )
             )
         )
