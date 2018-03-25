@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "declaration": true,
+        "target": "es2015",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "strict": true,
+        "pretty": true,
+        "jsx": "react",
+        "outFile": "test.js",
+        "outDir": "./dist",
+        "allowJs": true
+    }
+}
