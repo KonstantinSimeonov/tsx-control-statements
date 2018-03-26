@@ -42,3 +42,17 @@ export const IfConditionIsExpressions = ({ name1, name2 }) => (
         </If>
     </article>
 )
+
+export const NestedIfs = ({ a, b }) => (
+    <div>
+        <If condition={a % 2}>
+            <h1>a is add</h1>
+            <If condition={b % 2}>
+                b is odd
+            </If>
+            <If condition={b % 2 === 0}>
+                b is even
+            </If>
+        </If>
+    </div>
+)

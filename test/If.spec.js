@@ -70,5 +70,19 @@ describe('If', () => {
                 props: { name1, name2 }
             });
         }
-    })
+    });
+
+    describe('nested ifs', () => {
+        for(const [a, b] of [
+            [1, 1],
+            [1, 2]
+        ]) {
+            compareInnerHTMLTest({
+                message: `works for ${a} ${b}`,
+                babelComponent: Babel.NestedIfs,
+                tscComponent: Tsc.NestedIfs,
+                props: { a, b }
+            });
+        }
+    });
 });
