@@ -23,9 +23,7 @@ const isControlStatementNode = (node: ts.Node): boolean => {
     ) !== -1;
 };
 
-const getChildren = (node: ts.Node): ts.Node[] => {
-    return node.getChildren().slice(1, node.getChildCount() - 1);
-}
+const getChildren = (node: ts.Node): ts.Node[] => node.getChildren().slice(1, node.getChildCount() - 1);
 
 function* elems(node: ts.Node): Iterable<ts.Node> {
     yield node;
@@ -40,66 +38,49 @@ const filter = <T>(predicate: (item: T) => boolean) => function* (iterable: Iter
             yield item;
         }
     }
-}
-
-const map = <T, R>(fn: (item: T) => R) => function* (iterable: Iterable<T>): Iterable<R> {
-    for (const item of iterable) {
-        yield fn(item);
-    }
-}
-
-function* take<T>(count: number, iterable: Iterable<T>): Iterable<T> {
-    for (const item of iterable) {
-        if (count-- > 0) {
-            yield item;
-        } else {
-            break;
-        }
-    }
-}
-
-function* skip<T>(count: number, iterable: Iterable<T>): Iterable<T> {
-    for(const _ of iterable) {
-        if(count-- <= 0) {
-            yield* iterable;
-        }
-    }
-}
-
-const inverse = <T>(predicate: (item: T) => boolean) => (item: T) => !predicate(item);
+};
 
 const getConditionNode = (node: ts.Node): ts.Expression | null => {
     const [result] = filter(ts.isJsxAttribute)(elems(node));
     return result.getChildAt(2) as ts.Expression;
-}
+};
 
-const transformForNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts.Node => {
-    const token = () => ts.createToken(ts.SyntaxKind.DotDotDotToken);
+const trimStart = (from: string) => from.replace(/^\r?\n[\s\t]*/, '');
+const token = () => ts.createToken(ts.SyntaxKind.DotDotDotToken);
+
+const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts.Node => {
     const cnd = getConditionNode(node);
-    if (cnd !== null) {
-        const nodeChild = getChildren(parent);
-        return ts.createJsxExpression(
-            token(),
-            ts.createLogicalAnd(
-                cnd.getChildAt(1) as ts.Expression,
-                ts.createArrayLiteral(
-                    nodeChild[0].getChildren().filter(node => ts.isJsxElement(node) || ts.isJsxExpression(node)) as ts.Expression[]
-                )
-            )
-        )
+    if (cnd == null) {
+        return node;
     }
 
-    return node;
+    const nodeChild = getChildren(parent);
+    return ts.createJsxExpression(
+        token(),
+        ts.createLogicalAnd(
+            cnd.getChildAt(1) as ts.Expression,
+            ts.createArrayLiteral(
+                nodeChild[0]
+                    .getChildren()
+                    .filter(
+                        node => ts.isJsxElement(node)
+                                || ts.isJsxExpression(node)
+                                || ts.isJsxText(node)
+                    ).map(
+                        node => ts.isJsxText(node) ?
+                                    ts.createLiteral(trimStart(node.getFullText()))
+                                    : node
+                    ) as ts.Expression[]
+            )
+        )
+    )
 }
 
 const statements = (node: ts.Node, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
     const child = node.getChildAt(0);
     if (ts.isJsxElement(node) && isControlStatementNode(child)) {
-        const jsxNode = <ts.JsxOpeningElement>child;
-        // console.log(node.getFullText(), node.getText());
-        console.log(jsxNode.tagName.getFullText());
-        // return transformForNode(jsxNode);
-        return transformForNode(jsxNode, node);
+        return transformIfNode(<ts.JsxOpeningElement>child, node);
     }
+
     return node;
 };

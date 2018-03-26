@@ -16,7 +16,7 @@ const compareInnerHTMLTest = ({
     const babelWrapper = enzyme.mount(React.createElement(babelComponent, props))
     const tscWrapper = enzyme.mount(React.createElement(tscComponent, props));
 
-    expect(babelWrapper.getDOMNode().innerHTML).to.equal(tscWrapper.getDOMNode().innerHTML);
+    expect(tscWrapper.getDOMNode().innerHTML).to.equal(babelWrapper.getDOMNode().innerHTML);
 });
 
 describe('If', () => {
