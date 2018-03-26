@@ -9,7 +9,7 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
 
 function visitNodes(node: ts.Node, program: ts.Program, context: ts.TransformationContext): ts.Node {
     const newNode = statements(node, program, context);
-    if (node !== newNode) {
+    if(node !== newNode) {
         return newNode;
     }
 
@@ -44,11 +44,11 @@ const getConditionNode = (node: ts.Node): ts.Expression | null => {
     const [result] = filter(ts.isJsxAttribute)(elems(node));
     return result.getChildAt(2) as ts.Expression;
 };
-
-const trimStart = (from: string) => from.replace(/^\r?\n[\s\t]*/, '');
+const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
+const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 const token = () => ts.createToken(ts.SyntaxKind.DotDotDotToken);
 
-const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts.Node => {
+const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
     const cnd = getConditionNode(node);
     if (cnd == null) {
         return node;
@@ -68,9 +68,9 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts.
                                 || ts.isJsxText(node)
                     ).map(
                         node => ts.isJsxText(node) ?
-                                    ts.createLiteral(trimStart(node.getFullText()))
+                                    ts.createLiteral(trace(trim(node.getFullText()), 'kek'))
                                     : node
-                    ) as ts.Expression[]
+                    ).map(node => visitNodes(node, program, ctx)) as ts.Expression[]
             )
         )
     )
@@ -79,7 +79,7 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement): ts.
 const statements = (node: ts.Node, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
     const child = node.getChildAt(0);
     if (ts.isJsxElement(node) && isControlStatementNode(child)) {
-        return transformIfNode(<ts.JsxOpeningElement>child, node);
+        return transformIfNode(<ts.JsxOpeningElement>child, node, program, ctx);
     }
 
     return node;
