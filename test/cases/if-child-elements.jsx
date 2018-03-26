@@ -31,3 +31,14 @@ export const IfChildExpressionsAndElements = ({ a, b, shouldRenderStuff }) => (
         </If>
     </div>
 )
+
+export const IfConditionIsExpressions = ({ name1, name2 }) => (
+    <article>
+        <If condition={name1.length !== 0}>
+            <h1>First: {name1}</h1>
+        </If>
+        <If condition={name1 !== name2 && name2.length !== 0}>
+            <h2>Second: {name2}</h2>
+        </If>
+    </article>
+)

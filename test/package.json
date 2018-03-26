@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "./compile-cases.sh",
-    "test": "mocha ./helpers/browser-env.js ./*.spec.js"
+    "test": "yarn build && mocha ./helpers/browser-env.js ./*.spec.js"
   },
   "author": "",
   "license": "ISC",
