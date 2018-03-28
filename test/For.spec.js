@@ -18,4 +18,28 @@ describe('For', () => {
         tscComponent: Tsc.ForChildrenExpressions,
         props: { words: ['haskell', 'win api', 'wannacry', 'undefined', 'is', 'not', 'a', ''] }
     });
+
+    compareInnerHTMLTest({
+        message: 'long names for indentifiers work',
+        babelComponent: Babel.ForLongNames,
+        tscComponent: Tsc.ForLongNames
+    });
+
+    compareInnerHTMLTest({
+        message: 'index works',
+        babelComponent: Babel.ForIndex,
+        tscComponent: Tsc.ForIndex
+    });
+
+    compareInnerHTMLTest({
+        message: 'can use index as key',
+        babelComponent: Babel.ForKeyIndex,
+        tscComponent: Tsc.ForKeyIndex
+    });
+
+    compareInnerHTMLTest({
+        message: 'works for empty array',
+        babelComponent: Babel.ForEmptyArray,
+        tscComponent: Tsc.ForEmptyArray
+    });
 });
