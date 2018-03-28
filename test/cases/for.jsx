@@ -1,7 +1,9 @@
 export const ForChildrenExpressions = ({ words }) => (
     <article>
         <For each="w" index="i" of={words}>
-            <p>{i}. {w}</p>
+            {3 + 4}
+            <i>{i}. </i>
+            <p>{w}</p>
         </For>
     </article>
 )

@@ -99,12 +99,12 @@ const getForProps = (node: ts.Node) => {
 
     const propNames = new Set(['each', 'of', 'index']);
     const props = maybeOpeningElement // attributes are children of the opening element
-                    .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
-                    .getChildAt(0) // some kinda ts api derp
-                    .getChildren()
-                    .filter(x => ts.isJsxAttribute(x) && propNames.has(x.getChildAt(0).getText()))
-                    .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
-                    .reduce((m, c) => Object.assign(m, c), {});
+        .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
+        .getChildAt(0) // some kinda ts api derp
+        .getChildren()
+        .filter(x => ts.isJsxAttribute(x) && propNames.has(x.getChildAt(0).getText()))
+        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
+        .reduce((m, c) => Object.assign(m, c), {});
 
     const { each, index, of } = props;
     return { each, index, of };
@@ -115,7 +115,62 @@ const transformForNode: Transformation = (node, program, ctx) => {
     trace(
         [each, of, index].map(x => x && x.getFullText())
     );
-    return node;
+
+    if (!each || !index || !of) {
+        return ts.createNull();
+    }
+
+    const body = node
+        .getChildAt(1)
+        .getChildren()
+        .filter(
+        node => ts.isJsxElement(node)
+            || ts.isJsxExpression(node)
+            || ts.isJsxText(node) && node.getText() !== ''
+        );
+    trace(body.map(n => n.getFullText()));
+    if (body.length === 0) {
+        trace('kek');
+        return ts.createNull();
+    }
+
+    return ts.createJsxExpression(
+        undefined,
+        ts.createCall(
+            ts.createPropertyAccess(
+                of as ts.Expression,
+                'map'
+            ),
+            undefined,
+            [
+                ts.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                        ts.createParameter(
+                            undefined,
+                            undefined,
+                            undefined,
+                            each.getText().slice(1, -1)
+                        ),
+                        ts.createParameter(
+                            undefined,
+                            undefined,
+                            undefined,
+                            index.getText().slice(1, -1)
+                        )
+                    ],
+                    undefined, // type
+                    undefined,
+                    ts.createBlock([
+                        ts.createReturn(
+                            ts.createArrayLiteral(body as ts.Expression[])
+                        )
+                    ])
+                )
+            ]
+        )
+    );
 };
 
 const getTransformation = (node: ts.Node): Transformation => {
