@@ -1,23 +1,10 @@
-const { expect } = require('chai');
 const Babel = require('./babel/if-child-elements');
 const Tsc = require('./tsc/if-child-elements');
-const React = require('react');
 const enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
+const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 
 enzyme.configure({ adapter: new Adapter });
-
-const compareInnerHTMLTest = ({
-    message,
-    tscComponent,
-    babelComponent,
-    props
-}) => it(message, () => {
-        const babelWrapper = enzyme.mount(React.createElement(babelComponent, props))
-        const tscWrapper = enzyme.mount(React.createElement(tscComponent, props));
-
-        expect(tscWrapper.getDOMNode().innerHTML).to.equal(babelWrapper.getDOMNode().innerHTML);
-    });
 
 describe('If', () => {
     describe('renders child elements', () => {
