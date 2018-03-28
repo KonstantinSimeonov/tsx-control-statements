@@ -18,15 +18,6 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
 
 type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => ts.Node;
 
-const CONTROL_STATEMENT_TAG_NAMES = ['If'];
-const isControlStatementNode = (node: ts.Node): boolean => {
-    return ts.isJsxOpeningElement(node) && CONTROL_STATEMENT_TAG_NAMES.indexOf(
-        (node as ts.JsxOpeningElement).tagName.getFullText()
-    ) !== -1;
-};
-
-const getChildren = (node: ts.Node): ts.Node[] => node.getChildren().slice(1, node.getChildCount() - 1);
-
 function* elems(node: ts.Node): Iterable<ts.Node> {
     yield node;
     for (const cn of node.getChildren()) {
@@ -42,9 +33,17 @@ const filter = <T>(predicate: (item: T) => boolean) => function* (iterable: Iter
     }
 };
 
+const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
+    || ts.isJsxExpression(node)
+    || ts.isJsxText(node) && node.getText() !== '';
+
 const getConditionNode = (node: ts.Node): ts.Expression | null => {
     const [result] = filter((n: ts.Node) => ts.isJsxAttribute(n) && n.name.getText() === 'condition')(elems(node));
-    return result.getChildAt(2) as ts.Expression;
+    if (result) {
+        return result.getChildAt(2) as ts.Expression;
+    }
+
+    return null;
 };
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
@@ -57,14 +56,11 @@ const transformIfNode: Transformation = (node, program, ctx) => {
         return node;
     }
 
-    const ifStatementBody = getChildren(node);
+    const ifStatementBody = node.getChildren().slice(1, -1);
     const arr = ifStatementBody[0]
         .getChildren()
-        .filter(
-        node => ts.isJsxElement(node)
-            || ts.isJsxExpression(node)
-            || ts.isJsxText(node)
-        ).map(
+        .filter(isRelevantJsxNode)
+        .map(
         node => {
             if (ts.isJsxText(node)) {
                 const text = trim(node.getFullText());
@@ -123,11 +119,7 @@ const transformForNode: Transformation = (node, program, ctx) => {
     const body = node
         .getChildAt(1)
         .getChildren()
-        .filter(
-        node => ts.isJsxElement(node)
-            || ts.isJsxExpression(node)
-            || ts.isJsxText(node) && node.getText() !== ''
-        );
+        .filter(isRelevantJsxNode);
     trace(body.map(n => n.getFullText()));
     if (body.length === 0) {
         trace('kek');
@@ -173,6 +165,51 @@ const transformForNode: Transformation = (node, program, ctx) => {
     );
 };
 
+const transformChooseNode: Transformation = (node, program, ctx) => {
+    const body = node.getChildAt(1).getChildren();
+    const elements = body.filter(ts.isJsxElement).map(
+        node => {
+            const maybeOpeningElement = node.getChildAt(0);
+            const conditionNode = getConditionNode(maybeOpeningElement);
+            const nodeBody = node.getChildAt(1).getChildren().filter(isRelevantJsxNode).map(
+                node => {
+                    if (ts.isJsxText(node)) {
+                        const text = trim(node.getFullText());
+                        return text ? ts.createLiteral(text) : null;
+                    }
+                    return visitNodes(node, program, ctx);
+                }).filter(Boolean) as ts.Expression[];;
+            if (!conditionNode) {
+                trace('it is kek');
+                if (ts.isJsxOpeningElement(maybeOpeningElement) && maybeOpeningElement.tagName.getText() === 'Otherwise') {
+                    return ts.createArrayLiteral(nodeBody as ts.Expression[]);
+                }
+
+                return null;
+            }
+            return ts.createConditional(
+                conditionNode as ts.Expression,
+                ts.createArrayLiteral(nodeBody as ts.Expression[]),
+                ts.createNull()
+            )
+        }
+    );
+
+    return ts.createJsxExpression(
+        undefined,
+        ts.createCall(
+            ts.createPropertyAccess(
+                ts.createArrayLiteral(elements as ts.Expression[]),
+                'filter'
+            ),
+            undefined,
+            [
+                ts.createIdentifier('Boolean')
+            ]
+        )
+    );
+};
+
 const getTransformation = (node: ts.Node): Transformation => {
     if (!ts.isJsxElement(node)) {
         return (a, b, c) => a;
@@ -184,6 +221,7 @@ const getTransformation = (node: ts.Node): Transformation => {
     switch (tagName) {
         case 'If': return transformIfNode;
         case 'For': return transformForNode;
+        case 'Choose': return transformChooseNode;
         default: return (a, b, c) => a;
     }
 }
