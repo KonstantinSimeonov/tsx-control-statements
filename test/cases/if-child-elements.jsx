@@ -56,3 +56,23 @@ export const NestedIfs = ({ a, b }) => (
         </If>
     </div>
 )
+
+export const EmptyIfs = ({ a, b }) => (
+    <p>
+        <If condition={b % 2}>
+        </If>
+        <If condition={b % 2 === 0}>
+        </If>
+    </p>
+)
+
+export const EmptyNestedIfs = ({ a, b }) => (
+    <p>
+        <If condition={a % 2}>
+            <If condition={b % 2}>
+            </If>
+            <If condition={b % 2 === 0}>
+            </If>
+        </If>
+    </p>
+)

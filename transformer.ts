@@ -46,7 +46,6 @@ const getConditionNode = (node: ts.Node): ts.Expression | null => {
 };
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
-const token = () => ts.createToken(ts.SyntaxKind.DotDotDotToken);
 
 const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
     const cnd = getConditionNode(node);
@@ -69,6 +68,10 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, prog
             }
             return visitNodes(node, program, ctx);
         }).filter(Boolean) as ts.Expression[];
+
+    if (arr.length === 0) {
+        return ts.createNull();
+    }
 
     return ts.createJsxExpression(
         undefined,
