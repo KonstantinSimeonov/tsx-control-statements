@@ -200,7 +200,7 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
         ts.createCall(
             ts.createPropertyAccess(
                 ts.createArrayLiteral(elements as ts.Expression[]),
-                'filter'
+                'find'
             ),
             undefined,
             [

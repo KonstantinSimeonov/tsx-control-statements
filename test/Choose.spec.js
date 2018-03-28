@@ -24,7 +24,32 @@ describe('Choose', () => {
             props: { n: 2 }
         },
         {
-            message: 'when + otherwise works',
+            message: 'when works',
+            babelComponent: Babel.ChooseNumbers,
+            tscComponent: Tsc.ChooseNumbers,
+            props: { n: 1 }
+        },
+        {
+            message: 'when works',
+            babelComponent: Babel.ChooseNumbers,
+            tscComponent: Tsc.ChooseNumbers,
+            props: { n: 10 }
+        },
+        {
+            message: 'when works',
+            babelComponent: Babel.ChooseNumbers,
+            tscComponent: Tsc.ChooseNumbers,
+            props: { n: 42 }
+        },
+        {
+            message: 'when + otherwise works [when should render]',
+            babelComponent: Babel.ChooseWithOtherwise,
+            tscComponent: Tsc.ChooseWithOtherwise,
+            props: { name: 'gosho' }
+            
+        },
+        {
+            message: 'when + otherwise works [othewise should render]',
             babelComponent: Babel.ChooseWithOtherwise,
             tscComponent: Tsc.ChooseWithOtherwise,
             props: { name: 'pesho' }
