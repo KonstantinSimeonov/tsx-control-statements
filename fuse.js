@@ -1,7 +1,6 @@
 const { FuseBox } = require('fuse-box');
 const statements = require('./transformer').default;
 
-
 const fuse = FuseBox.init({
     transformers: {
         before: [statements()]

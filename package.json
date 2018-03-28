@@ -5,7 +5,8 @@
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --watch --project . transformer.ts"
+    "tsc": "tsc",
+    "build": "tsc transformer.ts --lib es6 --target es6 --module commonjs --watch"
   },
   "devDependencies": {
     "fuse-box": "^3.1.3",
