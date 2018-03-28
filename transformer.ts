@@ -9,7 +9,7 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
 
 function visitNodes(node: ts.Node, program: ts.Program, context: ts.TransformationContext): ts.Node {
     const newNode = statements(node, program, context);
-    if(node !== newNode) {
+    if (node !== newNode) {
         return newNode;
     }
 
@@ -55,23 +55,30 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, prog
     }
 
     const nodeChild = getChildren(parent);
+    const arr = nodeChild[0]
+        .getChildren()
+        .filter(
+        node => ts.isJsxElement(node)
+            || ts.isJsxExpression(node)
+            || ts.isJsxText(node)
+        ).map(
+        node => {
+            if (ts.isJsxText(node)) {
+                const text = trim(node.getFullText());
+                return text ? ts.createLiteral(text) : null;
+            }
+            return visitNodes(node, program, ctx);
+        }).filter(Boolean) as ts.Expression[];
+
     return ts.createJsxExpression(
-        token(),
-        ts.createLogicalAnd(
+        undefined,
+        ts.createConditional(
             cnd.getChildAt(1) as ts.Expression,
-            ts.createArrayLiteral(
-                nodeChild[0]
-                    .getChildren()
-                    .filter(
-                        node => ts.isJsxElement(node)
-                                || ts.isJsxExpression(node)
-                                || ts.isJsxText(node)
-                    ).map(
-                        node => ts.isJsxText(node) ?
-                                    ts.createLiteral(trace(trim(node.getFullText()), 'kek'))
-                                    : node
-                    ).map(node => visitNodes(node, program, ctx)) as ts.Expression[]
-            )
+            arr.length !== 1 ?
+                ts.createArrayLiteral(arr)
+                : ts.createJsxExpression(ts.createToken(ts.SyntaxKind.DotDotDotToken), arr[0])
+            ,
+            ts.createNull()
         )
     )
 }
