@@ -41,7 +41,7 @@ const filter = <T>(predicate: (item: T) => boolean) => function* (iterable: Iter
 };
 
 const getConditionNode = (node: ts.Node): ts.Expression | null => {
-    const [result] = filter(ts.isJsxAttribute)(elems(node));
+    const [result] = filter((n: ts.Node) => ts.isJsxAttribute(n) && n.name.getText() === 'condition')(elems(node));
     return result.getChildAt(2) as ts.Expression;
 };
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
@@ -50,11 +50,12 @@ const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[
 const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
     const cnd = getConditionNode(node);
     if (cnd == null) {
+        console.warn('tsx-ctrl: If missing condition props');
         return node;
     }
 
-    const nodeChild = getChildren(parent);
-    const arr = nodeChild[0]
+    const ifStatementBody = getChildren(parent);
+    const arr = ifStatementBody[0]
         .getChildren()
         .filter(
         node => ts.isJsxElement(node)
@@ -70,6 +71,7 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, prog
         }).filter(Boolean) as ts.Expression[];
 
     if (arr.length === 0) {
+        console.warn('tsx-ctrl: empty If');
         return ts.createNull();
     }
 

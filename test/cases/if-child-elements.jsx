@@ -76,3 +76,11 @@ export const EmptyNestedIfs = ({ a, b }) => (
         </If>
     </p>
 )
+
+export const IfMultipleProps = ({ condition }) => (
+    <p>
+        <If prop1={3} prop5={5} condition={condition} kekLevel="topkek">
+            <b>kljsdfjklsdfjklsdfjkl</b>
+        </If>
+    </p>
+)

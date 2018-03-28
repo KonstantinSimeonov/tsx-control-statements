@@ -102,4 +102,15 @@ describe('If', () => {
             });
         }
     });
+
+    describe('additional props passed', () => {
+        for(const condition of [true, false]) {
+            compareInnerHTMLTest({
+                message: `works when addition props different from 'condition' are passed and condition={${condition}}`,
+                babelComponent: Babel.IfMultipleProps,
+                tscComponent: Tsc.IfMultipleProps,
+                props: { condition }
+            });
+        }
+    })
 });
