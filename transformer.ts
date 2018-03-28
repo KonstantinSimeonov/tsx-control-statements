@@ -16,6 +16,8 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
     return ts.visitEachChild(node, childNode => visitNodes(childNode, program, context), context);
 }
 
+type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => ts.Node;
+
 const CONTROL_STATEMENT_TAG_NAMES = ['If'];
 const isControlStatementNode = (node: ts.Node): boolean => {
     return ts.isJsxOpeningElement(node) && CONTROL_STATEMENT_TAG_NAMES.indexOf(
@@ -47,14 +49,15 @@ const getConditionNode = (node: ts.Node): ts.Expression | null => {
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 
-const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
-    const cnd = getConditionNode(node);
+const transformIfNode: Transformation = (node, program, ctx) => {
+    const openingElement = node.getChildAt(0);
+    const cnd = getConditionNode(openingElement);
     if (cnd == null) {
         console.warn('tsx-ctrl: If missing condition props');
         return node;
     }
 
-    const ifStatementBody = getChildren(parent);
+    const ifStatementBody = getChildren(node);
     const arr = ifStatementBody[0]
         .getChildren()
         .filter(
@@ -88,11 +91,46 @@ const transformIfNode = (node: ts.JsxOpeningElement, parent: ts.JsxElement, prog
     )
 }
 
-const statements = (node: ts.Node, program: ts.Program, ctx: ts.TransformationContext): ts.Node => {
-    const child = node.getChildAt(0);
-    if (ts.isJsxElement(node) && isControlStatementNode(child)) {
-        return transformIfNode(<ts.JsxOpeningElement>child, node, program, ctx);
+const getForProps = (node: ts.Node) => {
+    const maybeOpeningElement = node.getChildAt(0);
+    if (!ts.isJsxOpeningElement(maybeOpeningElement)) {
+        return { each: null, index: null, of: null };
     }
 
+    const propNames = new Set(['each', 'of', 'index']);
+    const props = maybeOpeningElement // attributes are children of the opening element
+                    .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
+                    .getChildAt(0) // some kinda ts api derp
+                    .getChildren()
+                    .filter(x => ts.isJsxAttribute(x) && propNames.has(x.getChildAt(0).getText()))
+                    .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
+                    .reduce((m, c) => Object.assign(m, c), {});
+
+    const { each, index, of } = props;
+    return { each, index, of };
+};
+
+const transformForNode: Transformation = (node, program, ctx) => {
+    const { each, of, index } = getForProps(node);
+    trace(
+        [each, of, index].map(x => x && x.getFullText())
+    );
     return node;
 };
+
+const getTransformation = (node: ts.Node): Transformation => {
+    if (!ts.isJsxElement(node)) {
+        return (a, b, c) => a;
+    }
+
+    const openingElement = node.getChildAt(0);
+    const tagName = ts.isJsxOpeningElement(openingElement) && openingElement.tagName.getText();
+
+    switch (tagName) {
+        case 'If': return transformIfNode;
+        case 'For': return transformForNode;
+        default: return (a, b, c) => a;
+    }
+}
+
+const statements: Transformation = (node, program, ctx) => getTransformation(node)(node, program, ctx);
