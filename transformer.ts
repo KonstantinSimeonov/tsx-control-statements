@@ -108,9 +108,6 @@ const getForProps = (node: ts.Node) => {
 
 const transformForNode: Transformation = (node, program, ctx) => {
     const { each, of, index } = getForProps(node);
-    trace(
-        [each, of, index].map(x => x && x.getFullText())
-    );
 
     if (!each || !index || !of) {
         return ts.createNull();
@@ -120,7 +117,6 @@ const transformForNode: Transformation = (node, program, ctx) => {
         .getChildAt(1)
         .getChildren()
         .filter(isRelevantJsxNode);
-    trace(body.map(n => n.getFullText()));
     if (body.length === 0) {
         trace('kek');
         return ts.createNull();

@@ -28,3 +28,20 @@ export const ChooseWithOtherwise = ({ name }) => (
         </Choose>
     </div>
 )
+
+export const ChooseMultipleChildren = ({ name }) => (
+    <div>
+        <Choose>
+            <When condition={name === 'ivan'}>
+                <h1>kek</h1>
+                <p>ivan is here</p>
+                {name + ' is haskell dev'}
+            </When>
+            <Otherwise>
+                <h2>topkek</h2>
+                <p>it is not ivan, but rather {name}</p>
+                <b>neshto si neshto si</b>
+            </Otherwise>
+        </Choose>
+    </div>
+)

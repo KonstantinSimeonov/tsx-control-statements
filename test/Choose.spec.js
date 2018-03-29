@@ -9,7 +9,6 @@ enzyme.configure({ adapter: new Adapter });
 
 describe('Choose', () => {
     it('renders without crashing', () => {
-        console.log(Tsc, 'kekekekekek')
         enzyme.shallow(React.createElement(
             Tsc.ChooseNumbers,
             { n: 1 }
@@ -17,43 +16,24 @@ describe('Choose', () => {
     });
 
     [
-        {
+        ...[2, 1, 10, 42].map(n => ({
             message: 'when works',
             babelComponent: Babel.ChooseNumbers,
             tscComponent: Tsc.ChooseNumbers,
-            props: { n: 2 }
-        },
-        {
-            message: 'when works',
-            babelComponent: Babel.ChooseNumbers,
-            tscComponent: Tsc.ChooseNumbers,
-            props: { n: 1 }
-        },
-        {
-            message: 'when works',
-            babelComponent: Babel.ChooseNumbers,
-            tscComponent: Tsc.ChooseNumbers,
-            props: { n: 10 }
-        },
-        {
-            message: 'when works',
-            babelComponent: Babel.ChooseNumbers,
-            tscComponent: Tsc.ChooseNumbers,
-            props: { n: 42 }
-        },
-        {
-            message: 'when + otherwise works [when should render]',
+            props: { n }
+        })),
+        ...['pesho', 'gosho'].map(name => ({
+            message: 'when + otherwise works',
             babelComponent: Babel.ChooseWithOtherwise,
             tscComponent: Tsc.ChooseWithOtherwise,
             props: { name: 'gosho' }
             
-        },
-        {
-            message: 'when + otherwise works [othewise should render]',
+        })),
+        ...['ivan', 'haralampi'].map(name => ({
+            message: 'when + otherwise works with multiple children',
             babelComponent: Babel.ChooseWithOtherwise,
             tscComponent: Tsc.ChooseWithOtherwise,
-            props: { name: 'pesho' }
-            
-        }
+            props: { name }
+        }))
     ].forEach(compareInnerHTMLTest);
 });
