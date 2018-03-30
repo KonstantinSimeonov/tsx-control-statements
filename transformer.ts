@@ -32,7 +32,7 @@ const getJsxProps = (node: ts.Node): PropMap => {
         .getChildAt(2) // [tag (<), name (For, If, etc), attributes (...), tag (>)]
         .getChildAt(0) // some kinda ts api derp
         .getChildren()
-        .filter(x => ts.isJsxAttribute(x))
+        .filter(ts.isJsxAttribute)
         .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }))
         .reduce((m, c) => Object.assign(m, c), {});
 
@@ -60,6 +60,13 @@ const getJsxElementBody = (
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 
+const createExpressionLiteral =
+    (
+        expressions: ts.Expression[]
+    ): ts.ArrayLiteralExpression | ts.Expression => expressions.length === 1
+                                                    ? ts.createJsxExpression(undefined, expressions[0])
+                                                    : ts.createArrayLiteral(expressions);
+
 const transformIfNode: Transformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
     if (condition == null) {
@@ -77,11 +84,8 @@ const transformIfNode: Transformation = (node, program, ctx) => {
     return ts.createJsxExpression(
         undefined,
         ts.createConditional(
-            condition.getChildAt(1) as ts.Expression,
-            body.length !== 1 ?
-                ts.createArrayLiteral(body)
-                : ts.createJsxExpression(ts.createToken(ts.SyntaxKind.DotDotDotToken), body[0])
-            ,
+            condition,
+            createExpressionLiteral(body),
             ts.createNull()
         )
     )
@@ -130,7 +134,7 @@ const transformForNode: Transformation = (node, program, ctx) => {
                     undefined,
                     ts.createBlock([
                         ts.createReturn(
-                            ts.createArrayLiteral(body)
+                            createExpressionLiteral(body)
                         )
                     ])
                 )
@@ -143,19 +147,20 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     const body = node.getChildAt(1).getChildren();
     const elements = body.filter(isRelevantJsxNode).map(
         node => {
-            const maybeOpeningElement = node.getChildAt(0);
+            const openingElement = node.getChildAt(0);
             const { condition } = getJsxProps(node);
-            const body = getJsxElementBody(node, program, ctx);
+            const bodyExpression = createExpressionLiteral(getJsxElementBody(node, program, ctx));
             if (!condition) {
-                if (ts.isJsxOpeningElement(maybeOpeningElement) && maybeOpeningElement.tagName.getText() === 'Otherwise') {
-                    return ts.createArrayLiteral(body);
+                if (ts.isJsxOpeningElement(openingElement) && openingElement.tagName.getText() === 'Otherwise') {
+                    return bodyExpression;
                 }
 
                 return null;
             }
+
             return ts.createConditional(
-                condition as ts.Expression,
-                ts.createArrayLiteral(body),
+                condition,
+                bodyExpression,
                 ts.createNull()
             )
         }
@@ -193,7 +198,7 @@ const transformWithNode: Transformation = (node, program, ctx) => {
                 undefined,
                 ts.createBlock([
                     ts.createReturn(
-                        ts.createArrayLiteral(body)
+                        createExpressionLiteral(body)
                     )
                 ])
             ),
