@@ -134,11 +134,7 @@ const transformForNode: Transformation = (node, program, ctx) => {
                     arrowFunctionArgs,
                     undefined, // type
                     undefined,
-                    ts.createBlock([
-                        ts.createReturn(
-                            createExpressionLiteral(body)
-                        )
-                    ])
+                    createExpressionLiteral(body)
                 )
             ]
         )
@@ -193,11 +189,7 @@ const transformWithNode: Transformation = (node, program, ctx) => {
                 iifeArgs,
                 undefined,
                 undefined,
-                ts.createBlock([
-                    ts.createReturn(
-                        createExpressionLiteral(body)
-                    )
-                ])
+                createExpressionLiteral(body)
             ),
             undefined,
             iifeArgValues
