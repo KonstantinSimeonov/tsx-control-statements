@@ -26,4 +26,3 @@ readdirSync('./cases')
         fuse.bundle(bundle).instructions(`> [${caseFile}]`)
         fuse.run();
     });
-

@@ -3,6 +3,9 @@
         "alwaysStrict": true,
         "declaration": true,
         "target": "es2015",
+        "lib": [
+            "es6", "es2017"
+        ],
         "module": "commonjs",
         "noImplicitAny": true,
         "noUnusedLocals": true,

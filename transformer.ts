@@ -61,13 +61,13 @@ const transformIfNode: Transformation = (node, program, ctx) => {
         .getChildren()
         .filter(isRelevantJsxNode)
         .map(
-        node => {
-            if (ts.isJsxText(node)) {
-                const text = trim(node.getFullText());
-                return text ? ts.createLiteral(text) : null;
-            }
-            return visitNodes(node, program, ctx);
-        }).filter(Boolean) as ts.Expression[];
+            node => {
+                if (ts.isJsxText(node)) {
+                    const text = trim(node.getFullText());
+                    return text ? ts.createLiteral(text) : null;
+                }
+                return visitNodes(node, program, ctx);
+            }).filter(Boolean) as ts.Expression[];
 
     if (arr.length === 0) {
         console.warn('tsx-ctrl: empty If');
@@ -174,7 +174,7 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
                         return text ? ts.createLiteral(text) : null;
                     }
                     return visitNodes(node, program, ctx);
-                }).filter(Boolean) as ts.Expression[];;
+                }).filter(Boolean) as ts.Expression[];
             if (!conditionNode) {
                 trace('it is kek');
                 if (ts.isJsxOpeningElement(maybeOpeningElement) && maybeOpeningElement.tagName.getText() === 'Otherwise') {
@@ -206,26 +206,59 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     );
 };
 
-type BindingsMap = { string?: ts.Expression };
+type BindingsMap = { [id: string]: ts.Expression };
 const getWithProps = (node: ts.Node): BindingsMap => {
     const child = node.getChildAt(0);
-    if(!ts.isJsxOpeningElement(child)) {
+    if (!ts.isJsxOpeningElement(child)) {
         return {} as BindingsMap;
     }
 
     const props = child
-                    .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
-                    .getChildAt(0) // some kinda ts api derp
-                    .getChildren()
-                    .filter(x => ts.isJsxAttribute(x))
-                    .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
-                    .reduce((m, c) => Object.assign(m, c), {});
+        .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
+        .getChildAt(0) // some kinda ts api derp
+        .getChildren()
+        .filter(x => ts.isJsxAttribute(x))
+        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }))
+        .reduce((m, c) => Object.assign(m, c), {});
 
     return props;
 };
 
 const transformWithNode: Transformation = (node, program, ctx) => {
-
+    const props = getWithProps(node);
+    const body = node
+        .getChildAt(1)
+        .getChildren()
+        .filter(isRelevantJsxNode)
+        .map(
+            node => {
+                if (ts.isJsxText(node)) {
+                    const text = trim(node.getFullText());
+                    return text ? ts.createLiteral(text) : null;
+                }
+                return visitNodes(node, program, ctx);
+            }).filter(Boolean) as ts.Expression[];;
+    return ts.createJsxExpression(
+        undefined,
+        ts.createCall(
+            ts.createArrowFunction(
+                undefined,
+                undefined,
+                Object.keys(props).map(key => ts.createParameter(undefined, undefined, undefined, key)),
+                undefined,
+                undefined,
+                ts.createBlock([
+                    ts.createReturn(
+                        ts.createArrayLiteral(
+                            body as ts.Expression[]
+                        )
+                    )
+                ])
+            ),
+            undefined,
+            Object.values(props).map(valueNode => valueNode.getChildAt(1) as ts.Expression)
+        )
+    );
 };
 
 const getTransformation = (node: ts.Node): Transformation => {
@@ -234,14 +267,14 @@ const getTransformation = (node: ts.Node): Transformation => {
     }
 
     const openingElement = node.getChildAt(0);
-    const tagName = ts.isJsxOpeningElement(openingElement) && openingElement.tagName.getText();
-
+    const tagName = ts.isJsxOpeningElement(openingElement) ? openingElement.tagName.getText() : '';
     switch (tagName) {
         case 'If': return transformIfNode;
         case 'For': return transformForNode;
         case 'Choose': return transformChooseNode;
+        case 'With': return transformWithNode;
         default: return (a, b, c) => a;
     }
-}
+};
 
 const statements: Transformation = (node, program, ctx) => getTransformation(node)(node, program, ctx);
