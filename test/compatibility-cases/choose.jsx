@@ -45,3 +45,31 @@ export const ChooseMultipleChildren = ({ name }) => (
         </Choose>
     </div>
 )
+
+export const ChooseNested = ({ name }) => (
+    <div>
+        <Choose>
+            <When condition={name.length < 3}>
+                <Choose>
+                    <When condition={name.length === 0}>
+                        name cannot be empty
+                    </When>
+                    <Otherwise>
+                        name too short
+                    </Otherwise>
+                </Choose>
+            </When>
+            <Otherwise>
+                <Choose>
+                    <When condition={name.length > 20}>
+                        name too long
+                    </When>
+                    <Otherwise>
+                        {name}
+                    </Otherwise>
+                </Choose>
+                sdf
+            </Otherwise>
+        </Choose>
+    </div>
+)

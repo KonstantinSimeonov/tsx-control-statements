@@ -44,3 +44,17 @@ export const ForEmptyArray = () => (
         </For>
     </ul>
 )
+
+export const ForNested = ({ xs, ys }) => (
+    <ol>
+        <For each="x" of={xs} index="i">
+            <li>
+                <ol>
+                    <For each="y" of={ys} index="j">
+                        <li>[{i}, {j}] = ({x}, {y})</li>
+                    </For>
+                </ol>
+            </li>
+        </For>
+    </ol>
+)

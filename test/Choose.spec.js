@@ -34,6 +34,12 @@ describe('Choose', () => {
             expectedComponent: Babel.ChooseWithOtherwise,
             assertedComponent: Tsc.ChooseWithOtherwise,
             props: { name }
+        })),
+        ...['', 'h', 'haskell', 'fsdfsdfsdfsdfsdfdsfsdfsdfsdfsdfsdf'].map(name => ({
+            message: 'nested choose with otherwise works',
+            expectedComponent: Babel.ChooseNested,
+            assertedComponent: Tsc.ChooseNested,
+            props: { name }
         }))
     ].forEach(compareInnerHTMLTest);
 });

@@ -21,3 +21,22 @@ export const WithNoVariables = ({ thing }) => (
         <With>This {thing} is idiotic</With>
     </div>
 )
+
+export const WithNested = ({ xs }) => (
+    <div>
+        <With fst={xs[0]}>
+            {fst + 1}
+            <With snd={xs[1]}>
+                {fst + snd}
+                <With last={xs.slice(-1).pop()}>
+                    {last}
+                </With>
+                <With sum={xs.reduce((sum, n) => sum + n, 0)}>
+                    <p>{fst}</p>
+                    <p>{sum}</p>
+                    {snd}
+                </With>
+            </With>
+        </With>
+    </div>
+)

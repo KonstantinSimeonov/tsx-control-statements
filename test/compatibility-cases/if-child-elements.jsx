@@ -45,9 +45,9 @@ export const IfConditionIsExpressions = ({ name1, name2 }) => (
 
 export const NestedIfs = ({ a, b }) => (
     <div>
-        <If condition={a % 2}>
+        <If condition={a % 2 === 1}>
             <h1>a is add</h1>
-            <If condition={b % 2}>
+            <If condition={b % 2 === 1}>
                 b is odd
             </If>
             <If condition={b % 2 === 0}>
@@ -59,7 +59,7 @@ export const NestedIfs = ({ a, b }) => (
 
 export const EmptyIfs = ({ a, b }) => (
     <p>
-        <If condition={b % 2}>
+        <If condition={b % 2 === 1}>
         </If>
         <If condition={b % 2 === 0}>
         </If>
@@ -68,8 +68,8 @@ export const EmptyIfs = ({ a, b }) => (
 
 export const EmptyNestedIfs = ({ a, b }) => (
     <p>
-        <If condition={a % 2}>
-            <If condition={b % 2}>
+        <If condition={a % 2 === 1}>
+            <If condition={b % 2 === 1}>
             </If>
             <If condition={b % 2 === 0}>
             </If>

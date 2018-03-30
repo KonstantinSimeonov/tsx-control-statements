@@ -9,13 +9,12 @@ readdirSync('./compatibility-cases')
             transformers: {
                 before: [statements()]
             },
-            homeDir: './compatibility-cases/',
+            homeDir: './compatibility-cases',
             output: 'tsc/$name.js',
             useTypescriptCompiler: true,
             cache: false,
             target: 'npm',
             globals: { default: '*' },
-            // tsConfig: { module: 'commonjs', target: 'es6' },
             plugins: [
                 QuantumPlugin({
                     containedAPI: true,
@@ -23,6 +22,6 @@ readdirSync('./compatibility-cases')
                 })
             ]
         });
-        fuse.bundle(bundle).instructions(`> [${caseFile}]`)
+        fuse.bundle(bundle).instructions(`> [${caseFile}]`);
         fuse.run();
     });

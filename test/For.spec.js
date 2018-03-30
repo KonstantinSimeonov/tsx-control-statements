@@ -42,4 +42,14 @@ describe('For', () => {
         expectedComponent: Babel.ForEmptyArray,
         assertedComponent: Tsc.ForEmptyArray
     });
+
+    compareInnerHTMLTest({
+        message: 'works for nested loops',
+        expectedComponent: Babel.ForNested,
+        assertedComponent: Tsc.ForNested,
+        props: {
+            xs: [1, 2, 3],
+            ys: ['i', 'hate', 'nested', 'ctrl', 'flow']
+        }
+    });
 });

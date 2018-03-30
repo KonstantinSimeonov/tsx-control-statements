@@ -27,5 +27,12 @@ describe('With', () => {
         expectedComponent: Babel.WithNoVariables,
         assertedComponent: Tsc.WithNoVariables,
         props: { thing: 'ctrl sttmnts thingie' }
-    })
+    });
+
+    compareInnerHTMLTest({
+        message: 'works when some idiot has nested 4 Withs',
+        expectedComponent: Babel.WithNested,
+        assertedComponent: Tsc.WithNested,
+        props: { xs: [1, 2, 3, 6, 10044] }
+    });
 });
