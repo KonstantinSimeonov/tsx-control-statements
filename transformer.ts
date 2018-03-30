@@ -62,7 +62,6 @@ const getJsxElementBody = (
                 const text = trim(node.getFullText());
                 return text ? ts.createLiteral(text) : null;
             }
-            trace(getTagNameString(node));
             return visitNodes(node, program, ctx);
         }
     ).filter(Boolean) as ts.Expression[];
@@ -104,11 +103,13 @@ const transformIfNode: Transformation = (node, program, ctx) => {
 const transformForNode: Transformation = (node, program, ctx) => {
     const { each, of, index } = getJsxProps(node);
     if (!of) {
+        console.warn('tsx-ctrl: "of" property of For is missing');
         return ts.createNull();
     }
 
     const body = getJsxElementBody(node, program, ctx);
     if (body.length === 0) {
+        console.warn('tsx-ctrl: empty For');
         return ts.createNull();
     }
 
