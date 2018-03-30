@@ -206,6 +206,28 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     );
 };
 
+type BindingsMap = { string?: ts.Expression };
+const getWithProps = (node: ts.Node): BindingsMap => {
+    const child = node.getChildAt(0);
+    if(!ts.isJsxOpeningElement(child)) {
+        return {} as BindingsMap;
+    }
+
+    const props = child
+                    .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
+                    .getChildAt(0) // some kinda ts api derp
+                    .getChildren()
+                    .filter(x => ts.isJsxAttribute(x))
+                    .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
+                    .reduce((m, c) => Object.assign(m, c), {});
+
+    return props;
+};
+
+const transformWithNode: Transformation = (node, program, ctx) => {
+
+};
+
 const getTransformation = (node: ts.Node): Transformation => {
     if (!ts.isJsxElement(node)) {
         return (a, b, c) => a;
