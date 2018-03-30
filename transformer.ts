@@ -155,7 +155,6 @@ const transformWhenNode: Transformation = (node, program, ctx) => {
 };
 
 const transformChooseNode: Transformation = (node, program, ctx) => {
-    trace('kek')
     const elements = getJsxElementBody(node, program, ctx);
     return ts.createJsxExpression(
         undefined,
