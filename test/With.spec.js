@@ -7,7 +7,7 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 
 enzyme.configure({ adapter: new Adapter });
 
-describe.only('With', () => {
+describe('With', () => {
     [1, 2].forEach(n => compareInnerHTMLTest({
         message: 'works for one variable',
         babelComponent: Babel.WithOneVariable,

@@ -16,60 +16,60 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
     return ts.visitEachChild(node, childNode => visitNodes(childNode, program, context), context);
 }
 
-type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => ts.Node;
-
-function* elems(node: ts.Node): Iterable<ts.Node> {
-    yield node;
-    for (const cn of node.getChildren()) {
-        yield* elems(cn);
-    }
-}
-
-const filter = <T>(predicate: (item: T) => boolean) => function* (iterable: Iterable<T>): Iterable<T> {
-    for (const item of iterable) {
-        if (predicate(item)) {
-            yield item;
-        }
-    }
-};
-
+type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => Readonly<ts.Node>;
 const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
     || ts.isJsxExpression(node)
     || ts.isJsxText(node) && node.getText() !== '';
 
-const getConditionNode = (node: ts.Node): ts.Expression | null => {
-    const [result] = filter((n: ts.Node) => ts.isJsxAttribute(n) && n.name.getText() === 'condition')(elems(node));
-    if (result) {
-        return result.getChildAt(2) as ts.Expression;
+type PropMap = Readonly<ts.MapLike<ts.Expression>>;
+const getJsxProps = (node: ts.Node): PropMap => {
+    const child = node.getChildAt(0);
+    if (!ts.isJsxOpeningElement(child)) {
+        return {} as PropMap;
     }
 
-    return null;
+    const props = child
+        .getChildAt(2) // [tag (<), name (For, If, etc), attributes (...), tag (>)]
+        .getChildAt(0) // some kinda ts api derp
+        .getChildren()
+        .filter(x => ts.isJsxAttribute(x))
+        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }))
+        .reduce((m, c) => Object.assign(m, c), {});
+
+    return props;
 };
+
+const getJsxElementBody = (
+    node: ts.Node,
+    program: ts.Program,
+    ctx: ts.TransformationContext
+): ts.Expression[] => node.getChildAt(1)
+    .getChildren()
+    .filter(isRelevantJsxNode)
+    .map(
+        node => {
+            if (ts.isJsxText(node)) {
+                const text = trim(node.getFullText());
+                return text ? ts.createLiteral(text) : null;
+            }
+
+            return visitNodes(node, program, ctx);
+        }
+    ).filter(Boolean) as ts.Expression[];
+
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 
 const transformIfNode: Transformation = (node, program, ctx) => {
-    const openingElement = node.getChildAt(0);
-    const cnd = getConditionNode(openingElement);
-    if (cnd == null) {
+    const { condition } = getJsxProps(node);
+    if (condition == null) {
         console.warn('tsx-ctrl: If missing condition props');
         return node;
     }
 
-    const ifStatementBody = node.getChildren().slice(1, -1);
-    const arr = ifStatementBody[0]
-        .getChildren()
-        .filter(isRelevantJsxNode)
-        .map(
-            node => {
-                if (ts.isJsxText(node)) {
-                    const text = trim(node.getFullText());
-                    return text ? ts.createLiteral(text) : null;
-                }
-                return visitNodes(node, program, ctx);
-            }).filter(Boolean) as ts.Expression[];
+    const body = getJsxElementBody(node, program, ctx);
 
-    if (arr.length === 0) {
+    if (body.length === 0) {
         console.warn('tsx-ctrl: empty If');
         return ts.createNull();
     }
@@ -77,48 +77,26 @@ const transformIfNode: Transformation = (node, program, ctx) => {
     return ts.createJsxExpression(
         undefined,
         ts.createConditional(
-            cnd.getChildAt(1) as ts.Expression,
-            arr.length !== 1 ?
-                ts.createArrayLiteral(arr)
-                : ts.createJsxExpression(ts.createToken(ts.SyntaxKind.DotDotDotToken), arr[0])
+            condition.getChildAt(1) as ts.Expression,
+            body.length !== 1 ?
+                ts.createArrayLiteral(body)
+                : ts.createJsxExpression(ts.createToken(ts.SyntaxKind.DotDotDotToken), body[0])
             ,
             ts.createNull()
         )
     )
 }
 
-const getForProps = (node: ts.Node) => {
-    const maybeOpeningElement = node.getChildAt(0);
-    if (!ts.isJsxOpeningElement(maybeOpeningElement)) {
-        return { each: null, index: null, of: null };
-    }
-
-    const propNames = new Set(['each', 'of', 'index']);
-    const props = maybeOpeningElement // attributes are children of the opening element
-        .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
-        .getChildAt(0) // some kinda ts api derp
-        .getChildren()
-        .filter(x => ts.isJsxAttribute(x) && propNames.has(x.getChildAt(0).getText()))
-        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) }))
-        .reduce((m, c) => Object.assign(m, c), {});
-
-    const { each, index, of } = props;
-    return { each, index, of };
-};
-
 const transformForNode: Transformation = (node, program, ctx) => {
-    const { each, of, index } = getForProps(node);
+    const { each, of, index } = getJsxProps(node);
 
     if (!each || !index || !of) {
         return ts.createNull();
     }
 
-    const body = node
-        .getChildAt(1)
-        .getChildren()
-        .filter(isRelevantJsxNode);
+    const body = getJsxElementBody(node, program, ctx);
+
     if (body.length === 0) {
-        trace('kek');
         return ts.createNull();
     }
 
@@ -152,7 +130,7 @@ const transformForNode: Transformation = (node, program, ctx) => {
                     undefined,
                     ts.createBlock([
                         ts.createReturn(
-                            ts.createArrayLiteral(body as ts.Expression[])
+                            ts.createArrayLiteral(body)
                         )
                     ])
                 )
@@ -163,29 +141,21 @@ const transformForNode: Transformation = (node, program, ctx) => {
 
 const transformChooseNode: Transformation = (node, program, ctx) => {
     const body = node.getChildAt(1).getChildren();
-    const elements = body.filter(ts.isJsxElement).map(
+    const elements = body.filter(isRelevantJsxNode).map(
         node => {
             const maybeOpeningElement = node.getChildAt(0);
-            const conditionNode = getConditionNode(maybeOpeningElement);
-            const nodeBody = node.getChildAt(1).getChildren().filter(isRelevantJsxNode).map(
-                node => {
-                    if (ts.isJsxText(node)) {
-                        const text = trim(node.getFullText());
-                        return text ? ts.createLiteral(text) : null;
-                    }
-                    return visitNodes(node, program, ctx);
-                }).filter(Boolean) as ts.Expression[];
-            if (!conditionNode) {
-                trace('it is kek');
+            const { condition } = getJsxProps(node);
+            const body = getJsxElementBody(node, program, ctx);
+            if (!condition) {
                 if (ts.isJsxOpeningElement(maybeOpeningElement) && maybeOpeningElement.tagName.getText() === 'Otherwise') {
-                    return ts.createArrayLiteral(nodeBody as ts.Expression[]);
+                    return ts.createArrayLiteral(body);
                 }
 
                 return null;
             }
             return ts.createConditional(
-                conditionNode as ts.Expression,
-                ts.createArrayLiteral(nodeBody as ts.Expression[]),
+                condition as ts.Expression,
+                ts.createArrayLiteral(body),
                 ts.createNull()
             )
         }
@@ -206,57 +176,29 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     );
 };
 
-type BindingsMap = { [id: string]: ts.Expression };
-const getWithProps = (node: ts.Node): BindingsMap => {
-    const child = node.getChildAt(0);
-    if (!ts.isJsxOpeningElement(child)) {
-        return {} as BindingsMap;
-    }
-
-    const props = child
-        .getChildAt(2) // [tag (<), name (For), attributes (...), tag (>)]
-        .getChildAt(0) // some kinda ts api derp
-        .getChildren()
-        .filter(x => ts.isJsxAttribute(x))
-        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }))
-        .reduce((m, c) => Object.assign(m, c), {});
-
-    return props;
-};
-
 const transformWithNode: Transformation = (node, program, ctx) => {
-    const props = getWithProps(node);
-    const body = node
-        .getChildAt(1)
-        .getChildren()
-        .filter(isRelevantJsxNode)
-        .map(
-            node => {
-                if (ts.isJsxText(node)) {
-                    const text = trim(node.getFullText());
-                    return text ? ts.createLiteral(text) : null;
-                }
-                return visitNodes(node, program, ctx);
-            }).filter(Boolean) as ts.Expression[];;
+    const props = getJsxProps(node);
+    const body = getJsxElementBody(node, program, ctx) as ts.Expression[];
+    const iifeArgs = Object.keys(props).map(key => ts.createParameter(undefined, undefined, undefined, key));
+    const iifeArgValues = Object.values(props).map(valueNode => valueNode.getChildAt(1)) as ts.Expression[];
+
     return ts.createJsxExpression(
         undefined,
         ts.createCall(
             ts.createArrowFunction(
                 undefined,
                 undefined,
-                Object.keys(props).map(key => ts.createParameter(undefined, undefined, undefined, key)),
+                iifeArgs,
                 undefined,
                 undefined,
                 ts.createBlock([
                     ts.createReturn(
-                        ts.createArrayLiteral(
-                            body as ts.Expression[]
-                        )
+                        ts.createArrayLiteral(body)
                     )
                 ])
             ),
             undefined,
-            Object.values(props).map(valueNode => valueNode.getChildAt(1) as ts.Expression)
+            iifeArgValues
         )
     );
 };
