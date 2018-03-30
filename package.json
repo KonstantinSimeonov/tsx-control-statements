@@ -8,7 +8,7 @@
   "types": "index.ts",
   "scripts": {
     "tsc": "tsc",
-    "build": "tsc transformer.ts --lib es6 es2017 --target es6 --module commonjs --watch"
+    "build": "tsc transformer.ts --lib es6 es2017 --target es6 --module commonjs"
   },
   "devDependencies": {
     "@types/react": "^16.1.0",
