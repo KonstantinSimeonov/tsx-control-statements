@@ -1,7 +1,9 @@
-import { JsxElement } from "typescript";
+import { Component } from 'react';
+import { MapLike } from 'typescript';
 
-export declare function If(props: { condition: boolean }): JsxElement | undefined;
-export declare function For(props: { each?: string; of: any[]; index?: string }): JsxElement | undefined;
-export declare function Choose(): JsxElement | undefined;
-export declare function When(props: { condition: boolean }): JsxElement | undefined;
-export declare function Otherwise(): JsxElement | undefined;
+export declare class For extends Component<{ each?: string, index?: string, of: any[] }> {};
+export declare class If extends Component<{ condition: boolean }> {};
+export declare class Choose extends Component<{}> {};
+export declare class When extends Component<{ condition: boolean }> {};
+export declare class Otherwise extends Component<{}> {};
+export declare class With extends Component<MapLike<any>> {};
