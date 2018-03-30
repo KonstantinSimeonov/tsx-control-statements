@@ -4,6 +4,7 @@ const React = require('react');
 const enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
 const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
+const For = require('./tsc/tsx-for').default;
 
 enzyme.configure({ adapter: new Adapter });
 
@@ -52,4 +53,11 @@ describe('For', () => {
             ys: ['i', 'hate', 'nested', 'ctrl', 'flow']
         }
     });
+
+    For.dataSet.forEach(props => compareInnerHTMLTest({
+        message: 'works when compiled from typescript',
+        assertedComponent: For.actual,
+        expectedComponent: For.expected,
+        props
+    }));
 });

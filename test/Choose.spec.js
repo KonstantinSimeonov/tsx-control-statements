@@ -4,6 +4,7 @@ const React = require('react');
 const enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
 const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
+const Choose = require('./tsc/tsx-choose').default;
 
 enzyme.configure({ adapter: new Adapter });
 
@@ -42,4 +43,11 @@ describe('Choose', () => {
             props: { name }
         }))
     ].forEach(compareInnerHTMLTest);
+
+    Choose.dataSet.forEach(props => compareInnerHTMLTest({
+        message: 'renders same stuff as when written in plain jsx',
+        assertedComponent: Choose.actual,
+        expectedComponent: Choose.expected,
+        props
+    }))
 });
