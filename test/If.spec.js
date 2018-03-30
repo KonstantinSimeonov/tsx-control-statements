@@ -3,6 +3,7 @@ const Tsc = require('./tsc/if-child-elements');
 const enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
 const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
+const If = require('./tsc/tsx-if').default;
 
 enzyme.configure({ adapter: new Adapter });
 
@@ -99,5 +100,12 @@ describe('If', () => {
                 props: { condition }
             });
         }
-    })
+    });
+
+    If.dataSet.forEach(props => compareInnerHTMLTest({
+        message: 'works when compiled from typescript',
+        assertedComponent: If.actual,
+        expectedComponent: If.expected,
+        props
+    }));
 });
