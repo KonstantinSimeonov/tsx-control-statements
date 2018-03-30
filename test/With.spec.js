@@ -10,22 +10,22 @@ enzyme.configure({ adapter: new Adapter });
 describe('With', () => {
     [1, 2].forEach(n => compareInnerHTMLTest({
         message: 'works for one variable',
-        babelComponent: Babel.WithOneVariable,
-        tscComponent: Tsc.WithOneVariable,
+        expectedComponent: Babel.WithOneVariable,
+        assertedComponent: Tsc.WithOneVariable,
         props: { n }
     }));
 
     compareInnerHTMLTest({
         message: 'works with many variables',
-        babelComponent: Babel.WithManyVariables,
-        tscComponent: Tsc.WithManyVariables,
+        expectedComponent: Babel.WithManyVariables,
+        assertedComponent: Tsc.WithManyVariables,
         props: { x: 2, firstName: 'Maha', lastName: 'Tavani', people: ['ivan', 'penka', 'gery', 'nikol'] }
     });
 
     compareInnerHTMLTest({
         message: 'works with no variables (who does that anyway?)',
-        babelComponent: Babel.WithNoVariables,
-        tscComponent: Tsc.WithNoVariables,
+        expectedComponent: Babel.WithNoVariables,
+        assertedComponent: Tsc.WithNoVariables,
         props: { thing: 'ctrl sttmnts thingie' }
     })
 });

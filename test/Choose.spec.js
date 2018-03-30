@@ -18,21 +18,21 @@ describe('Choose', () => {
     [
         ...[2, 1, 10, 42].map(n => ({
             message: 'when works',
-            babelComponent: Babel.ChooseNumbers,
-            tscComponent: Tsc.ChooseNumbers,
+            expectedComponent: Babel.ChooseNumbers,
+            assertedComponent: Tsc.ChooseNumbers,
             props: { n }
         })),
         ...['pesho', 'gosho'].map(name => ({
             message: 'when + otherwise works',
-            babelComponent: Babel.ChooseWithOtherwise,
-            tscComponent: Tsc.ChooseWithOtherwise,
+            expectedComponent: Babel.ChooseWithOtherwise,
+            assertedComponent: Tsc.ChooseWithOtherwise,
             props: { name: 'gosho' }
             
         })),
         ...['ivan', 'haralampi'].map(name => ({
             message: 'when + otherwise works with multiple children',
-            babelComponent: Babel.ChooseWithOtherwise,
-            tscComponent: Tsc.ChooseWithOtherwise,
+            expectedComponent: Babel.ChooseWithOtherwise,
+            assertedComponent: Tsc.ChooseWithOtherwise,
             props: { name }
         }))
     ].forEach(compareInnerHTMLTest);

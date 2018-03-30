@@ -14,32 +14,32 @@ describe('For', () => {
 
     compareInnerHTMLTest({
         message: 'renders expressions and elements',
-        babelComponent: Babel.ForChildrenExpressions,
-        tscComponent: Tsc.ForChildrenExpressions,
+        expectedComponent: Babel.ForChildrenExpressions,
+        assertedComponent: Tsc.ForChildrenExpressions,
         props: { words: ['haskell', 'win api', 'wannacry', 'undefined', 'is', 'not', 'a', ''] }
     });
 
     compareInnerHTMLTest({
         message: 'long names for indentifiers work',
-        babelComponent: Babel.ForLongNames,
-        tscComponent: Tsc.ForLongNames
+        expectedComponent: Babel.ForLongNames,
+        assertedComponent: Tsc.ForLongNames
     });
 
     compareInnerHTMLTest({
         message: 'index works',
-        babelComponent: Babel.ForIndex,
-        tscComponent: Tsc.ForIndex
+        expectedComponent: Babel.ForIndex,
+        assertedComponent: Tsc.ForIndex
     });
 
     compareInnerHTMLTest({
         message: 'can use index as key',
-        babelComponent: Babel.ForKeyIndex,
-        tscComponent: Tsc.ForKeyIndex
+        expectedComponent: Babel.ForKeyIndex,
+        assertedComponent: Tsc.ForKeyIndex
     });
 
     compareInnerHTMLTest({
         message: 'works for empty array',
-        babelComponent: Babel.ForEmptyArray,
-        tscComponent: Tsc.ForEmptyArray
+        expectedComponent: Babel.ForEmptyArray,
+        assertedComponent: Tsc.ForEmptyArray
     });
 });

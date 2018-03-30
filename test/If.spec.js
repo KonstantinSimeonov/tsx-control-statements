@@ -11,8 +11,8 @@ describe('If', () => {
         for (const shouldRenderLinks of [true, false]) {
             compareInnerHTMLTest({
                 message: `does ${!shouldRenderLinks ? 'not ' : ''}render child elements when condition={${shouldRenderLinks}}`,
-                babelComponent: Babel.IfChildElements,
-                tscComponent: Tsc.IfChildElements,
+                expectedComponent: Babel.IfChildElements,
+                assertedComponent: Tsc.IfChildElements,
                 props: { shouldRenderLinks }
             });
         }
@@ -22,8 +22,8 @@ describe('If', () => {
         for (const shouldRenderExpressions of [true, false]) {
             compareInnerHTMLTest({
                 message: `does ${!shouldRenderExpressions ? 'not ' : ''}render child expression when condition={${shouldRenderExpressions}}`,
-                babelComponent: Babel.IfChildExpressions,
-                tscComponent: Tsc.IfChildExpressions,
+                expectedComponent: Babel.IfChildExpressions,
+                assertedComponent: Tsc.IfChildExpressions,
                 props: { a: 3, b: 10, shouldRenderExpressions }
             });
         }
@@ -33,8 +33,8 @@ describe('If', () => {
         for (const shouldRender of [true, false]) {
             compareInnerHTMLTest({
                 message: `does ${shouldRender ? 'not ' : ''}render child expression and elements when condition={${shouldRender}}`,
-                babelComponent: Babel.IfChildExpressionsAndElements,
-                tscComponent: Tsc.IfChildExpressionsAndElements,
+                expectedComponent: Babel.IfChildExpressionsAndElements,
+                assertedComponent: Tsc.IfChildExpressionsAndElements,
                 props: { a: 3, b: 4, shouldRenderStuff: shouldRender }
             });
         }
@@ -52,8 +52,8 @@ describe('If', () => {
         for (const [name1, name2] of names) {
             compareInnerHTMLTest({
                 message: `works for ${name1} ${name2}`,
-                babelComponent: Babel.IfConditionIsExpressions,
-                tscComponent: Tsc.IfConditionIsExpressions,
+                expectedComponent: Babel.IfConditionIsExpressions,
+                assertedComponent: Tsc.IfConditionIsExpressions,
                 props: { name1, name2 }
             });
         }
@@ -66,8 +66,8 @@ describe('If', () => {
         ]) {
             compareInnerHTMLTest({
                 message: `works for ${a} ${b}`,
-                babelComponent: Babel.NestedIfs,
-                tscComponent: Tsc.NestedIfs,
+                expectedComponent: Babel.NestedIfs,
+                assertedComponent: Tsc.NestedIfs,
                 props: { a, b }
             });
         }
@@ -77,14 +77,14 @@ describe('If', () => {
         for (const [a, b] of [[1, 1], [1, 2], [2, 1]]) {
             compareInnerHTMLTest({
                 message: `works for ${a} ${b}`,
-                babelComponent: Babel.EmptyIfs,
-                tscComponent: Tsc.EmptyIfs,
+                expectedComponent: Babel.EmptyIfs,
+                assertedComponent: Tsc.EmptyIfs,
                 props: { a, b }
             });
             compareInnerHTMLTest({
                 message: `works for ${a} ${b}`,
-                babelComponent: Babel.EmptyNestedIfs,
-                tscComponent: Tsc.EmptyNestedIfs,
+                expectedComponent: Babel.EmptyNestedIfs,
+                assertedComponent: Tsc.EmptyNestedIfs,
                 props: { a, b }
             });
         }
@@ -94,8 +94,8 @@ describe('If', () => {
         for(const condition of [true, false]) {
             compareInnerHTMLTest({
                 message: `works when addition props different from 'condition' are passed and condition={${condition}}`,
-                babelComponent: Babel.IfMultipleProps,
-                tscComponent: Tsc.IfMultipleProps,
+                expectedComponent: Babel.IfMultipleProps,
+                assertedComponent: Tsc.IfMultipleProps,
                 props: { condition }
             });
         }

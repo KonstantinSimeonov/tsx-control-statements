@@ -4,12 +4,12 @@ const React = require('react');
 
 module.exports = ({
     message,
-    tscComponent,
-    babelComponent,
+    assertedComponent,
+    expectedComponent,
     props
 }) => it(message, () => {
-        const babelWrapper = enzyme.mount(React.createElement(babelComponent, props))
-        const tscWrapper = enzyme.mount(React.createElement(tscComponent, props));
+        const babelWrapper = enzyme.mount(React.createElement(expectedComponent, props))
+        const tscWrapper = enzyme.mount(React.createElement(assertedComponent, props));
 
         expect(tscWrapper.getDOMNode().innerHTML).to.equal(babelWrapper.getDOMNode().innerHTML);
     });

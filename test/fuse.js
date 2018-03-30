@@ -2,14 +2,14 @@ const { FuseBox, QuantumPlugin } = require('fuse-box');
 const statements = require('../transformer').default;
 const { readdirSync } = require('fs');
 
-readdirSync('./cases')
+readdirSync('./compatibility-cases')
     .forEach(caseFile => {
         const [bundle] = caseFile.split('.');
         const fuse = FuseBox.init({
             transformers: {
                 before: [statements()]
             },
-            homeDir: './cases',
+            homeDir: './compatibility-cases/',
             output: 'tsc/$name.js',
             useTypescriptCompiler: true,
             cache: false,
