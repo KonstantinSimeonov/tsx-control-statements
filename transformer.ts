@@ -103,13 +103,11 @@ const transformIfNode: Transformation = (node, program, ctx) => {
 
 const transformForNode: Transformation = (node, program, ctx) => {
     const { each, of, index } = getJsxProps(node);
-
     if (!of) {
         return ts.createNull();
     }
 
     const body = getJsxElementBody(node, program, ctx);
-
     if (body.length === 0) {
         return ts.createNull();
     }
@@ -182,9 +180,9 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
 
 const transformWithNode: Transformation = (node, program, ctx) => {
     const props = getJsxProps(node);
-    const body = getJsxElementBody(node, program, ctx) as ts.Expression[];
     const iifeArgs = Object.keys(props).map(key => ts.createParameter(undefined, undefined, undefined, key));
-    const iifeArgValues = Object.values(props).map(valueNode => valueNode.getChildAt(1)) as ts.Expression[];
+    const iifeArgValues = Object.values(props);
+    const body = getJsxElementBody(node, program, ctx) as ts.Expression[];
 
     return ts.createJsxExpression(
         undefined,
