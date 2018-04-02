@@ -2,12 +2,6 @@
 
 Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/babel-plugin-jsx-control-statements for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
 
-## Implemented stuff
-- `With` - generates iifes
-- `For` - generates `.map` calls
-- `If` - generates ternary jsx expressions
-- `Choose`/`When`/`Otherwise` - generates switchs-case-like thingies
-
 ## Do `.tsx` files compile successfuly?
 - Yup, control statements transpile to type correct typescript before type checking
 - Note: editors like visual studio code cannot infer that some additional transpilation will occur and will complain
@@ -17,19 +11,105 @@ Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/bab
 - Typings: `index.ts`
 
 ## What typescript/javascript code is emitted?
-```shell
- # build the transformer
-yarn && yarn build
- # build the test cases
-cd test && yarn && yarn build
 
-# see input jsx and output javascript for the "For" statement
-cat compatibility-cases/for.jsx
-cat tsc/for.js
+### If
+- Transpiles to ternary operators
 
-# see input tsx and output js for the "If" statement
-cat tsx-cases/if.tsx
-cat tsc/tsx-if.js
+```tsx
+const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
+    <p>
+        <If condition={songList.includes(`Gery-Nikol - I'm the Queen`)}>
+            good taste in music
+        </If>
+    </p>
+)
+
+// will transpile to
+const SongRelatedThingy = ({ songList }) => React.createElement(
+    'p',
+    null,
+    songList.includes(`Gery-Nikol - I'm the Queen`) ? 'good taste in music' : null
+)
+```
+
+### With
+- Transpiles to immediately invoked function expression
+
+```tsx
+const Sum = () => (
+    <p>
+        <With a={3} b={5} c={6}>
+            {a + b + c}
+        </With>
+    </p>
+)
+
+// becomes
+const Sum = () => React.createElement(
+    'p',
+    null,
+    ((a, b, c) => a + b + c)(3, 5, 6)
+)
+```
+
+### For
+- Generates `[].map` calls
+```tsx
+const Names = ({ names }: { names: string[] }) => (
+    <ol>
+        <For each="name" of={names} index="i">
+            <li key={name}>{i}<strong>{name}</strong></li>
+        </For>
+    </ol>
+)
+
+// Will become
+
+const Names = ({ names }) => React.createElement(
+    'ol',
+    null,
+    names.map(
+        (name, i) => React.createElement(
+            'li',
+            { key: name },
+            i,
+            React.createElement('strong', null, name)
+        )
+    )
+)
+```
+
+### Choose/When/Otherwise
+- Provides If/Else like conditional control. Currently transpiles to array of elements, the first of which will be renderd.
+    - Note: this will be changed to nested ternary operators in the future.
+
+```tsx
+const RandomStuff = ({ str }: { str: string }) => (
+    <article>
+        <Choose>
+            <When condition={str === 'ivan'}>
+                ivancho
+                </When>
+            <When condition={str === 'sarmi'}>
+                <h1>yum!</h1>
+            </When>
+            <Otherwise>
+                im the queen da da da da
+            </Otherwise>
+        </Choose>
+    </article>
+)
+
+// transpiles to
+const RandomStuff = ({ str }) => React.createElement(
+    'article',
+    null,
+    [
+        str === 'ivan' ? 'ivancho' : null,
+        str === 'sarmi' ? React.createElement('h1', null, 'yum!') : null,
+        'im the queen da da da da'
+    ].find(Boolean)
+)
 ```
 
 ## Usage with [fuse-box](https://github.com/fuse-box/fuse-box)
