@@ -8,18 +8,17 @@ export default {
     expected: ({ chaps }: { chaps: string[] }) => (
         <ol>
             <For each="chap" of={chaps} index="i">
-                <li>{i}<strong>{chap}</strong></li>
+                <li key={chap}>{i}<strong>{chap}</strong></li>
             </For>
         </ol>
     ),
     actual: ({ chaps }: { chaps: string[] }) => (
         <ol>
-            {chaps.map((chap, i) => <li>{i}<strong>{chap}</strong></li>)}
+            {chaps.map((chap, i) => <li key={chap}>{i}<strong>{chap}</strong></li>)}
         </ol>
     ),
     dataSet: [
-        [],
-        ['steeve joobs', 'bil gaytes', 'lightlin naakov'],
-        ['kek']
-    ].map(chaps => ({ chaps }))
+        [[], 'renders empty ol'],
+        [['steeve joobs', 'bil gaytes', 'lightlin naakov'], 'renders a li for every chap'],
+    ].map(([chaps, message]) => ({ props: { chaps }, message }))
 }

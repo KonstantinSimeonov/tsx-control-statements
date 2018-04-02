@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Choose, When, Otherwise } from './types';
 
 export default {
-    expected: ({ str }: { str: string }) => (
+    actual: ({ str }: { str: string }) => (
         <p>
             <Choose>
                 <When condition={str === 'ivan'}>
@@ -13,11 +13,11 @@ export default {
                 </When>
                 <Otherwise>
                     im the queen da da da da
-                    </Otherwise>
+                </Otherwise>
             </Choose>
         </p>
     ),
-    actual: ({ str }: { str: string }) => (
+    expected: ({ str }: { str: string }) => (
         <p>
             {[
                 (str === 'ivan') && 'ivancho',
@@ -26,6 +26,10 @@ export default {
             ].find(Boolean)}
         </p>
     ),
-    dataSet: ['ivan', 'sarmi', 'banana'].map(str => ({ str }))
+    dataSet: [
+        ['ivan', 'renders first When'],
+        ['sarmi', 'renders second When'],
+        ['banana', 'renders Otherwise']
+    ].map(([str, message]) => ({ props: { str }, message }))
 }
 

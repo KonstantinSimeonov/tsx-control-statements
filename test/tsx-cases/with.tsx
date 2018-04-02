@@ -5,17 +5,17 @@ import { With } from './types';
 // declare var gosho: number, pesho: number, tosho: number;
 
 export default {
-    expected: () => (
+    actual: () => (
         <p>
             <With gosho={3} pesho={5} tosho={6}>
                 {gosho + pesho + tosho}
             </With>
         </p>
     ),
-    actual: ({ songList }: { songList: string[] }) => (
+    expected: () => (
         <p>
             {14}
         </p>
     ),
-    dataSet: [{}]
+    dataSet: [{ props: {}, message: 'bindings defined in With are available in the children expressions' }]
 }

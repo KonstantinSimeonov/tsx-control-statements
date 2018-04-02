@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./compile-cases.sh",
     "tsc": "tsc",
-    "test": "mocha ./helpers/browser-env.js ./*.spec.js"
+    "test": "mocha ./helpers/browser-env.js ./Compatibility.spec.js ./Tsx.spec.js"
   },
   "author": "",
   "license": "ISC",

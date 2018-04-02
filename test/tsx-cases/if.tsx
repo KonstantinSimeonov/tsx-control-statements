@@ -2,22 +2,22 @@ import * as React from 'react';
 import { If } from './types';
 
 export default {
-    expected: ({ songList }: { songList: string[] }) => (
-        <ol>
+    actual: ({ songList }: { songList: string[] }) => (
+        <p>
             <If condition={songList.includes(`Gery-Nikol - I'm the Queen`)}>
                 good taste in music
             </If>
-        </ol>
+        </p>
     ),
-    actual: ({ songList }: { songList: string[] }) => (
-        <ol>
+    expected: ({ songList }: { songList: string[] }) => (
+        <p>
             {
                 songList.includes(`Gery-Nikol - I'm the Queen`) ? 'good taste in music' : null
             }
-        </ol>
+        </p>
     ),
     dataSet: [
-        ['Iron Maiden - The Monad (Horse & Penguin cover)', 'Britney - Toxic'],
-        ['Iron Maiden - The Monad (Horse & Penguin cover)', 'Britney - Toxic', `Gery-Nikol - I'm the Queen`]
-    ].map(songList => ({ songList }))
+        [['Iron Maiden - The Monad (Horse & Penguin cover)', 'Britney - Toxic'], 'renders text'],
+        [['Iron Maiden - The Monad (Horse & Penguin cover)', 'Britney - Toxic', `Gery-Nikol - I'm the Queen`], 'does not render text']
+    ].map(([songList, message]) => ({ props: { songList }, message }))
 }
