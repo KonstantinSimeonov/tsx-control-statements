@@ -14,7 +14,6 @@ fs.readdirSync('./tsc')
             const suiteName = name.replace('default', fn.replace('.js', '').replace('tsx-', ''));
             describe(suiteName, () => {
                 const { expected, actual, dataSet } = suite;
-                console.log(expected, actual)
                 dataSet.map(propsAndMessage => Object.assign(propsAndMessage, {
                         expectedComponent: expected,
                         assertedComponent: actual

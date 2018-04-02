@@ -3,7 +3,7 @@ import { Choose, When, Otherwise } from './types';
 
 export default {
     actual: ({ str }: { str: string }) => (
-        <p>
+        <article>
             <Choose>
                 <When condition={str === 'ivan'}>
                     ivancho
@@ -15,16 +15,16 @@ export default {
                     im the queen da da da da
                 </Otherwise>
             </Choose>
-        </p>
+        </article>
     ),
     expected: ({ str }: { str: string }) => (
-        <p>
+        <article>
             {[
                 (str === 'ivan') && 'ivancho',
                 (str === 'sarmi') && <h1>yum!</h1>,
                 'im the queen da da da da'
             ].find(Boolean)}
-        </p>
+        </article>
     ),
     dataSet: [
         ['ivan', 'renders first When'],
