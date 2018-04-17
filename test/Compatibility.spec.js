@@ -9,7 +9,7 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 
 enzyme.configure({ adapter: new Adapter });
 
-const testFiles = fs.readdirSync('./babel').filter(x => !x[1].endsWith('if.js'));
+const testFiles = fs.readdirSync('./babel');
 const zip = (xs, ys, fn) => Array
                                 .from({ length: Math.min(xs.length, ys.length) })
                                 .map((_, index) => fn(xs[index], ys[index], index));
