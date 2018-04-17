@@ -10,28 +10,30 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 enzyme.configure({ adapter: new Adapter });
 
 const testFiles = fs.readdirSync('./babel').filter(x => !x[1].endsWith('if.js'));
-const zip = (xs, ys, fn) => Array.from({ length: Math.min(xs.length, ys.length) }).map((_, index) => fn(xs[index], ys[index], index));
+const zip = (xs, ys, fn) => Array
+                                .from({ length: Math.min(xs.length, ys.length) })
+                                .map((_, index) => fn(xs[index], ys[index], index));
 
 zip(
-    testFiles.map(fn => [fn, `./babel/${fn}`]),
-    testFiles.map(fn => `./tsc/${fn}`),
+    testFiles.map(fileName => [fileName, `./babel/${fileName}`]),
+    testFiles.map(fileName => `./tsc/${fileName}`),
     (babelPath, tscPath) => [babelPath[0], require(babelPath[1]), require(tscPath)]
-).forEach(([fn, Babel, Tsc]) => {
-    describe(fn, () => Object.keys(Babel)
-        .map(suiteName => {
-            const babelComponent = Babel[suiteName].component;
-            const { component: tscComponent, dataSet } = Tsc[suiteName];
-            return [suiteName, babelComponent, tscComponent, dataSet];
-        })
-        .forEach(
-            (
-                [
-                    suiteName,
-                    expectedComponent,
-                    assertedComponent,
-                    dataSet
-                ]
-            ) => dataSet.map(testProps => Object.assign({ expectedComponent, assertedComponent }, testProps)).forEach(compareInnerHTMLTest)
-        )
+).forEach(([fileName, BabelComponents, TscComponents]) => {
+    describe(
+        fileName,
+        () => {
+            const suitNames = Object.keys(BabelComponents);
+            const suites = suitNames.map(suiteName => {
+                const babelComponent = BabelComponents[suiteName].component;
+                const { component: tscComponent, dataSet } = TscComponents[suiteName];
+                return [suiteName, babelComponent, tscComponent, dataSet];
+            });
+
+            for (const [suiteName, expectedComponent, assertedComponent, dataSet] of suites) {
+                dataSet
+                    .map(testProps => Object.assign({ expectedComponent, assertedComponent }, testProps))
+                    .forEach(compareInnerHTMLTest)
+            }
+        }
     )
 });

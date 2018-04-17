@@ -1,4 +1,5 @@
 node_modules/
 transformer.js
+transformer.d.ts
 dist/
 .vscode/

@@ -7,19 +7,23 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 enzyme.configure({ adapter: new Adapter });
 
 fs.readdirSync('./tsc')
-    .filter(fn => fn.startsWith('tsx-'))
-    .map(fn => [fn, Object.entries(require(`./tsc/${fn}`))])
-    .forEach(
-        ([fn, testSuite]) => testSuite.map(([name, suite]) => {
-            const suiteName = name.replace('default', fn.replace('.js', '').replace('tsx-', ''));
+    .filter(fileName => fileName.startsWith('tsx-'))
+    .map(fileName => [fileName, Object.entries(require(`./tsc/${fileName}`))])
+    .forEach(([fileName, testSuite]) => {
+        for (const [name, suite] of testSuite) {
+            const suiteName = name.replace('default', fileName.replace('.js', '').replace('tsx-', ''));
+            const {
+                expected: expectedComponent,
+                actual: assertedComponent,
+                dataSet
+            } = suite;
+
             describe(suiteName, () => {
-                const { expected, actual, dataSet } = suite;
-                dataSet.map(propsAndMessage => Object.assign(propsAndMessage, {
-                        expectedComponent: expected,
-                        assertedComponent: actual
-                    })
-                )
-                    .forEach(compareInnerHTMLTest);
+                for (const testProps of dataSet) {
+                    compareInnerHTMLTest({
+                        ...testProps, expectedComponent, assertedComponent
+                    });
+                }
             });
-        })
-    );
+        }
+    });

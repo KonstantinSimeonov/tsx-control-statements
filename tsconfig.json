@@ -2,18 +2,18 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "declaration": true,
-        "target": "es2015",
+        "target": "es6",
         "lib": [
-            "es6", "es2017"
+            "es6", "es2017", "es2017.object", "es2016"
         ],
         "module": "commonjs",
         "noImplicitAny": true,
         "noUnusedLocals": true,
         "strict": true,
         "pretty": true,
-        "jsx": "react",
-        "outFile": "test.js",
-        "outDir": "./dist",
-        "allowJs": true
-    }
+        "outDir": "./"
+    },
+    "files": [
+        "transformer.ts"
+    ]
 }
