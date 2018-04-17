@@ -66,7 +66,7 @@ const getJsxElementBody = (
         }
     ).filter(Boolean) as ts.Expression[];
 
-const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
+// const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 
 const createExpressionLiteral =
