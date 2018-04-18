@@ -83,8 +83,7 @@ const Names = ({ names }) => React.createElement(
 ```
 
 ### Choose/When/Otherwise
-- Provides If/Else like conditional control. Currently transpiles to array of elements, the first of which will be renderd.
-    - Note: this will be changed to nested ternary operators in the future.
+- Provides If/Else like conditional control. Transpiles to nested ternary operators.
 
 ```tsx
 const RandomStuff = ({ str }: { str: string }) => (
@@ -107,14 +106,9 @@ const RandomStuff = ({ str }: { str: string }) => (
 const RandomStuff = ({ str }) => React.createElement(
     'article',
     null,
-    [
-        str === 'ivan' ? 'ivancho' : null,
-        str === 'sarmi' ? React.createElement('h1', null, 'yum!') : null,
-        'im the queen da da da da'
-    ].find(Boolean)
+    str === 'ivan' ? 'ivancho' : str === 'sarmi' ? React.createElement('h1', null, 'yum!') : 'im the queen da da da da'
 )
 ```
-
 
 ## Cookbook (example setups incoming)
 
