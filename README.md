@@ -112,7 +112,11 @@ const RandomStuff = ({ str }) => React.createElement(
 )
 ```
 
-## Usage with [fuse-box](https://github.com/fuse-box/fuse-box)
+
+## Cookbook (example setups incoming)
+
+### [fuse-box](https://github.com/fuse-box/fuse-box)
+In a nutshell:
 
 ```js
 const FuseBox = require('fuse-box');
@@ -125,15 +129,31 @@ const fuse = FuseBox.init({
 });
 ```
 
-## Usage with typescript compiler cli
+- The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could server as an example.
+
+### Typescript compiler cli (`tsconfig.json`)
 ```shell
 $ ./node_modules/.bin/tsc --all | grep plugins
 --plugins                                          List of language service plugins.
 ```
-Looks like `tsc` cli has `--plugins` option. Might work, haven't tried.
+Looks like `tsc` cli has `--plugins` option. It can be configured in the `tsconfig.json` file like that:
 
-## Usage with webpack
-Typescript loaders should have some kind of option for this, haven't researched.
+```js
+{
+    "compilerOptions": {
+        "jsx": "react", /* jsx should be enabled, but not necessarily react */
+        "plugins": [
+            { "name": "./transformer.js" } /* put the path to the transformer file here */
+        ]
+    }
+}
+```
+
+### Usage with webpack
+[ts-loader](https://github.com/TypeStrong/ts-loader) and [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader) both seem to use `tsconfig.json`, so the above configuration should work.
+
+### Browserify, Gulp, etc
+No idea, will research.
 
 ## Can I switch from `babel` + `jsx-control-statements` to `tsc` + `tsx-control-statements`?
 - Should be a drop-in replacement, will try it for a bigger project in a few days.
@@ -147,3 +167,6 @@ Typescript loaders should have some kind of option for this, haven't researched.
 man git submodule # optional
 git submodule add git@github.com:KonstantinSimeonov/tsx-control-statements.git
 ```
+
+## Do I think control statements are a good idea?
+Nah. They might make jsx look a lot more feng shui, but in my experience they tend to get in the way of correct static typing and use of language features like destructuring in function parameters. Also (at least to me) they seem to kind of promote dumping out huger chunks of jsx, which could be broken down into smaller parts for testability and other stuff and whatnot. Why am I developing this then? I've a project written with `jsx-control-statements` that I want to migrate to typescript/fuse-box.
