@@ -10,6 +10,9 @@ Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/bab
     - This monstrous command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
 - Typings: `index.ts`
 
+## Can it compile `.js` or `.jsx` files?
+- Yup, just add `"allowJs": true` to the compiler options in your `tsconfig.json`.
+
 ## What typescript/javascript code is emitted?
 
 ### If
@@ -129,7 +132,7 @@ const fuse = FuseBox.init({
 });
 ```
 
-- The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could server as an example.
+- The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could serve as an example.
 
 ### Typescript compiler cli (`tsconfig.json`)
 ```shell
