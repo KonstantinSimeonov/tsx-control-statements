@@ -57,13 +57,13 @@ const getJsxElementBody = (
     .getChildren()
     .filter(isRelevantJsxNode)
     .map(
-        node => {
-            if (ts.isJsxText(node)) {
-                const text = trim(node.getFullText());
-                return text ? ts.createLiteral(text) : null;
-            }
-            return visitNodes(node, program, ctx);
+    node => {
+        if (ts.isJsxText(node)) {
+            const text = trim(node.getFullText());
+            return text ? ts.createLiteral(text) : null;
         }
+        return visitNodes(node, program, ctx);
+    }
     ).filter(Boolean) as ts.Expression[];
 
 // const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
@@ -169,14 +169,18 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
 
     const last = elements[elements.length - 1];
     const otherwise = last && last.tagName === 'Otherwise' ? elements.pop() : null;
+    const lastNode = otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull();
 
     return ts.createJsxExpression(
         undefined,
-        elements.reduceRight((conditionalExpr, { condition, nodeBody }) => ts.createConditional(
-            condition,
-            createExpressionLiteral(nodeBody),
-            conditionalExpr
-        ), otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull())
+        elements.reduceRight(
+            (conditionalExpr, { condition, nodeBody }) => ts.createConditional(
+                condition,
+                createExpressionLiteral(nodeBody),
+                conditionalExpr
+            ),
+            lastNode
+        )
     );
 };
 

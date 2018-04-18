@@ -101,3 +101,27 @@ export const ChooseNested = {
         ['horse', 'Otherwise -> Otherwise']
     ].map(([name, message]) => ({ props: { name }, message: `renders ${message}` }))
 }
+
+export const NoOtherwise = {
+    component: ({ n }) => (
+        <div>
+            <Choose>
+                <When condition={n === 1}>
+                    <h1>its one!</h1>
+                </When>
+                <When condition={n === 2}>
+                    <h2>its two :(</h2>
+                    kek
+                </When>
+                <When condition={n === 3}>
+                    <h1>its 3!</h1>
+                </When>
+                <When condition={n === 7}>
+                    <h2>{n}</h2>
+                </When>
+            </Choose>
+        </div>
+    ),
+    dataSet: [1, 2, 3, 7].map(n => ({ props: { n }, message: `renders one of the 'Whens'` }))
+                         .concat([{ props: { n: 10 }, message: 'renders nothing' }])
+}

@@ -11,9 +11,7 @@
     "build": "tsc --project ./tsconfig.json"
   },
   "devDependencies": {
-    "typescript": "^2.7.2"
-  },
-  "dependencies": {
+    "typescript": ">=2.3.0",
     "@types/node": "^9.6.0"
   }
 }

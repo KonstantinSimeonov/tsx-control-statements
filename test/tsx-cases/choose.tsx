@@ -7,7 +7,7 @@ export default {
             <Choose>
                 <When condition={str === 'ivan'}>
                     ivancho
-                    </When>
+                </When>
                 <When condition={str === 'sarmi'}>
                     <h1>yum!</h1>
                 </When>
@@ -19,11 +19,9 @@ export default {
     ),
     expected: ({ str }: { str: string }) => (
         <article>
-            {[
-                (str === 'ivan') && 'ivancho',
-                (str === 'sarmi') && <h1>yum!</h1>,
-                'im the queen da da da da'
-            ].find(Boolean)}
+            {
+                str === 'ivan' ? 'ivancho' : str === 'sarmi' ? <h1>yum!</h1> :  'im the queen da da da da'
+            }
         </article>
     ),
     dataSet: [
@@ -32,4 +30,3 @@ export default {
         ['banana', 'renders Otherwise']
     ].map(([str, message]) => ({ props: { str }, message }))
 }
-
