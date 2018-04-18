@@ -146,7 +146,7 @@ const transformOtherwiseNode: Transformation = (node, program, ctx) => createExp
 
 const transformWhenNode: Transformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
-    if(!condition) return ts.createNull();
+    if (!condition) return ts.createNull();
     return ts.createConditional(
         condition,
         createExpressionLiteral(getJsxElementBody(node, program, ctx)),
@@ -155,19 +155,28 @@ const transformWhenNode: Transformation = (node, program, ctx) => {
 };
 
 const transformChooseNode: Transformation = (node, program, ctx) => {
-    const elements = getJsxElementBody(node, program, ctx);
+    const elements = node
+        .getChildAt(1)
+        .getChildren()
+        .filter(node => isRelevantJsxNode(node) && ['When', 'Otherwise'].includes(String(getTagNameString(node))))
+        .map(node => {
+            const tagName = getTagNameString(node);
+            const { condition } = getJsxProps(node);
+            const nodeBody = getJsxElementBody(node, program, ctx);
+
+            return { condition, nodeBody, tagName };
+        });
+
+    const last = elements[elements.length - 1];
+    const otherwise = last && last.tagName === 'Otherwise' ? elements.pop() : null;
+
     return ts.createJsxExpression(
         undefined,
-        ts.createCall(
-            ts.createPropertyAccess(
-                ts.createArrayLiteral(elements),
-                'find'
-            ),
-            undefined,
-            [
-                ts.createIdentifier('Boolean')
-            ]
-        )
+        elements.reduceRight((conditionalExpr, { condition, nodeBody }) => ts.createConditional(
+            condition,
+            createExpressionLiteral(nodeBody),
+            conditionalExpr
+        ), otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull())
     );
 };
 
