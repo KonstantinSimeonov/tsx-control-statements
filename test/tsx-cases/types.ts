@@ -1,1 +1,1 @@
-../../index.ts
+../../index.d.ts
