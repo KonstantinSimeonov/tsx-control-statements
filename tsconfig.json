@@ -19,6 +19,6 @@
         "outDir": "./"
     },
     "files": [
-        "transformer.ts"
+        "./transformer.ts",
     ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "tsx-control-statements",
-  "version": "0.1.2",
+  "version": "0.0.1",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
@@ -18,11 +18,5 @@
   "devDependencies": {
     "@types/node": "^9.6.0",
     "typescript": ">=2.3.0"
-  },
-  "files": [
-      "./transformer.ts",
-      "./transformer.js",
-      "./transformer.d.ts",
-      "./index.d.ts"
-  ]
+  }
 }

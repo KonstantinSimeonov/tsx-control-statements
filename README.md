@@ -122,7 +122,7 @@ In a nutshell:
 
 ```js
 const FuseBox = require('fuse-box');
-const jsxControlStatements = require('./transformer');
+const jsxControlStatements = require('tsx-control-statements').default;
 const fuse = FuseBox.init({
     transformers: {
         before: [jsxControlStatements()]
