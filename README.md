@@ -21,7 +21,7 @@ Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/bab
 ```tsx
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
     <p>
-        <If condition={songList.includes(`Gery-Nikol - I'm the Queen`)}>
+        <If condition={songList.includes('Gery-Nikol - Im the Queen')}>
             good taste in music
         </If>
     </p>
@@ -31,7 +31,7 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 const SongRelatedThingy = ({ songList }) => React.createElement(
     'p',
     null,
-    songList.includes(`Gery-Nikol - I'm the Queen`) ? 'good taste in music' : null
+    songList.includes('Gery-Nikol - Im the Queen') ? 'good taste in music' : null
 )
 ```
 
@@ -110,6 +110,8 @@ const RandomStuff = ({ str }) => React.createElement(
 )
 ```
 
+- `Otherwise` tag at the end is optional - if not provided, whenever no `When`'s condition did match, nothing will be rendered.
+
 ## Cookbook (example setups incoming)
 
 ### [fuse-box](https://github.com/fuse-box/fuse-box)
@@ -133,7 +135,7 @@ const fuse = FuseBox.init({
 $ ./node_modules/.bin/tsc --all | grep plugins
 --plugins                                          List of language service plugins.
 ```
-Looks like `tsc` cli has `--plugins` option. It can be configured in the `tsconfig.json` file like that:
+- Looks like `tsc` cli has `--plugins` option. It can be configured in the `tsconfig.json` file like that:
 
 ```js
 {
@@ -147,10 +149,10 @@ Looks like `tsc` cli has `--plugins` option. It can be configured in the `tsconf
 ```
 
 ### Usage with webpack
-[ts-loader](https://github.com/TypeStrong/ts-loader) and [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader) both seem to use `tsconfig.json`, so the above configuration should work.
+- [ts-loader](https://github.com/TypeStrong/ts-loader) and [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader) both seem to use `tsconfig.json`, so the above configuration should work.
 
 ### Browserify, Gulp, etc
-No idea, will research.
+- No idea, will research.
 
 ## Can I switch from `babel` + `jsx-control-statements` to `tsc` + `tsx-control-statements`?
 - Should be a drop-in replacement, will try it for a bigger project in a few days.
@@ -166,4 +168,4 @@ git submodule add git@github.com:KonstantinSimeonov/tsx-control-statements.git
 ```
 
 ## Do I think control statements are a good idea?
-Nah. They might make jsx look a lot more feng shui, but in my experience they tend to get in the way of correct static typing and use of language features like destructuring in function parameters. Also (at least to me) they seem to kind of promote dumping out huger chunks of jsx, which could be broken down into smaller parts for testability and other stuff and whatnot. Why am I developing this then? I've a project written with `jsx-control-statements` that I want to migrate to typescript/fuse-box.
+- Nah. They might make jsx look a lot more feng shui, but in my experience they tend to get in the way of correct static typing and use of language features like destructuring in function parameters. Also (at least to me) they seem to kind of promote dumping out huger chunks of jsx, which could be broken down into smaller parts for testability and other stuff and whatnot. Why am I developing this then? I've a project written with `jsx-control-statements` that I want to migrate to typescript/fuse-box.
