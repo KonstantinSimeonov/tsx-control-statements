@@ -1,5 +1,7 @@
 # tsx-control-statements
 
+[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements)
+
 Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/babel-plugin-jsx-control-statements for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
 
 ## Do `.tsx` files compile successfuly?
@@ -8,6 +10,7 @@ Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/bab
     - You can check out a workaround [here](./test/tsx-cases/for.tsx)
 - Test it: `yarn && yarn build && cd test && yarn && yarn build && yarn test`
     - This monstrous command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
+    - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
 - Typings: `index.ts`
 
 ## Can it compile `.js` or `.jsx` files?
@@ -158,13 +161,16 @@ $ ./node_modules/.bin/tsc --all | grep plugins
 - Should be a drop-in replacement, will try it for a bigger project in a few days.
 
 ## What if I want to use this right nao?
-- This package is still not on npm, but it will probably be in a short while.
-
-## What if I want to use this right nao real much?
-- I seriously doubt that.
 ```shell
-man git submodule # optional
-git submodule add git@github.com:KonstantinSimeonov/tsx-control-statements.git
+# npm
+npm i tsx-control-statements
+# or yarn
+yarn add tsx-control-statements
+```
+
+- In your code:
+```js
+const transformer = require('tsx-control-statements').default();
 ```
 
 ## Do I think control statements are a good idea?
