@@ -2,13 +2,18 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "declaration": true,
-        "target": "es6",
+        "target": "es5",
         "lib": [
             "es6", "es2017", "es2017.object", "es2016"
         ],
         "module": "commonjs",
         "noImplicitAny": true,
         "noUnusedLocals": true,
+        "downlevelIteration": true,
+        "listEmittedFiles": true,
+        "newLine": "LF",
+        "removeComments": true,
+        "strictNullChecks": true,
         "strict": true,
         "pretty": true,
         "outDir": "./"

@@ -3,3 +3,4 @@ transformer.js
 transformer.d.ts
 dist/
 .vscode/
+yarn-error.log
