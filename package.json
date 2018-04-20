@@ -1,9 +1,18 @@
 {
   "name": "tsx-control-statements",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
+  "keywords": [
+    "control-statements",
+    "typescript",
+    "jsx",
+    "tsx",
+    "if",
+    "loop",
+    "react "
+  ],
   "repository": {
       "type": "git",
       "url": "https://github.com/KonstantinSimeonov/tsx-control-statements"
