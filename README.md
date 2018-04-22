@@ -117,45 +117,9 @@ const RandomStuff = ({ str }) => React.createElement(
 
 ## Cookbook (example setups incoming)
 
-### [fuse-box](https://github.com/fuse-box/fuse-box)
-In a nutshell:
-
-```js
-const FuseBox = require('fuse-box');
-const jsxControlStatements = require('tsx-control-statements').default;
-const fuse = FuseBox.init({
-    transformers: {
-        before: [jsxControlStatements()]
-    },
-    ...otherOptions
-});
-```
+## [fuse-box](./examples/fuse-box)
 
 - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could serve as an example.
-
-### Typescript compiler cli (`tsconfig.json`)
-```shell
-$ ./node_modules/.bin/tsc --all | grep plugins
---plugins                                          List of language service plugins.
-```
-- Looks like `tsc` cli has `--plugins` option. It can be configured in the `tsconfig.json` file like that:
-
-```js
-{
-    "compilerOptions": {
-        "jsx": "react", /* jsx should be enabled, but not necessarily react */
-        "plugins": [
-            { "name": "./transformer.js" } /* put the path to the transformer file here */
-        ]
-    }
-}
-```
-
-### Usage with webpack
-- [ts-loader](https://github.com/TypeStrong/ts-loader) and [awesome-typescript-loader](https://github.com/s-panferov/awesome-typescript-loader) both seem to use `tsconfig.json`, so the above configuration should work.
-
-### Browserify, Gulp, etc
-- No idea, will research.
 
 ## Can I switch from `babel` + `jsx-control-statements` to `tsc` + `tsx-control-statements`?
 - Should be a drop-in replacement, will try it for a bigger project in a few days.
