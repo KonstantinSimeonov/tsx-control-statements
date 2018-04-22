@@ -15,12 +15,11 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			// only those lines are relevant
 			{
 				test: /\.tsx?$/,
-				loader: 'ts-loader',
+				loader: 'awesome-typescript-loader',
+				// loader: 'ts-loader',
 				options: {
-					transpileOnly: true,
 					getCustomTransformers: () => ({ before: [statements()] })
 				}
 			}

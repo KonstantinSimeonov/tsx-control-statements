@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { If } from './types';
 
 export default {
     actual: ({ songList }: { songList: string[] }) => (

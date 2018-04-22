@@ -15,6 +15,7 @@
 	"devDependencies": {
 		"@types/react": "^16.3.12",
 		"@types/react-dom": "^16.0.5",
+		"awesome-typescript-loader": "^5.0.0",
 		"ts-loader": "^4.2.0",
 		"tsx-control-statements": "^0.0.2",
 		"typescript": "^2.8.3",

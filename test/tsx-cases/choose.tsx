@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Choose, When, Otherwise } from './types';
 
 export default {
     actual: ({ str }: { str: string }) => (

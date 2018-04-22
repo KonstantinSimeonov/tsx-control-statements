@@ -120,7 +120,7 @@ const RandomStuff = ({ str }) => React.createElement(
 - [fuse-box](./examples/fuse-box)
     - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could serve as an example.
 
-- [webpack (ts-loader)](./examples/webpack)
+- [webpack (ts-loader/awesome-typescript-loader)](./examples/webpack)
 
 ## Can I switch from `babel` + `jsx-control-statements` to `tsc` + `tsx-control-statements`?
 - Should be a drop-in replacement, will try it for a bigger project in a few days.

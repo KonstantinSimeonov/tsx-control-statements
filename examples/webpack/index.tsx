@@ -1,6 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+// Bindings in <For /> body cause compile time errors without those declarations.
+declare const i: number;
+declare const thingy: string;
+
 export default class Example extends React.Component<{}, { things: string[] }> {
 	constructor(props) {
 		super(props);
@@ -11,7 +15,7 @@ export default class Example extends React.Component<{}, { things: string[] }> {
 	_onChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({ things: event.target.value.split(' ').filter(Boolean) })
 
 	render() {
-		const { things } = this.state;
+        const { things } = this.state;
 		return (
 			<div>
 				<input type="text" onChange={this._onChange} />

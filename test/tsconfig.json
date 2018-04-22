@@ -1,13 +1,13 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "module": "commonjs",
-        "jsx": "react",
-        "lib": [
-            "es6",
-            "es2016"
-        ],
-        "target": "es5",
-        "allowSyntheticDefaultImports": true
-    }
+	"compilerOptions": {
+		"allowJs": true,
+		"module": "commonjs",
+		"jsx": "react",
+		"lib": [
+			"es6",
+			"es2016"
+		],
+		"target": "es5",
+		"allowSyntheticDefaultImports": true
+	}
 }

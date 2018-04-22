@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { With } from './types';
 
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var gosho: number, pesho: number, tosho: number;
