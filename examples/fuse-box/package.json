@@ -1,0 +1,20 @@
+{
+	"name": "fuse-box-example",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "yarn && node fuse.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/react": "^16.3.12",
+		"@types/react-dom": "^16.0.5",
+		"fuse-box": "^3.2.2",
+		"react": "^16.3.2",
+		"react-dom": "^16.3.2",
+		"tsx-control-statements": "^0.0.2",
+		"typescript": "^2.8.3"
+	}
+}
