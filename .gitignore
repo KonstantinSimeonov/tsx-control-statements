@@ -4,3 +4,5 @@ transformer.d.ts
 dist/
 .vscode/
 yarn-error.log
+.nyc_output/
+coverage/
