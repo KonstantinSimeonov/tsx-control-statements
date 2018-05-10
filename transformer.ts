@@ -142,18 +142,6 @@ const transformForNode: Transformation = (node, program, ctx) => {
     );
 };
 
-const transformOtherwiseNode: Transformation = (node, program, ctx) => createExpressionLiteral(getJsxElementBody(node, program, ctx));
-
-const transformWhenNode: Transformation = (node, program, ctx) => {
-    const { condition } = getJsxProps(node);
-    if (!condition) return ts.createNull();
-    return ts.createConditional(
-        condition,
-        createExpressionLiteral(getJsxElementBody(node, program, ctx)),
-        ts.createNull()
-    )
-};
-
 const transformChooseNode: Transformation = (node, program, ctx) => {
     const elements = node
         .getChildAt(1)
@@ -217,8 +205,6 @@ const getTransformation = (node: ts.Node): Transformation => {
         case 'If': return transformIfNode;
         case 'For': return transformForNode;
         case 'Choose': return transformChooseNode;
-        case 'Otherwise': return transformOtherwiseNode;
-        case 'When': return transformWhenNode;
         case 'With': return transformWithNode;
         default: return (a, b, c) => a;
     }
