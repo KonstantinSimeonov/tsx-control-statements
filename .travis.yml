@@ -2,5 +2,5 @@ language: node_js
 node_js:
   - "9.11.1"
 install: yarn
-script: yarn test
-after_sucess: yarn coverage
+script: yarn build && yarn test
+after_success: yarn coverage
