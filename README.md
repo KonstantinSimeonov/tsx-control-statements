@@ -1,14 +1,17 @@
 # tsx-control-statements
 
-[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements)
+[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements) [![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tsx-control-statements/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Typescript compiler plugin - kind of a port of https://www.npmjs.com/package/babel-plugin-jsx-control-statements for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
+Typescript compiler plugin - kind of a port of [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements) for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
+
+## Feedback appreciated!
+- Got a problem getting things rolling or having a suggestion? You're welcome! Reach me at [gitter chat](https://gitter.im/tsx-control-statements/Lobby).
 
 ## Do `.tsx` files compile successfuly?
 - Yup, control statements transpile to type correct typescript before type checking
 - Note: editors like visual studio code cannot infer that some additional transpilation will occur and will complain
     - You can check out a workaround [here](./test/tsx-cases/for.tsx)
-- Test it: `yarn && yarn build && cd test && yarn && yarn build && yarn test`
+- Test it: `yarn test`
     - This monstrous command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
     - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
 - Typings: `index.ts`
