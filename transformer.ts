@@ -16,6 +16,15 @@ function visitNodes(node: ts.Node, program: ts.Program, context: ts.Transformati
     return ts.visitEachChild(node, childNode => visitNodes(childNode, program, context), context);
 }
 
+const CTRL_NODE_NAMES = Object.freeze({
+	CONDITIONAL: 'If',
+	FOREACH: 'For',
+	SWITCH: 'Choose',
+	CASE: 'When',
+	DEFAULT: 'Otherwise',
+	WITH: 'With'
+});
+
 type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => Readonly<ts.Node>;
 const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
     || ts.isJsxExpression(node)
@@ -79,14 +88,14 @@ const createExpressionLiteral =
 const transformIfNode: Transformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
     if (!condition) {
-        console.warn('tsx-ctrl: If missing condition props');
+        console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CONDITIONAL} missing condition props`);
         return ts.createNull();
     }
 
     const body = getJsxElementBody(node, program, ctx);
 
     if (body.length === 0) {
-        console.warn('tsx-ctrl: empty If');
+        console.warn(`tsx-ctrl: empty ${CTRL_NODE_NAMES.CONDITIONAL}`);
         return ts.createNull();
     }
 
@@ -103,13 +112,13 @@ const transformIfNode: Transformation = (node, program, ctx) => {
 const transformForNode: Transformation = (node, program, ctx) => {
     const { each, of, index } = getJsxProps(node);
     if (!of) {
-        console.warn('tsx-ctrl: "of" property of For is missing');
+        console.warn(`tsx-ctrl: 'of' property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
         return ts.createNull();
     }
 
     const body = getJsxElementBody(node, program, ctx);
     if (body.length === 0) {
-        console.warn('tsx-ctrl: empty For');
+        console.warn(`tsx-ctrl: empty ${CTRL_NODE_NAMES.FOREACH}`);
         return ts.createNull();
     }
 
@@ -146,7 +155,7 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     const elements = node
         .getChildAt(1)
         .getChildren()
-        .filter(node => isRelevantJsxNode(node) && ['When', 'Otherwise'].includes(String(getTagNameString(node))))
+        .filter(node => isRelevantJsxNode(node) && [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT].includes(String(getTagNameString(node))))
         .map(node => {
             const tagName = getTagNameString(node);
             const { condition } = getJsxProps(node);
@@ -155,19 +164,31 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
             return { condition, nodeBody, tagName };
         });
 
+    if (elements.length === 0) {
+        console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
+        return;
+    }
+
+    const hasBadPlacedDefaultCase = elements.some((node, index) => node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== elements.length - 1));
+    if (hasBadPlacedDefaultCase) {
+        console.log(`tsx-ctrl: ${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`);
+    }
+
     const last = elements[elements.length - 1];
-    const [whens, otherwise] = last && last.tagName === 'Otherwise' ? [elements.slice(0, elements.length - 1), last] : [elements, null];
-    const otherwiseOrNull = otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull();
+    const [cases, defaultCase] = last && last.tagName === CTRL_NODE_NAMES.DEFAULT
+                                ? [elements.slice(0, elements.length - 1), last]
+                                : [elements, null];
+    const defaultCaseOrNull = defaultCase ? createExpressionLiteral(defaultCase.nodeBody) : ts.createNull();
 
     return ts.createJsxExpression(
         undefined,
-        whens.reduceRight(
+        cases.reduceRight(
             (conditionalExpr, { condition, nodeBody }) => ts.createConditional(
                 condition,
                 createExpressionLiteral(nodeBody),
                 conditionalExpr
             ),
-            otherwiseOrNull
+            defaultCaseOrNull
         )
     );
 };
@@ -202,10 +223,10 @@ const getTransformation = (node: ts.Node): Transformation => {
 
     const tagName = getTagNameString(node);
     switch (tagName) {
-        case 'If': return transformIfNode;
-        case 'For': return transformForNode;
-        case 'Choose': return transformChooseNode;
-        case 'With': return transformWithNode;
+        case CTRL_NODE_NAMES.CONDITIONAL: return transformIfNode;
+        case CTRL_NODE_NAMES.FOREACH: return transformForNode;
+        case CTRL_NODE_NAMES.SWITCH: return transformChooseNode;
+        case CTRL_NODE_NAMES.WITH: return transformWithNode;
         default: return (a, b, c) => a;
     }
 };
