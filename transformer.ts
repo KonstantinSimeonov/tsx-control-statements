@@ -156,18 +156,18 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
         });
 
     const last = elements[elements.length - 1];
-    const otherwise = last && last.tagName === 'Otherwise' ? elements.pop() : null;
-    const lastNode = otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull();
+    const [whens, otherwise] = last && last.tagName === 'Otherwise' ? [elements.slice(0, elements.length - 1), last] : [elements, null];
+    const otherwiseOrNull = otherwise ? createExpressionLiteral(otherwise.nodeBody) : ts.createNull();
 
     return ts.createJsxExpression(
         undefined,
-        elements.reduceRight(
+        whens.reduceRight(
             (conditionalExpr, { condition, nodeBody }) => ts.createConditional(
                 condition,
                 createExpressionLiteral(nodeBody),
                 conditionalExpr
             ),
-            lastNode
+            otherwiseOrNull
         )
     );
 };
