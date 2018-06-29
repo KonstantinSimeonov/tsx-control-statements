@@ -30,3 +30,4 @@ for (const [homeDir, output] of [
             fuse.run();
         });
 }
+

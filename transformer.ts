@@ -52,10 +52,9 @@ const getJsxProps = (node: ts.Node): PropMap => {
         .getChildAt(0) // some kinda ts api derp
         .getChildren()
         .filter(ts.isJsxAttribute)
-        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }))
-        .reduce((m, c) => Object.assign(m, c), {});
+        .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }));
 
-    return props;
+    return Object.assign({}, ...props);
 };
 
 const getJsxElementBody = (
@@ -66,22 +65,22 @@ const getJsxElementBody = (
     .getChildren()
     .filter(isRelevantJsxNode)
     .map(
-    node => {
-        if (ts.isJsxText(node)) {
-            const text = trim(node.getFullText());
-            return text ? ts.createLiteral(text) : null;
+        node => {
+            if (ts.isJsxText(node)) {
+                const text = trim(node.getFullText());
+                return text ? ts.createLiteral(text) : null;
+            }
+
+            return visitNodes(node, program, ctx);
         }
-        return visitNodes(node, program, ctx);
-    }
     ).filter(Boolean) as ts.Expression[];
 
 // const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 
-const createExpressionLiteral =
-    (
-        expressions: ts.Expression[]
-    ): ts.ArrayLiteralExpression | ts.Expression => expressions.length === 1
+const createExpressionLiteral = (
+    expressions: ts.Expression[]
+): ts.ArrayLiteralExpression | ts.Expression => expressions.length === 1
             ? ts.createJsxExpression(undefined, expressions[0])
             : ts.createArrayLiteral(expressions);
 
@@ -166,10 +165,10 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
 
     if (elements.length === 0) {
         console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
-        return;
+        return ts.createNull();
     }
 
-    const hasBadPlacedDefaultCase = elements.some((node, index) => node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== elements.length - 1));
+    const hasBadPlacedDefaultCase = elements.some((node, index) => node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== elements.length - 1);
     if (hasBadPlacedDefaultCase) {
         console.log(`tsx-ctrl: ${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`);
     }
