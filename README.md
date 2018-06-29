@@ -11,13 +11,16 @@ Typescript compiler plugin - kind of a port of [jsx-control-statements](https://
 - Yup, control statements transpile to type correct typescript before type checking
 - Note: editors like visual studio code cannot infer that some additional transpilation will occur and will complain
     - You can check out a workaround [here](./test/tsx-cases/for.tsx)
-- Test it: `yarn test`
-    - This monstrous command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
+- Test it: `yarn build && yarn test`
+    - This command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
     - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
-- Typings: `index.ts`
+- Typings: `index.d.tsx`
 
 ## Can it compile `.js` or `.jsx` files?
 - Yup, just add `"allowJs": true` to the compiler options in your `tsconfig.json`.
+
+## I see the tests are writen with React, can I use this with something else (Vue for example)?
+- The transformer itself has no dependency on React, Vue or other frontend frameworks. It can be used to transform jsx for whatever purposes.
 
 ## What typescript/javascript code is emitted?
 
@@ -34,10 +37,10 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 )
 
 // will transpile to
-const SongRelatedThingy = ({ songList }) => React.createElement(
-    'p',
-    null,
-    songList.includes('Gery-Nikol - Im the Queen') ? 'good taste in music' : null
+const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
+    <p>
+        {songList.includes('Gery-Nikol - Im the Queen') ? 'good taste in music' : null}
+    </p>
 )
 ```
 
@@ -54,10 +57,10 @@ const Sum = () => (
 )
 
 // becomes
-const Sum = () => React.createElement(
-    'p',
-    null,
-    ((a, b, c) => a + b + c)(3, 5, 6)
+const Sum = () => (
+    <p>
+        {((a, b, c) => a + b + c))()}
+    </p>
 )
 ```
 
@@ -73,18 +76,10 @@ const Names = ({ names }: { names: string[] }) => (
 )
 
 // Will become
-
-const Names = ({ names }) => React.createElement(
-    'ol',
-    null,
-    names.map(
-        (name, i) => React.createElement(
-            'li',
-            { key: name },
-            i,
-            React.createElement('strong', null, name)
-        )
-    )
+const Names = ({ names }: { names: string[] }) => (
+    <ol>
+        {names.map((name, i) => <li key={name}>{i}<strong>{name}</strong></li>}
+    </ol>
 )
 ```
 
@@ -109,10 +104,10 @@ const RandomStuff = ({ str }: { str: string }) => (
 )
 
 // transpiles to
-const RandomStuff = ({ str }) => React.createElement(
-    'article',
-    null,
-    str === 'ivan' ? 'ivancho' : str === 'sarmi' ? React.createElement('h1', null, 'yum!') : 'im the queen da da da da'
+const RandomStuff = ({ str }: { str: string }) => (
+    <article>
+	{str === 'ivan' ? 'ivancho' : str === 'sarmi' ? React.createElement('h1', null, 'yum!') : 'im the queen da da da da'}
+    </article>
 )
 ```
 
