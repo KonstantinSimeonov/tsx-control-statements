@@ -16,9 +16,10 @@
         "strictNullChecks": true,
         "strict": true,
         "pretty": true,
-        "outDir": "./"
+        "outDir": "./",
+        "jsx": "react"
     },
     "files": [
-        "./transformer.ts",
+        "./transformer.ts"
     ]
 }

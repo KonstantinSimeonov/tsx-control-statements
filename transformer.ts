@@ -117,7 +117,7 @@ const transformForNode: Transformation = (node, program, ctx) => {
 
     const body = getJsxElementBody(node, program, ctx);
     if (body.length === 0) {
-        console.warn(`tsx-ctrl: empty ${CTRL_NODE_NAMES.FOREACH}`);
+        console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.FOREACH}`);
         return ts.createNull();
     }
 
@@ -161,16 +161,29 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
             const nodeBody = getJsxElementBody(node, program, ctx);
 
             return { condition, nodeBody, tagName };
+        })
+        .filter((node, index, array) => {
+            if (node.nodeBody.length === 0) {
+                console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.CASE}`);
+                return false;
+            }
+
+            if (!node.condition && node.tagName !== CTRL_NODE_NAMES.DEFAULT) {
+                console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CASE} without condition will be skipped`);
+                return false;
+            }
+
+            if (node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== array.length - 1) {
+                console.log(`tsx-ctrl: ${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`);
+                return false;
+            }
+
+            return true;
         });
 
     if (elements.length === 0) {
         console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
         return ts.createNull();
-    }
-
-    const hasBadPlacedDefaultCase = elements.some((node, index) => node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== elements.length - 1);
-    if (hasBadPlacedDefaultCase) {
-        console.log(`tsx-ctrl: ${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`);
     }
 
     const last = elements[elements.length - 1];
@@ -231,3 +244,4 @@ const getTransformation = (node: ts.Node): Transformation => {
 };
 
 const statements: Transformation = (node, program, ctx) => getTransformation(node)(node, program, ctx);
+

@@ -21,7 +21,6 @@ for (const [homeDir, output] of [
                 globals: { default: '*' },
                 plugins: [
                     QuantumPlugin({
-                        containedAPI: true,
                         bakeApiIntoBundle: bundle
                     })
                 ]

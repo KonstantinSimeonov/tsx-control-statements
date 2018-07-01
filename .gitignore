@@ -6,3 +6,6 @@ dist/
 yarn-error.log
 .nyc_output/
 coverage/
+*.swp
+package-lock.json
+

@@ -20,4 +20,42 @@ export default {
         [[], 'renders empty ol'],
         [['steeve joobs', 'bil gaytes', 'lightlin naakov'], 'renders a li for every chap'],
     ].map(([chaps, message]) => ({ props: { chaps }, message }))
-}
+};
+
+export const EmptyFor = {
+    expected: ({ peshovci }: { peshovci: any[] }) => (
+            <ul>
+                transformerfactory
+                <For each="peshko" index="toshko" of={peshovci}>
+                </For>
+            </ul>
+    ),
+    actual: () => (
+            <ul>
+                transformerfactory
+            </ul>
+    ),
+    dataSet: [
+        { props: { peshovci: [1, 2, 3] }, message: 'empty for renders nothing' }
+    ]
+};
+
+export const NoArrayFor = {
+    expected: ({ peshovci }: { peshovci: any[] }) => (
+            <ul>
+                transformerfactory
+                <For each="peshko" index="toshko">
+                        <li key={peshko}>{peshko}</li>
+                </For>
+            </ul>
+    ),
+    actual: () => (
+            <ul>
+                transformerfactory
+            </ul>
+    ),
+    dataSet: [
+        { props: { peshovci: [1, 2, 3] }, message: 'for without array renders nothing' }
+    ]
+};
+
