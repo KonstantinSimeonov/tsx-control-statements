@@ -20,9 +20,9 @@
   "license": "MIT",
   "types": "index.ts",
   "scripts": {
-    "tsc": "tsc",
-    "babel": "babel",
-    "build": "yarn && tsc --project ./tsconfig.json",
+    "tsc": "./node_modules/.bin/tsc",
+    "babel": "./node_modules/.bin/babel",
+    "build": "./node_modules/.bin/tsc --project ./tsconfig.json",
     "test": "cd test && ./compile-cases.sh && mocha ./helpers/browser-env.js ./*.spec.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "html-coverage": "nyc report --reporter=html"
@@ -45,7 +45,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "ts-node": "^7.0.0",
-    "typescript": ">=2.4.0"
+    "typescript": "2.9"
   },
   "peerDependencies": {
     "typescript": ">=2.4.0"

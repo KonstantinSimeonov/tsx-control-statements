@@ -4,6 +4,15 @@
 
 Typescript compiler plugin - kind of a port of [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements) for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
 
+| Typescript version | Build status           |
+|:------------------:|:-----------------------|
+| 2.4.x              | tests _passing_        |
+| 2.5.x              | tests _passing_        |
+| 2.6.x              | tests _passing_        |
+| 2.7.x              | tests _passing_        |
+| 2.8.x              | tests _passing_        |
+| 2.9.x              | tests **failing**      |
+
 ## Feedback appreciated!
 - Got a problem getting things rolling or having a suggestion? You're welcome! Reach me at [gitter chat](https://gitter.im/tsx-control-statements/Lobby).
 
