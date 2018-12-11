@@ -77,6 +77,7 @@ const getJsxElementBody = (
 
 // const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
+const nullJsxExpr = () => ts.createJsxExpression(undefined, ts.createNull());
 
 const createExpressionLiteral = (
     expressions: ts.Expression[]
@@ -88,14 +89,14 @@ const transformIfNode: Transformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
     if (!condition) {
         console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CONDITIONAL} missing condition props`);
-        return ts.createNull();
+        return nullJsxExpr();
     }
 
     const body = getJsxElementBody(node, program, ctx);
 
     if (body.length === 0) {
         console.warn(`tsx-ctrl: empty ${CTRL_NODE_NAMES.CONDITIONAL}`);
-        return ts.createNull();
+        return nullJsxExpr();
     }
 
     return ts.createJsxExpression(
@@ -112,13 +113,13 @@ const transformForNode: Transformation = (node, program, ctx) => {
     const { each, of, index } = getJsxProps(node);
     if (!of) {
         console.warn(`tsx-ctrl: 'of' property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
-        return ts.createNull();
+        return nullJsxExpr();
     }
 
     const body = getJsxElementBody(node, program, ctx);
     if (body.length === 0) {
         console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.FOREACH}`);
-        return ts.createNull();
+        return nullJsxExpr();
     }
 
     const arrowFunctionArgs =
@@ -183,7 +184,7 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
 
     if (elements.length === 0) {
         console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
-        return ts.createNull();
+        return nullJsxExpr();
     }
 
     const last = elements[elements.length - 1];
