@@ -1,3 +1,10 @@
-./test
-./transformer.d.ts
+test/
 .travis.yml
+node_modules/
+.travis.yml
+coverage/
+.nyc_output/
+test-output/
+examples/
+yarn-error.log
+runtests.sh
