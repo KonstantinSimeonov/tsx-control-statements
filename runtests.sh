@@ -11,9 +11,10 @@ for v in {4..9}; do
 	yarn upgrade typescript@2.$v > /dev/null
 	./-v | grep -i --color Version
 	yarn test
-	[[ $? != 0 ]] && exit_code=1
-	echo "Build and tests for 2.$v.* exited with code $?"
+	current_exit_code=$?
+	[[ $current_exit_code != 0 ]] && exit_code=1
+	echo "Build and tests for 2.$v.* exited with code $current_exit_code"
 done
 
-exit exit_code
+exit $exit_code
 
