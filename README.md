@@ -12,7 +12,9 @@ Typescript compiler plugin - kind of a port of [jsx-control-statements](https://
 | 2.7.x              | tests _passing_        |
 | 2.8.x              | tests _passing_        |
 | 2.9.x              | tests _passing_        |
-| 3.x                | _coming soon_          |
+| 3.0.x              | tests _passing_        |
+| 3.1.x              | tests _passing_        |
+| 3.2.x              | tests _passing_        |
 
 ## Feedback appreciated!
 - Got a problem getting things rolling or having a suggestion? You're welcome! Reach me at [gitter chat](https://gitter.im/tsx-control-statements/Lobby).
