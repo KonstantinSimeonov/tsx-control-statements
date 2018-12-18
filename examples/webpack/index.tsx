@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import 'tsx-control-statements/index.d';
+
 // Bindings in <For /> body cause compile time errors without those declarations.
 declare const i: number;
 declare const thingy: string;
+declare const emoji: string;
 
 export default class Example extends React.Component<{}, { things: string[] }> {
 	constructor(props) {
@@ -12,7 +15,9 @@ export default class Example extends React.Component<{}, { things: string[] }> {
 		this.state = { things: ['this', 'is', 'demo'] };
 	}
 
-	_onChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({ things: event.target.value.split(' ').filter(Boolean) })
+	_onChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({
+		things: event.target.value.split(' ').filter(Boolean)
+	})
 
 	render() {
         const { things } = this.state;
@@ -24,10 +29,15 @@ export default class Example extends React.Component<{}, { things: string[] }> {
 						<h1>{things.length} thingies:</h1>
 						<For each="thingy" index="i" of={things}>
 							<p key={i}>{i}. {thingy}</p>
+							<If condition={i >= 6}>
+								<p key="karamba">Karambaaaa</p>
+							</If>
 						</For>
 					</When>
 					<Otherwise>
-						no thingies :(
+						<With emoji=":(">
+							no thingies {emoji}
+						</With>
 					</Otherwise>
 				</Choose>
 			</div>

@@ -1,6 +1,6 @@
 # Usage with webpack
 
-`typings` directory and the `typesRoot` configuration in `tsconfig.json` prevent compile-time errors from typescript. This setup should be identical for `ts-loader` and `awesome-typescript-loader`.
+This setup should be identical for `ts-loader` and `awesome-typescript-loader`. This example does not work for `typescript < 2.7`.
 
 ## Running the example:
 

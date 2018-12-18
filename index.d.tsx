@@ -1,6 +1,22 @@
-declare function For<T>({ each, of, index }: { each: string; of: T[]; index?: string });
-declare function If({ condition }: { condition: boolean });
 declare function Choose();
-declare function When({ condition }: { condition: boolean });
+declare function When(props: { condition: boolean; });
 declare function Otherwise();
-declare function With(props: { [id: string]: any });
+declare function If(props: { condition: boolean; });
+declare function For<T>(props: { each: string; of: T[]; index?: string; });
+declare function With(props: { [id: string]: any; });
+
+
+declare namespace JSX {
+	type TChildren = Element[]
+		| Element
+		| Function
+		| string
+		| number
+		| boolean
+		| null
+		| typeof undefined;
+
+	interface IntrinsicAttributes {
+		children?: TChildren;
+	}
+}

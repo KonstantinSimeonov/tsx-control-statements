@@ -6,7 +6,6 @@
         "pretty": true,
         "moduleResolution": "node",
         "typeRoots": [
-            "./typings",
             "./node_modules/@types"
         ]
     }
