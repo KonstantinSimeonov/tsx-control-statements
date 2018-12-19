@@ -1,8 +1,8 @@
 # tsx-control-statements
 
-[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master) [![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tsx-control-statements/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master) [![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tsx-control-statements/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [gitter chat](https://gitter.im/tsx-control-statements/Lobby)
 
-Typescript compiler plugin - kind of a port of [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements) for typescript. Intended to allow migrating from babel to TSC without the need to migrate away from control statements.
+Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements), but for the typescript compiler toolchain. **Works for both javascript and typescript.**
 
 | Typescript version | Build status           |
 |:------------------:|:-----------------------|
@@ -16,28 +16,21 @@ Typescript compiler plugin - kind of a port of [jsx-control-statements](https://
 | 3.1.x              | tests _passing_        |
 | 3.2.x              | tests _passing_        |
 
-## Feedback appreciated!
-- Got a problem getting things rolling or having a suggestion? You're welcome! Reach me at [gitter chat](https://gitter.im/tsx-control-statements/Lobby).
-
-## Do `.tsx` files compile successfuly?
-- Yup, control statements transpile to type correct typescript before type checking
-- Note: editors like visual studio code cannot infer that some additional transpilation will occur and will complain
-    - You can check out a workaround [here](./test/tsx-cases/for.tsx)
-- Test it: `yarn build && yarn test`
-    - This command will compile and run the tests, some of which will compile the files in `tests/tsx-cases`, which are typescript files with jsx control statements used in them.
+## It compiles `tsx`
+- Control statements transpile to type correct typescript before type checking
+	- Editors like visual studio code cannot infer that some additional transpilation will occur and will complain (check out a workaround [here](./test/tsx-cases/for.tsx))
+- Test it: `yarn && yarn build && yarn test`
     - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
-- Typings: `index.d.tsx`
 
-## Can it compile `.js` or `.jsx` files?
-- Yup, just add `"allowJs": true` to the compiler options in your `tsconfig.json`.
+## It compiles javascript `jsx`
+- Setting `"allowJs"` to `true` in `tsconfig.json` should do the trick.
 
-## I see the tests are writen with React, can I use this with something else (Vue for example)?
-- The transformer itself has no dependency on React, Vue or other frontend frameworks. It can be used to transform jsx for whatever purposes.
+## No dependence on any frontend framework
+- The transformer works solely on the typescript ast and has nothing to do with React, React Native, Vue and so on. It just transforms jsx.
 
-## What typescript/javascript code is emitted?
+## What code is emitted?
 
-### If
-- Transpiles to ternary operators
+### If - Ternary operators
 
 ```tsx
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
@@ -56,8 +49,7 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 )
 ```
 
-### With
-- Transpiles to immediately invoked function expression
+### With - Immediately invoked function expression
 
 ```tsx
 const Sum = () => (
@@ -76,8 +68,8 @@ const Sum = () => (
 )
 ```
 
-### For
-- Generates `[].map` calls
+### For - `Array.from` calls
+- Since `Array.from` can be provided with an iterator or an array-like as it's first parameter, it is much more flexible than `[].map`.
 ```tsx
 const Names = ({ names }: { names: string[] }) => (
     <ol>
@@ -90,13 +82,12 @@ const Names = ({ names }: { names: string[] }) => (
 // Will become
 const Names = ({ names }: { names: string[] }) => (
     <ol>
-        {names.map((name, i) => <li key={name}>{i}<strong>{name}</strong></li>}
+        {Array.from(names, (name, i) => <li key={name}>{i}<strong>{name}</strong></li>)}
     </ol>
 )
 ```
 
-### Choose/When/Otherwise
-- Provides If/Else like conditional control. Transpiles to nested ternary operators.
+### Choose/When/Otherwise - Nested ternary operators.
 
 ```tsx
 const RandomStuff = ({ str }: { str: string }) => (
@@ -128,25 +119,31 @@ const RandomStuff = ({ str }: { str: string }) => (
 ## Cookbook (example setups incoming)
 
 - [fuse-box](./examples/fuse-box)
-    - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)) which could serve as an example.
+    - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)).
 
 - [webpack (ts-loader/awesome-typescript-loader)](./examples/webpack)
 
-## Can I switch from `babel` + `jsx-control-statements` to `tsc` + `tsx-control-statements`?
-- Should be a drop-in replacement, will try it for a bigger project in a few days.
-
-## What if I want to use this right nao?
-```shell
-# npm
-npm i tsx-control-statements
-# or yarn
-yarn add tsx-control-statements
-```
+## Is it a drop-in replacement of `jsx-control-statements`?
+- For javascript, yes.
+- This should be the case for typescript too, but I haven't tested it too much.
 
 - In your code:
-```js
+```ts
+// commonjs
 const transformer = require('tsx-control-statements').default();
+
+// ts
+import transformer from 'tsx-control-statements';
 ```
 
-## Do I think control statements are a good idea?
-- Nah. They might make jsx look a lot more feng shui, but in my experience they tend to get in the way of correct static typing and use of language features like destructuring in function parameters. Also (at least to me) they seem to kind of promote dumping out huger chunks of jsx, which could be broken down into smaller parts for testability and other stuff and whatnot. Why am I developing this then? I've a project written with `jsx-control-statements` that I want to migrate to typescript/fuse-box.
+- If typescript complains about typings:
+
+```ts
+import 'tsx-control-statements/index.d';
+```
+
+## Reasons to not use any control statements for jsx:
+- Hard to statically type
+- Not part of the standard
+- Not ordinary jsx elements
+- Requires extra dependencies to use
