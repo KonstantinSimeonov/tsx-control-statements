@@ -1,6 +1,6 @@
 {
   "name": "tsx-control-statements",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
