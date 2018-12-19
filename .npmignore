@@ -1,5 +1,9 @@
 test/
+dist/
+yarn.lock
+transformer.d.ts
 .travis.yml
+tsconfig.json
 node_modules/
 .travis.yml
 coverage/

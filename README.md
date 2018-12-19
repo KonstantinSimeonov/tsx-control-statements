@@ -1,6 +1,6 @@
 # tsx-control-statements
 
-[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master) [![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tsx-control-statements/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [gitter chat](https://gitter.im/tsx-control-statements/Lobby)
+[![Build Status](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://travis-ci.org/KonstantinSimeonov/tsx-control-statements) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master) [![Gitter chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tsx-control-statements/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements), but for the typescript compiler toolchain. **Works for both javascript and typescript.**
 
@@ -44,7 +44,10 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 // will transpile to
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
     <p>
-        {songList.includes('Gery-Nikol - Im the Queen') ? 'good taste in music' : null}
+        {songList.includes('Gery-Nikol - Im the Queen')
+		? 'good taste in music'
+		: null
+	}
     </p>
 )
 ```
@@ -74,7 +77,8 @@ const Sum = () => (
 const Names = ({ names }: { names: string[] }) => (
     <ol>
         <For each="name" of={names} index="i">
-            <li key={name}>{i}<strong>{name}</strong></li>
+            <li key={name}>
+		{i}<strong>{name}</strong></li>
         </For>
     </ol>
 )
@@ -82,7 +86,12 @@ const Names = ({ names }: { names: string[] }) => (
 // Will become
 const Names = ({ names }: { names: string[] }) => (
     <ol>
-        {Array.from(names, (name, i) => <li key={name}>{i}<strong>{name}</strong></li>)}
+        {Array.from(names, (name, i) => (
+		<li key={name}>
+			{i}
+			<strong>{name}</strong>
+		</li>
+	)}
     </ol>
 )
 ```
@@ -109,7 +118,12 @@ const RandomStuff = ({ str }: { str: string }) => (
 // transpiles to
 const RandomStuff = ({ str }: { str: string }) => (
     <article>
-	{str === 'ivan' ? 'ivancho' : str === 'sarmi' ? React.createElement('h1', null, 'yum!') : 'im the queen da da da da'}
+	{str === 'ivan'
+		? 'ivancho'
+		: (str === 'sarmi'
+			? React.createElement('h1', null, 'yum!')
+			: 'im the queen da da da da')
+	}
     </article>
 )
 ```

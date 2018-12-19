@@ -1,6 +1,6 @@
 {
   "name": "tsx-control-statements",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
@@ -20,9 +20,9 @@
   "license": "MIT",
   "types": "index.ts",
   "scripts": {
-    "tsc": "./node_modules/.bin/tsc",
-    "babel": "./node_modules/.bin/babel",
-    "build": "./node_modules/.bin/tsc --project ./tsconfig.json",
+    "tsc": "tsc",
+    "babel": "babel",
+    "build": "tsc --project ./tsconfig.json",
     "test": "cd test && ./compile-cases.sh && mocha ./helpers/browser-env.js ./*.spec.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "html-coverage": "nyc report --reporter=html"
