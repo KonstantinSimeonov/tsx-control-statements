@@ -40,6 +40,31 @@ export const EmptyFor = {
     ]
 };
 
+export const ForWithIterable = {
+	expected: ({ xs }: { xs: Map<string, number> }) => (
+		<ol>
+			{Array.from(
+				xs,
+				(kvp, i) => <span>pair {i} with key {kvp[0]} and value {kvp[1]}</span>
+			)}
+		</ol>
+	),
+	actual: ({ xs }: { xs: Map<string, number> }) => (
+		<ol>
+			<For each="kvp" of={xs} index="i">
+				<span>pair {i} with key {kvp[0]} and value {kvp[1]}</span>
+			</For>
+		</ol>
+	),
+	dataSet: [
+		{ props: { xs: new Map }, message: 'renders no pairs for empty iterator' },
+		{
+			props: { xs: new Map([['a', 2], ['c', 15], ['d', 69]]) },
+			message: 'uses the elements yielded by the iterator'
+		}
+	]
+};
+
 export const NoArrayFor = {
     expected: ({ peshovci }: { peshovci: any[] }) => (
             <ul>

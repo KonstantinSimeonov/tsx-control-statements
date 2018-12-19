@@ -135,9 +135,10 @@ const transformForNode: Transformation = (node, program, ctx) => {
     return ts.createJsxExpression(
         undefined,
         ts.createCall(
-            ts.createPropertyAccess(of, 'map'),
+            ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'),
             undefined,
             [
+                of,
                 ts.createArrowFunction(
                     undefined,
                     undefined,
