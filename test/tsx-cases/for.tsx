@@ -52,7 +52,7 @@ export const ForWithIterable = {
 	actual: ({ xs }: { xs: Map<string, number> }) => (
 		<ol>
 			<For each="kvp" of={xs} index="i">
-				<span>pair {i} with key {kvp[0]} and value {kvp[1]}</span>
+				<span key={kvp[0]}>pair {i} with key {kvp[0]} and value {kvp[1]}</span>
 			</For>
 		</ol>
 	),

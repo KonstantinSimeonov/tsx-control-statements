@@ -23,7 +23,9 @@
     "tsc": "tsc",
     "babel": "babel",
     "build": "tsc --project ./tsconfig.json",
-    "test": "cd test && ./compile-cases.sh && mocha ./helpers/browser-env.js ./*.spec.js",
+    "test": "yarn compile-compat-cases && yarn test-compiled",
+    "compile-compat-cases": "cd test && ./compile-cases.sh && cd ..",
+    "test-compiled": "cd test && mocha ./helpers/browser-env.js ./*.spec.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "html-coverage": "nyc report --reporter=html"
   },

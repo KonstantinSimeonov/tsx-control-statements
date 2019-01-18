@@ -30,11 +30,11 @@ export const IfChildElements = {
 
 export const IfSelfClosingChildElements = {
 	component: ({ condition }) => (
-		<p>
+		<section>
 			<If condition={condition}>
 				{selfClosingElements}
 			</If>
-		</p>
+		</section>
 	),
 	dataSet: [
 		{ props: { condition: true }, message: 'renders self-closing children' },

@@ -8,4 +8,4 @@ yarn-error.log
 coverage/
 *.swp
 package-lock.json
-
+*.patch
