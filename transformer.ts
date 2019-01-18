@@ -27,6 +27,7 @@ const CTRL_NODE_NAMES = Object.freeze({
 
 type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => Readonly<ts.Node>;
 const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
+    || ts.isJsxSelfClosingElement(node)
     || ts.isJsxExpression(node)
     || ts.isJsxText(node) && node.getText() !== '';
 
