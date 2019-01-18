@@ -8,5 +8,9 @@
         "typeRoots": [
             "./node_modules/@types"
         ]
-    }
+    },
+    "files": [
+        "./src/**/*",
+	"./node_modules/tsx-control-statements/index.d.tsx"
+    ]
 }

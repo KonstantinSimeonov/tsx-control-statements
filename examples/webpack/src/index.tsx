@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import 'tsx-control-statements/index.d';
-
 // Bindings in <For /> body cause compile time errors without those declarations.
 declare const i: number;
 declare const thingy: string;
