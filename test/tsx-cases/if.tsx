@@ -21,6 +21,27 @@ export default {
     ].map(([songList, message]) => ({ props: { songList }, message }))
 }
 
+export const WithSelfClosingElementChild = {
+	actual: ({ n }) => (
+		<div>
+			some text
+			<If condition={n > 2}>
+				<img src="https://cukii.me/img/Ripples-larry.svg" />
+			</If>
+		</div>
+	),
+	expected: ({ n }) => (
+		<div>
+			some text
+				{n > 2 ? <img src="https://cukii.me/img/Ripples-larry.svg" /> : null}
+		</div>
+	),
+	dataSet: [
+		{ props: { n: 1 }, message: 'works with self-closing children when condition is false' },
+		{ props: { n: 5 }, message: 'works with self-closing children when condition is true' }
+	]
+};
+
 export const EmptyIf = {
         actual: () => <p>123<If condition={true}></If>neshto si</p>,
         expected: () =>  <p>123neshto si</p>,

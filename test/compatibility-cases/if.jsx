@@ -1,5 +1,17 @@
 import * as React from 'react';
 
+const ListFive = ({ messages }) => (
+	<ul>
+		{messages.slice(0, 5).map((m, i) => <li key={i}>{m}</li>)}
+	</ul>
+);
+
+const selfClosingElements = [
+	<img src="https://cukii.me/img/Ripples-larry.svg" />,
+	<ListFive messages={'123456'.split('')} />,
+	<input type="text" placeholder="fun" />
+];
+
 export const IfChildElements = {
     component: ({ condition }) => (
         <div>
@@ -14,6 +26,20 @@ export const IfChildElements = {
         { props: { condition: true }, message: 'renders links' },
         { props: { condition: false }, message: 'does not render links' },
     ]
+}
+
+export const IfSelfClosingChildElements = {
+	component: ({ condition }) => (
+		<p>
+			<If condition={condition}>
+				{selfClosingElements}
+			</If>
+		</p>
+	),
+	dataSet: [
+		{ props: { condition: true }, message: 'renders self-closing children' },
+		{ props: { condition: false }, message: 'does not render self-closing' },
+	]
 }
 
 export const IfChildExpressions = {
@@ -40,7 +66,8 @@ export const IfChildExpressionsAndElements = {
                 3 + 4 = {3 + 4}
                 <a href="https://wiki.gentoo.org/wiki/Handbook:Main_Page">install gentoo</a>
                 <a href="https://github.com">github</a>
-                {a} + {b} = {a + b}
+		{a} + {b} = {a + b}
+		{selfClosingElements}
             </If>
         </div>
     ),
