@@ -1,6 +1,6 @@
 {
   "name": "tsx-control-statements",
-  "version": "2.12.0",
+  "version": "2.12.2",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
@@ -47,7 +47,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "ts-node": "^7.0.1",
-    "typescript": "3.2"
+    "typescript": "3.3"
   },
   "peerDependencies": {
     "typescript": ">=2.4.0"

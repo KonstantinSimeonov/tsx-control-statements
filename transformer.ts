@@ -247,4 +247,3 @@ const getTransformation = (node: ts.Node): Transformation => {
 };
 
 const statements: Transformation = (node, program, ctx) => getTransformation(node)(node, program, ctx);
-

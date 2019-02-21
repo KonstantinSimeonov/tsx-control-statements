@@ -15,6 +15,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 | 3.0.x              | tests _passing_        |
 | 3.1.x              | tests _passing_        |
 | 3.2.x              | tests _passing_        |
+| 3.3.x              | tests _passing_        |
 
 ## It compiles `tsx`
 - Control statements transpile to type correct typescript before type checking
