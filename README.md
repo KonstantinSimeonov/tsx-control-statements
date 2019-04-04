@@ -30,6 +30,12 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 ## No dependence on any frontend framework
 - The transformer works solely on the typescript ast and has nothing to do with React, React Native, Vue and so on. It just transforms jsx.
 
+## Known limitations:
+- **[js, ts]** I haven't found any way of integrating this into `create-react-app` scaffold project without ejecting the scripts and modifying them
+- **[js, ts]** Various CLIs (`tsc`, `ts-register`, `ts-node`) feature no flag (that I know of) that allows for addition of custom transformers
+- **[ts]** The `isolatedModules` flag currently causes build errors for typescript files, since the typings currently live in a namespace
+- **[ts]** Cannot work with various "smart" plugins that instead of invoking the typescript compiler rather strip the types and handle the code as javascript
+
 ## What code is emitted?
 
 ### If - Ternary operators
@@ -163,3 +169,4 @@ import 'tsx-control-statements/index.d';
 - Not part of the standard
 - Not ordinary jsx elements
 - Requires extra dependencies to use
+- Many typescript tools do not support custom transformers in a convenient way
