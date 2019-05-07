@@ -17,6 +17,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 | 3.2.x              | tests _passing_        |
 | 3.3.x              | tests _passing_        |
 | 3.4.x              | tests _passing_        |
+| next               | tests _passing_        |
 
 ## It compiles `tsx`
 - Control statements transpile to type correct typescript before type checking
@@ -34,7 +35,9 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 - **[js, ts]** I haven't found any way of integrating this into `create-react-app` scaffold project without ejecting the scripts and modifying them
 - **[js, ts]** Various CLIs (`tsc`, `ts-register`, `ts-node`) feature no flag (that I know of) that allows for addition of custom transformers
 - **[ts]** The `isolatedModules` flag currently causes build errors for typescript files, since the typings currently live in a namespace
-- **[ts]** Cannot work with various "smart" plugins that instead of invoking the typescript compiler rather strip the types and handle the code as javascript
+- **[ts]** Cannot work with various "smart" plugins that instead of invoking the typescript compiler rather strip the types and handle the code as javascript. This includes tools like:
+  - `@babel/preset-typescript`
+  - `@babel/plugin-transform-typescript`
 
 ## What code is emitted?
 
