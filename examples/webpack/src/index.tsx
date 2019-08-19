@@ -9,11 +9,7 @@ declare const thingy: string;
 declare const emoji: string;
 
 export default class Example extends React.Component<{}, { things: string[] }> {
-	constructor(props) {
-		super(props);
-
-		this.state = { things: ['this', 'is', 'demo'] };
-	}
+	state = { things: ['this', 'is', 'demo'] };
 
 	_onChange = (event: React.ChangeEvent<HTMLInputElement>) => this.setState({
 		things: event.target.value.split(' ').filter(Boolean)
