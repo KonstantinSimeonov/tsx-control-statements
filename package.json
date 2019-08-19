@@ -56,5 +56,8 @@
     "extension": [
       ".ts"
     ]
+  },
+  "dependencies": {
+    "tsx-control-statements": "^2.15.0"
   }
 }
