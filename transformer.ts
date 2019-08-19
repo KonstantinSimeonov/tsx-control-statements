@@ -231,7 +231,16 @@ const transformWithNode: Transformation = (node, program, ctx) => {
     );
 };
 
+const STUB_PACKAGE_REGEXP = /("|')tsx-control-statements\/components(.ts)?("|')/;
 const getTransformation = (node: ts.Node): Transformation => {
+    const isStubsImport = ts.isImportDeclaration(node) && node.getChildren().some(
+        child => STUB_PACKAGE_REGEXP.test(child.getFullText())
+    );
+    
+    if (isStubsImport) {
+        return (a, b, c) => ts.createEmptyStatement();
+    }
+
     if (!ts.isJsxElement(node)) {
         return (a, b, c) => a;
     }

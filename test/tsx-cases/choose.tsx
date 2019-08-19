@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Choose, When, Otherwise } from './components';
+
 export default {
     actual: ({ str }: { str: string }) => (
         <article>

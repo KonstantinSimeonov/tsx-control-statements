@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Choose, When, Otherwise, For, If } from './components';
+
 export default {
     actual: ({ songList }: { songList: string[] }) => (
         <div>

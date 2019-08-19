@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { For } from './components';
+
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var i: number, chap: string;
 

@@ -10,6 +10,11 @@ fs.readdirSync('./tsc')
     .filter(fileName => fileName.startsWith('tsx-'))
     .map(fileName => [fileName, Object.entries(require(`./tsc/${fileName}`))])
     .forEach(([fileName, testSuite]) => {
+        // skip files that do not contain test suites
+        if (typeof suite !== 'object') {
+            return;
+        }
+
         for (const [name, suite] of testSuite) {
             const suiteName = name.replace('default', fileName.replace('.js', '').replace('tsx-', ''));
             const {

@@ -4,23 +4,23 @@
  * compiler and various static analysis tools.
  */
 
-export function Choose(props: { children: any }) {
+export function Choose(props: { children?: any; }) {
 	return props.children;
 }
 
-export function When(props: { children: any; condition: boolean; }) {
+export function When(props: { children?: any; condition: boolean; }) {
 	return props.children;
 }
 
-export function If(props:{ children: any; condition: boolean; }) {
+export function If(props:{ children?: any; condition: boolean; }) {
 	return props.children;
 }
 
-export function For<T>(props: { children: any; each: string; of: Iterable<T>; index?: string; }) {
+export function For<T>(props: { children?: any; each: string; of: Iterable<T>; index?: string; }) {
 	return props.children;
 }
 
-export function Otherwise(props: { children: any; }) {
+export function Otherwise(props: { children?: any; }) {
 	return props.children;
 }
 
