@@ -22,9 +22,9 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 
 ## It compiles `tsx`
 - Control statements transpile to type correct typescript before type checking
-	- Editors like visual studio code cannot infer that some additional transpilation will occur and will complain (check out a workaround [here](./test/tsx-cases/for.tsx))
+  - Static linting tools cannot infer that some additional transpilation will occur and might complain (more on that [here](./test/tsx-cases/for.tsx))
 - Test it: `yarn && yarn build && yarn test`
-    - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
+  - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
 
 ## It compiles javascript `jsx`
 - Setting `"allowJs"` to `true` in `tsconfig.json` should do the trick.
@@ -35,7 +35,8 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 ## Known limitations:
 - **[js, ts]** I haven't found any way of integrating this into `create-react-app` scaffold project without ejecting the scripts and modifying them
 - **[js, ts]** Various CLIs (`tsc`, `ts-register`, `ts-node`) feature no flag (that I know of) that allows for addition of custom transformers
-- **[ts]** The `isolatedModules` flag currently causes build errors for typescript files, since the typings currently live in a namespace
+- ~~**[ts]** The `isolatedModules` flag currently causes build errors for typescript files, since the typings currently live in a namespace~~
+  - `isolatedModules` is supported since the module `tsx-control-statements/components` contains stub definitions which can be imported `import { For, If } from 'tsx-control-statements/components'`
 - **[ts]** Cannot work with various "smart" plugins that instead of invoking the typescript compiler rather strip the types and handle the code as javascript. This includes tools like:
   - `@babel/preset-typescript`
   - `@babel/plugin-transform-typescript`
@@ -56,10 +57,11 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 // will transpile to
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
     <p>
-        {songList.includes('Gery-Nikol - Im the Queen')
-		? 'good taste in music'
-		: null
-	}
+        {
+            songList.includes('Gery-Nikol - Im the Queen')
+                ? 'good taste in music'
+                : null
+        }
     </p>
 )
 ```
@@ -67,93 +69,84 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 ### With - Immediately invoked function expression
 
 ```tsx
-const Sum = () => (
-    <p>
-        <With a={3} b={5} c={6}>
-            {a + b + c}
-        </With>
-    </p>
-)
+const Sum = () => <p>
+    <With a={3} b={5} c={6}>
+        {a + b + c}
+    </With>
+</p>
 
 // becomes
-const Sum = () => (
-    <p>
-        {((a, b, c) => a + b + c))()}
-    </p>
-)
+const Sum = () => <p>
+    {((a, b, c) => a + b + c))()}
+</p>
 ```
 
 ### For - `Array.from` calls
 - Since `Array.from` can be provided with an iterator or an array-like as it's first parameter, it is much more flexible than `[].map`.
 ```tsx
-const Names = ({ names }: { names: string[] }) => (
-    <ol>
-        <For each="name" of={names} index="i">
-            <li key={name}>
-		{i}<strong>{name}</strong></li>
-        </For>
-    </ol>
-)
+const Names = ({ names }: { names: string[] }) => <ol>
+    <For each="name" of={names} index="i">
+        <li key={name}>
+            {i}<strong>{name}</strong>
+        </li>
+    </For>
+</ol>
 
 // Will become
-const Names = ({ names }: { names: string[] }) => (
-    <ol>
-        {Array.from(names, (name, i) => (
-		<li key={name}>
-			{i}
-			<strong>{name}</strong>
-		</li>
-	)}
-    </ol>
-)
+const Names = ({ names }: { names: string[] }) => <ol>
+    {
+        Array.from(names, (name, i) => (
+            <li key={name}>
+                {i}<strong>{name}</strong>
+            </li>
+        )
+    }
+</ol>
 ```
 
 ### Choose/When/Otherwise - Nested ternary operators.
 
 ```tsx
-const RandomStuff = ({ str }: { str: string }) => (
-    <article>
-        <Choose>
-            <When condition={str === 'ivan'}>
-                ivancho
-                </When>
-            <When condition={str === 'sarmi'}>
-                <h1>yum!</h1>
+const RandomStuff = ({ str }: { str: string }) => <article>
+    <Choose>
+        <When condition={str === 'ivan'}>
+            ivancho
             </When>
-            <Otherwise>
-                im the queen da da da da
-            </Otherwise>
-        </Choose>
-    </article>
-)
+        <When condition={str === 'sarmi'}>
+            <h1>yum!</h1>
+        </When>
+        <Otherwise>
+            im the queen da da da da
+        </Otherwise>
+    </Choose>
+</article>
 
 // transpiles to
-const RandomStuff = ({ str }: { str: string }) => (
-    <article>
-	{str === 'ivan'
-		? 'ivancho'
-		: (str === 'sarmi'
-			? React.createElement('h1', null, 'yum!')
-			: 'im the queen da da da da')
-	}
-    </article>
-)
+const RandomStuff = ({ str }: { str: string }) => <article>
+    {
+        str === 'ivan'
+            ? 'ivancho'
+            : (str === 'sarmi'
+                ? React.createElement('h1', null, 'yum!')
+                : 'im the queen da da da da')
+    }
+</article>
 ```
 
 - `Otherwise` tag at the end is optional - if not provided, whenever no `When`'s condition did match, nothing will be rendered.
 
-## Cookbook (example setups incoming)
+## Cookbook
 
-- [fuse-box](./examples/fuse-box)
-    - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)).
-
-- [webpack (ts-loader/awesome-typescript-loader)](./examples/webpack)
+- **[fuse-box](./examples/fuse-box)**
+  - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)).
+- **[webpack](./examples/webpack)**
+- **[create-react-app](./examples/my-app)**
 
 ## Is it a drop-in replacement of `jsx-control-statements`?
 - For javascript, yes.
 - This should be the case for typescript too, but I haven't tested it too much.
 
-- In your code:
+- Importing the transformer in your build configs:
 ```ts
 // commonjs
 const transformer = require('tsx-control-statements').default();
@@ -162,10 +155,10 @@ const transformer = require('tsx-control-statements').default();
 import transformer from 'tsx-control-statements';
 ```
 
-- If typescript complains about typings:
+- Importing type definitions:
 
 ```ts
-import 'tsx-control-statements/index.d';
+import { For, If, With, Choose, When, Otherwise } from 'tsx-control-statements/components';
 ```
 
 ## Reasons to not use any control statements for jsx:
