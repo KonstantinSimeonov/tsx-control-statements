@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { For, If, Choose, When, Otherwise, With } from 'tsx-control-statements/components';
+
 // Bindings in <For /> body cause compile time errors without those declarations.
 declare const i: number;
 declare const thingy: string;

@@ -9,6 +9,7 @@
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
+    "isolatedModules": true,
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

@@ -1,12 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { For, Choose, When, Otherwise } from 'tsx-control-statements/components';
 
 export default class Example extends React.Component<{}, { things: string[] }> {
-	constructor(props) {
-		super(props);
-
-		this.state = { things: ['this', 'is', 'demo'] };
-	}
+	state = { things: ['this', 'is', 'DEMOOO!'] };
 
 	_onChange = event => this.setState({ things: event.target.value.split(' ').filter(Boolean) })
 

@@ -5,12 +5,12 @@
         "target": "es6",
         "pretty": true,
         "moduleResolution": "node",
+        "isolatedModules": true,
         "typeRoots": [
             "./node_modules/@types"
         ]
     },
     "files": [
-        "./src/**/*",
-	"./node_modules/tsx-control-statements/index.d.tsx"
+        "./src/**/*"
     ]
 }
