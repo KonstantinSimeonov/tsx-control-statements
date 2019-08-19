@@ -12,3 +12,4 @@ test-output/
 examples/
 yarn-error.log
 runtests.sh
+bump-tsc.sh
