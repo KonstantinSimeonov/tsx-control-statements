@@ -48,6 +48,8 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 ### If - Ternary operators
 
 ```tsx
+import { If } from 'tsx-control-statements/components';
+
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
     <p>
         <If condition={songList.includes('Gery-Nikol - Im the Queen')}>
@@ -71,6 +73,8 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 ### With - Immediately invoked function expression
 
 ```tsx
+import { With } from 'tsx-control-statements/components';
+
 const Sum = () => <p>
     <With a={3} b={5} c={6}>
         {a + b + c}
@@ -84,8 +88,21 @@ const Sum = () => <p>
 ```
 
 ### For - `Array.from` calls
-- Since `Array.from` can be provided with an iterator or an array-like as it's first parameter, it is much more flexible than `[].map`.
+More flexible than `[].map`, since it can be provided with an iterator or an array-like as it's first parameter. For non-legacy code, prefer the more type-safe alternative.
 ```tsx
+import { For } from 'tsx-control-statements/components';
+
+// type-safe for
+// type inferrence also works
+const Names = ({ names }: { names: string[] }) => <ol>
+    <For of={names} body={(name, i) => (
+        <li key={name}>
+            {i}<string>{name}</strong>
+        </li>
+    )} />
+</ol>
+
+// jsx-control-statements compatible
 const Names = ({ names }: { names: string[] }) => <ol>
     <For each="name" of={names} index="i">
         <li key={name}>
@@ -94,7 +111,7 @@ const Names = ({ names }: { names: string[] }) => <ol>
     </For>
 </ol>
 
-// Will become
+// Both of the above will transpile to:
 const Names = ({ names }: { names: string[] }) => <ol>
     {
         Array.from(names, (name, i) => (
@@ -109,6 +126,8 @@ const Names = ({ names }: { names: string[] }) => <ol>
 ### Choose/When/Otherwise - Nested ternary operators.
 
 ```tsx
+import { Choose, When, Otherwise } from 'tsx-control-statements/components';
+
 const RandomStuff = ({ str }: { str: string }) => <article>
     <Choose>
         <When condition={str === 'ivan'}>
@@ -164,7 +183,8 @@ import { For, If, With, Choose, When, Otherwise } from 'tsx-control-statements/c
 ```
 
 ## Reasons to not use any control statements for jsx:
-- Hard to statically type
+- ~~Hard to statically type~~
+  - Has been somewhat adressed, with the exception of `With`
 - Not part of the standard
 - Not ordinary jsx elements
 - Requires extra dependencies to use
