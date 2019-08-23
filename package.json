@@ -1,6 +1,6 @@
 {
   "name": "tsx-control-statements",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
@@ -56,8 +56,5 @@
     "extension": [
       ".ts"
     ]
-  },
-  "dependencies": {
-    "tsx-control-statements": "^2.15.0"
   }
 }

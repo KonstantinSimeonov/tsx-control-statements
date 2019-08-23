@@ -4620,11 +4620,6 @@ tslib@^1.8.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
   integrity sha512-f/qGG2tUkrISBlQZEjEqoZ3B2+npJjIf04H1wuAv9iA8i04Icp+61KRXxFdha22670NJopsZCIjhC3SnjPRKrQ==
 
-tsx-control-statements@^2.15.0:
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/tsx-control-statements/-/tsx-control-statements-2.15.0.tgz#3fa0db7196f59e17fe0e271fddef917f36ee373c"
-  integrity sha512-+gbEJy8khxD8pRJWzYB8esmvSsRXS+pHbZrxiaZQDa/JRsRyBHpYtzpJ25xeTUkL4SWernhim+6qtoPsIFo46w==
-
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
