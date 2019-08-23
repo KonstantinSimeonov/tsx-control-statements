@@ -16,7 +16,9 @@ export function If(props:{ children?: any; condition: boolean; }) {
 	return props.children;
 }
 
-export function For<T>(props: { children?: any; each: string; of: Iterable<T>; index?: string; }) {
+type NoBody<T> = { children?: any; each: string; of: Iterable<T>; index?: string; };
+type WithBody<T> = { children?: any; of: Iterable<T>; body: (x: T, index: number) => any };
+export function For<T>(props: NoBody<T> | WithBody<T>) {
 	return props.children;
 }
 
