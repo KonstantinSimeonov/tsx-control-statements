@@ -25,7 +25,12 @@ const CTRL_NODE_NAMES = Object.freeze({
     WITH: 'With'
 });
 
-type Transformation = (node: ts.Node, program: ts.Program, context: ts.TransformationContext) => Readonly<ts.Node>;
+type Transformation = (
+    node: ts.Node,
+    program: ts.Program,
+    context: ts.TransformationContext
+) => Readonly<ts.Node>;
+
 const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
     || ts.isJsxSelfClosingElement(node)
     || ts.isJsxExpression(node)
@@ -74,25 +79,20 @@ const getJsxElementBody = (
     .getChildren()
     .filter(isRelevantJsxNode)
     .map(
-        node => {
-            if (ts.isJsxText(node)) {
-                const text = trim(node.getFullText());
-                return text ? ts.createLiteral(text) : null;
-            }
-
-            return visitNodes(node, program, ctx);
-        }
+        node => ts.isJsxText(node)
+            ? ts.createLiteral(trim(node.getFullText()))
+            : visitNodes(node, program, ctx)
     ).filter(Boolean) as ts.Expression[];
 
 // const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 const nullJsxExpr = () => ts.createJsxExpression(undefined, ts.createNull());
 
-const createExpressionLiteral = (
-    expressions: ts.Expression[]
-): ts.ArrayLiteralExpression | ts.Expression => expressions.length === 1
-        ? ts.createJsxExpression(undefined, expressions[0])
-        : ts.createArrayLiteral(expressions);
+const createExpressionLiteral =
+    (expressions: ts.Expression[]): ts.ArrayLiteralExpression | ts.Expression =>
+        expressions.length === 1
+            ? ts.createJsxExpression(undefined, expressions[0])
+            : ts.createArrayLiteral(expressions);
 
 const transformIfNode: Transformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
@@ -174,7 +174,14 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     const elements = node
         .getChildAt(1)
         .getChildren()
-        .filter(node => isRelevantJsxNode(node) && [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT].includes(String(getTagNameString(node))))
+        .filter(
+            node =>
+                isRelevantJsxNode(node)
+                && [
+                        CTRL_NODE_NAMES.CASE,
+                        CTRL_NODE_NAMES.DEFAULT
+                ].includes(getTagNameString(node))
+        )
         .map(node => {
             const tagName = getTagNameString(node);
             const { condition } = getJsxProps(node);
