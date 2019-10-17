@@ -1,60 +1,16 @@
 {
-  "name": "tsx-control-statements",
-  "version": "2.16.1",
-  "main": "transformer.js",
-  "ts-main": "transformer.ts",
+  "name": "root",
+  "version": "0.0.0",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
-  "keywords": [
-    "control-statements",
-    "typescript",
-    "jsx",
-    "tsx",
-    "if",
-    "loop",
-    "react "
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/KonstantinSimeonov/tsx-control-statements"
-  },
-  "license": "MIT",
-  "types": "index.ts",
   "scripts": {
-    "tsc": "tsc",
-    "babel": "babel",
-    "build": "tsc --project ./tsconfig.json",
-    "test": "yarn compile-compat-cases && yarn test-compiled",
-    "compile-compat-cases": "cd test && ./compile-cases.sh && cd ..",
-    "test-compiled": "cd test && mocha ./helpers/browser-env.js ./*.spec.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "html-coverage": "nyc report --reporter=html"
+    "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
-    "@types/node": "^10.12.12",
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-plugin-jsx-control-statements": "^4.0.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "chai": "^4.2.0",
-    "coveralls": "^3.0.2",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.7.1",
-    "fuse-box": "^3.6.0",
-    "jsdom": "^13.0.0",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "ts-node": "^7.0.1",
-    "typescript": "3.5"
+    "lerna": "^3.18.1"
   },
-  "peerDependencies": {
-    "typescript": ">=2.4.0"
-  },
-  "nyc": {
-    "extension": [
-      ".ts"
-    ]
-  }
+  "private": true,
+  "workspaces": [
+    "examples/*",
+    "transformer/"
+  ]
 }

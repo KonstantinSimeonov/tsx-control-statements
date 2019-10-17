@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "yarn && webpack -d"
+		"build": "webpack -d"
 	},
 	"author": "",
 	"license": "ISC",
@@ -17,7 +17,7 @@
 		"@types/react-dom": "^16.0.5",
 		"awesome-typescript-loader": "^5.2.1",
 		"ts-loader": "^6.0.4",
-		"tsx-control-statements": "^2.12.0",
+		"tsx-control-statements": "^2.16.1",
 		"typescript": "3.5",
 		"webpack": "^4.39.2",
 		"webpack-cli": "^3.3.7"
