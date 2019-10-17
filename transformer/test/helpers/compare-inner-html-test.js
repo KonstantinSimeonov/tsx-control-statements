@@ -8,8 +8,10 @@ module.exports = ({
     expectedComponent,
     props
 }) => it(message, () => {
-        const babelWrapper = enzyme.mount(React.createElement(expectedComponent, props))
-        const tscWrapper = enzyme.mount(React.createElement(assertedComponent, props));
+        const [expectedNode, actualNode] = [expectedComponent, assertedComponent]
+            .map(component => enzyme.mount(React.createElement(component, props)).getDOMNode());
 
-        expect(tscWrapper.getDOMNode().innerHTML).to.equal(babelWrapper.getDOMNode().innerHTML);
+        if (expectedNode !== actualNode) {
+            expect(actualNode.innerHTML).to.equal(expectedNode.innerHTML);
+        }
     });

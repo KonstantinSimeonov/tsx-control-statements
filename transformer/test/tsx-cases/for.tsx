@@ -1,9 +1,25 @@
 import * as React from 'react';
 
-import { For } from './components';
+import { For } from 'tsx-control-statements/components';
 
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var i: number, chap: string;
+
+export const NoOf = {
+    expected: () => null,
+    actual: () => <For each="test">haha</For>,
+    dataSet: [
+        { props: {}, message: 'renders null' }
+    ]
+}
+
+export const BadBodyProp = {
+    expected: () => <p>123</p>,
+    actual: () => <p><For each="i" of={[1, 2, 3]} body={String}>{i}</For></p>,
+    dataSet: [
+        { props: {}, message: 'uses for children when body is bad' }
+    ]
+}
 
 export default {
     expected: ({ chaps }: { chaps: string[] }) => (

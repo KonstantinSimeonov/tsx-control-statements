@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { With } from './components';
+import { With } from 'tsx-control-statements/components';
 
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var gosho: number, pesho: number, tosho: number;

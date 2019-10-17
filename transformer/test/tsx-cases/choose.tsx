@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Choose, When, Otherwise } from './components';
+import { Choose, When, Otherwise } from 'tsx-control-statements/components';
 
 export default {
     actual: ({ str }: { str: string }) => (

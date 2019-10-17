@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { If } from './components';
+import { If } from 'tsx-control-statements/components';
 
 export default {
     actual: ({ songList }: { songList: string[] }) => (
