@@ -25,38 +25,33 @@ const CTRL_NODE_NAMES = Object.freeze({
     WITH: 'With'
 });
 
-type Transformation = (
-    node: ts.Node,
+type TS<N, R = ts.Node> = (
+    node: N,
     program: ts.Program,
     context: ts.TransformationContext
-) => Readonly<ts.Node>;
+) => Readonly<R>;
 
-const isRelevantJsxNode = (node: ts.Node): boolean => ts.isJsxElement(node)
+type Transformation = TS<ts.Node>;
+type JsxTransformation = TS<ts.JsxElement>;
+
+const isRelevantJsxNode = (node: ts.Node): node is ts.JsxElement =>
+    ts.isJsxElement(node)
     || ts.isJsxSelfClosingElement(node)
     || ts.isJsxExpression(node)
     || ts.isJsxText(node) && node.getText() !== '';
 
-const getTagNameString = (node: ts.Node): string | null => {
+const getTagNameString = (node: ts.JsxElement): string => {
     if (ts.isJsxSelfClosingElement(node)) {
         return node.tagName.getFullText();
     }
 
-    const maybeOpeningElement = node.getChildAt(0);
-    if (!ts.isJsxOpeningElement(maybeOpeningElement)) {
-        return null;
-    }
-
+    const maybeOpeningElement = node.getChildAt(0) as ts.JsxOpeningElement;
     return maybeOpeningElement.tagName.getFullText();
 };
 
 type PropMap = Readonly<ts.MapLike<ts.Expression>>;
-const getJsxProps = (node: ts.Node): PropMap => {
+const getJsxProps = (node: ts.JsxElement): PropMap => {
     const isOpening = ts.isJsxOpeningElement(node.getChildAt(0));
-    const isSelfClosing = ts.isJsxSelfClosingElement(node);
-    if (!isOpening && !isSelfClosing) {
-        return {} as PropMap;
-    }
-
     const elementWithProps = isOpening
         ? node.getChildAt(0)
         : node;
@@ -94,7 +89,7 @@ const createExpressionLiteral =
             ? ts.createJsxExpression(undefined, expressions[0])
             : ts.createArrayLiteral(expressions);
 
-const transformIfNode: Transformation = (node, program, ctx) => {
+const transformIfNode: JsxTransformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
     if (!condition) {
         console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CONDITIONAL} missing condition props`);
@@ -127,7 +122,8 @@ const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
             args
         )
     );
-const transformForNode: Transformation = (node, program, ctx) => {
+
+const transformForNode: JsxTransformation = (node, program, ctx) => {
     const { each, of, index, body: functionLoopBody } = getJsxProps(node);
     if (!of) {
         console.warn(`tsx-ctrl: 'of' property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
@@ -170,8 +166,8 @@ const transformForNode: Transformation = (node, program, ctx) => {
     return makeArrayFromCall([of, arrowFunction]);
 };
 
-const transformChooseNode: Transformation = (node, program, ctx) => {
-    const elements = node
+const transformChooseNode: JsxTransformation = (node, program, ctx) => {
+    const elements = (node
         .getChildAt(1)
         .getChildren()
         .filter(
@@ -181,7 +177,7 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
                         CTRL_NODE_NAMES.CASE,
                         CTRL_NODE_NAMES.DEFAULT
                 ].includes(getTagNameString(node))
-        )
+        ) as ts.JsxElement[])
         .map(node => {
             const tagName = getTagNameString(node);
             const { condition } = getJsxProps(node);
@@ -217,7 +213,9 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     const [cases, defaultCase] = last && last.tagName === CTRL_NODE_NAMES.DEFAULT
         ? [elements.slice(0, elements.length - 1), last]
         : [elements, null];
-    const defaultCaseOrNull = defaultCase ? createExpressionLiteral(defaultCase.nodeBody) : ts.createNull();
+    const defaultCaseOrNull = defaultCase
+        ? createExpressionLiteral(defaultCase.nodeBody)
+        : ts.createNull();
 
     return ts.createJsxExpression(
         undefined,
@@ -232,9 +230,11 @@ const transformChooseNode: Transformation = (node, program, ctx) => {
     );
 };
 
-const transformWithNode: Transformation = (node, program, ctx) => {
+const transformWithNode: JsxTransformation = (node, program, ctx) => {
     const props = getJsxProps(node);
-    const iifeArgs = Object.keys(props).map(key => ts.createParameter(undefined, undefined, undefined, key));
+    const iifeArgs = Object.keys(props).map(
+        key => ts.createParameter(undefined, undefined, undefined, key)
+    );
     const iifeArgValues = Object.values(props);
     const body = getJsxElementBody(node, program, ctx) as ts.Expression[];
 
@@ -256,7 +256,7 @@ const transformWithNode: Transformation = (node, program, ctx) => {
 };
 
 const STUB_PACKAGE_REGEXP = /("|')tsx-control-statements\/components(.ts)?("|')/;
-const getTransformation = (node: ts.Node): Transformation => {
+const getTransformation = (node: ts.Node): JsxTransformation => {
     const isStubsImport = ts.isImportDeclaration(node) && node.getChildren().some(
         child => STUB_PACKAGE_REGEXP.test(child.getFullText())
     );
@@ -269,7 +269,7 @@ const getTransformation = (node: ts.Node): Transformation => {
         return (a, b, c) => a;
     }
 
-    const tagName = getTagNameString(node);
+    const tagName = getTagNameString(node as ts.JsxElement);
     switch (tagName) {
         case CTRL_NODE_NAMES.CONDITIONAL: return transformIfNode;
         case CTRL_NODE_NAMES.FOREACH: return transformForNode;
@@ -279,4 +279,5 @@ const getTransformation = (node: ts.Node): Transformation => {
     }
 };
 
-const statements: Transformation = (node, program, ctx) => getTransformation(node)(node, program, ctx);
+const statements: Transformation = (node, program, ctx) =>
+    (getTransformation(node) as Transformation)(node, program, ctx);
