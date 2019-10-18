@@ -26,7 +26,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 ## It compiles `tsx`
 - Control statements transpile to type correct typescript before type checking
   - Static linting tools cannot infer that some additional transpilation will occur and might complain (more on that [here](./test/tsx-cases/for.tsx))
-- Test it: `yarn && yarn build && yarn test`
+- Test it: `yarn && yarn --cwd transformer build && yarn test`
   - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
 
 ## It compiles javascript `jsx`
@@ -176,7 +176,7 @@ const RandomStuff = ({ str }: { str: string }) => <article>
 - Importing the transformer in your build configs:
 ```ts
 // commonjs
-const transformer = require('tsx-control-statements').default();
+const transformer = require('tsx-control-statements').default;
 
 // ts
 import transformer from 'tsx-control-statements';

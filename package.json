@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
   "scripts": {
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "test": "yarn --cwd transformer test"
   },
   "devDependencies": {
     "lerna": "^3.18.1"
