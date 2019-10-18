@@ -1,13 +1,10 @@
 {
-	"name": "fuse-box-example",
+	"name": "@examples/fuse-box",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
 	"scripts": {
 		"build": "yarn && node fuse.js"
 	},
 	"author": "",
-	"license": "ISC",
 	"dependencies": {
 		"@types/react": "^16.3.12",
 		"@types/react-dom": "^16.0.5",
