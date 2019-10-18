@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "webpack -d",
 		"test": "mocha --require src/ts-node-register.js \"src/**/*.spec.tsx\"",
-        "test:ci": "test"
+        "test:ci": "yarn test"
 	},
 	"dependencies": {
 		"react": "^16.9.0",
