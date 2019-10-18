@@ -22,11 +22,13 @@
   "types": "index.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
-    "test": "yarn compile-compat-cases && yarn test-compiled",
-    "compile-compat-cases": "cd test && ./compile-cases.sh && cd ..",
-    "test-compiled": "cd test && mocha ./helpers/browser-env.js ./*.spec.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "html-coverage": "nyc report --reporter=html"
+    "build:watch": "yarn build -- --watch",
+    "test": "yarn test:compile && yarn test:run-compiled",
+    "test:ci": "./runtests.sh",
+    "test:compile": "cd test && ./compile-cases.sh && cd ..",
+    "test:run-compiled": "mocha test/helpers/browser-env.js \"test/**/*.spec.js\"",
+    "test:coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test:html-report": "nyc report --reporter=html"
   },
   "devDependencies": {
     "@types/node": "^10.12.12",

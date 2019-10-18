@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
   "scripts": {
-    "postinstall": "lerna bootstrap",
-    "test": "yarn --cwd transformer test"
+    "postinstall": "lerna --loglevel debug bootstrap",
+    "test:ci": "lerna --loglevel debug run test:ci"
   },
   "devDependencies": {
     "lerna": "^3.18.1"
   },
   "private": true,
-  "workspaces": [
-    "examples/*",
-    "transformer/"
-  ]
+  "workspaces": {
+    "packages": [
+        "examples/*",
+        "transformer/"
+    ],
+    "nohoist": ["**/@types/**"]
+  }
 }

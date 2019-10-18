@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const Babel = require('./babel/choose');
 const Tsc = require('./tsc/choose');
@@ -9,7 +10,7 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 
 enzyme.configure({ adapter: new Adapter });
 
-const testFiles = fs.readdirSync('./babel');
+const testFiles = fs.readdirSync(path.join(__dirname, 'babel'));
 const zip = (xs, ys, fn) => Array
                                 .from({ length: Math.min(xs.length, ys.length) })
                                 .map((_, index) => fn(xs[index], ys[index], index));
