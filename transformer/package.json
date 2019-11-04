@@ -18,7 +18,7 @@
     "type": "git",
     "url": "https://github.com/KonstantinSimeonov/tsx-control-statements"
   },
-  "license": "MIT",
+  "license": "WTFPL",
   "types": "index.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
