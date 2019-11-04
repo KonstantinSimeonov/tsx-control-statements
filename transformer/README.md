@@ -23,17 +23,20 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 | 3.6.x              | tests _passing_        |
 | next               | tests _passing_        |
 
-## It compiles `tsx`
-- Control statements transpile to type correct typescript before type checking
-  - Static linting tools cannot infer that some additional transpilation will occur and might complain (more on that [here](./test/tsx-cases/for.tsx))
-- Test it: `yarn && yarn --cwd transformer build && yarn test`
-  - **Tests include behaviour compatibility tests with `jsx-control-statements` and tests whether tsx control statements render the same elements as components using plain ts in tsx.**
+## Drop-in replacement for jsx control statements
+- No need to rewrite anything
+- Compile control statements in typescript `.tsx` files
+  - Control statements transpile to type-correct typescript before type checking
+- Compile control statements in javascript `.js` and `.jsx` files
+  - `"allowJs"` should be set to `true` in your typescript configuration
+- Run the test suite: `yarn && yarn --cwd transformer build && yarn test`. It includes:
+  - Compatibility tests with `jsx-control-statements` (i.e. both produce the same output html)
+  - Tests for correct transpilation
+  - Tests for typechecking
 
-## It compiles javascript `jsx`
-- Setting `"allowJs"` to `true` in `tsconfig.json` should do the trick.
-
-## No dependence on any frontend framework
-- The transformer works solely on the typescript ast and has nothing to do with React, React Native, Vue and so on. It just transforms jsx.
+## Zero dependencies apart from typescript
+- Pick any typescript version equal to or above `2.4.x`
+- Can be used with Vue, React or just plain jsx/tsx
 
 ## Known limitations:
 - **[js, ts]** I haven't found any way of integrating this into `create-react-app` scaffold project without ejecting the scripts and modifying them
@@ -44,7 +47,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
   - `@babel/preset-typescript`
   - `@babel/plugin-transform-typescript`
 
-## What code is emitted?
+## What are the control statements transpiled to?
 
 ### If - Ternary operators
 
@@ -126,7 +129,11 @@ const Names = ({ names }) => <ol>
 ### Choose/When/Otherwise - nested ternary operators, emulates switch/case.
 
 ```tsx
-import { Choose, When, Otherwise } from 'tsx-control-statements/components';
+import {
+    Choose,
+    When,
+    Otherwise
+} from 'tsx-control-statements/components';
 
 const RandomStuff = ({ str }: { str: string }) => <article>
     <Choose>
@@ -136,7 +143,10 @@ const RandomStuff = ({ str }: { str: string }) => <article>
         <When condition={str === 'sarmi'}>
             <h1>yum!</h1>
         </When>
-        {/* Otherise tag is option - if not provided, null will be rendered */}
+        {/*
+          * Otherwise tag is optional,
+          * if not provided, null will be rendered
+          */}
         <Otherwise>
             im the queen da da da da
         </Otherwise>
@@ -144,7 +154,7 @@ const RandomStuff = ({ str }: { str: string }) => <article>
 </article>
 
 // transpiles to
-const RandomStuff = ({ str }: { str: string }) => <article>
+const RandomStuff = ({ str }) => <article>
     {
         str === 'ivan'
             ? 'ivancho'
@@ -180,11 +190,15 @@ import transformer from 'tsx-control-statements';
 #### Importing type definitions:
 
 ```ts
-import { For, If, With, Choose, When, Otherwise } from 'tsx-control-statements/components';
+import {
+    For,
+    If,
+    With,
+    Choose,
+    When,
+    Otherwise
+} from 'tsx-control-statements/components';
 ```
-
-## Is it a drop-in replacement of `jsx-control-statements`?
-- Yes.
 
 ## Reasons to not use any control statements for jsx:
 - ~~Hard to statically type~~
