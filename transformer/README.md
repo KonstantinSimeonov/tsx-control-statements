@@ -60,7 +60,7 @@ const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
 )
 
 // will transpile to
-const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
+const SongRelatedThingy = ({ songList }) => (
     <p>
         {
             songList.includes('Gery-Nikol - Im the Queen')
@@ -84,7 +84,7 @@ const Sum = () => <p>
 
 // becomes
 const Sum = () => <p>
-    {((a, b, c) => a + b + c))()}
+    {((a, b, c) => a + b + c))(3, 5, 6)}
 </p>
 ```
 
@@ -93,8 +93,7 @@ More flexible than `[].map`, since it can be provided with an iterator or an arr
 ```tsx
 import { For } from 'tsx-control-statements/components';
 
-// type-safe for
-// type inferrence also works
+// more type-safe for, the typechecker knows the types of the "name" and "i" bindings
 const Names = ({ names }: { names: string[] }) => <ol>
     <For of={names} body={(name, i) => (
         <li key={name}>
@@ -112,8 +111,8 @@ const Names = ({ names }: { names: string[] }) => <ol>
     </For>
 </ol>
 
-// Both of the above will transpile to:
-const Names = ({ names }: { names: string[] }) => <ol>
+// both of the above will transpile to:
+const Names = ({ names }) => <ol>
     {
         Array.from(names, (name, i) => (
             <li key={name}>
@@ -124,7 +123,7 @@ const Names = ({ names }: { names: string[] }) => <ol>
 </ol>
 ```
 
-### Choose/When/Otherwise - Nested ternary operators.
+### Choose/When/Otherwise - nested ternary operators, emulates switch/case.
 
 ```tsx
 import { Choose, When, Otherwise } from 'tsx-control-statements/components';
@@ -137,6 +136,7 @@ const RandomStuff = ({ str }: { str: string }) => <article>
         <When condition={str === 'sarmi'}>
             <h1>yum!</h1>
         </When>
+        {/* Otherise tag is option - if not provided, null will be rendered */}
         <Otherwise>
             im the queen da da da da
         </Otherwise>
@@ -155,8 +155,6 @@ const RandomStuff = ({ str }: { str: string }) => <article>
 </article>
 ```
 
-- `Otherwise` tag at the end is optional - if not provided, whenever no `When`'s condition did match, nothing will be rendered.
-
 ## Cookbook
 
 #### Bundlers and scaffolding tools
@@ -170,11 +168,7 @@ const RandomStuff = ({ str }: { str: string }) => <article>
   - [mocha example](./examples/webpack/package.json)
 - **jest** - I couldn't find a way to pass a custom transformer to **ts-jest**. A solution to this is to compile the test files prior to running them with **jest**.
 
-## Is it a drop-in replacement of `jsx-control-statements`?
-- For javascript, yes.
-- This should be the case for typescript too, but I haven't tested it too much.
-
-- Importing the transformer in your build configs:
+#### Importing the transformer in your build configs:
 ```ts
 // commonjs
 const transformer = require('tsx-control-statements').default;
@@ -183,11 +177,14 @@ const transformer = require('tsx-control-statements').default;
 import transformer from 'tsx-control-statements';
 ```
 
-- Importing type definitions:
+#### Importing type definitions:
 
 ```ts
 import { For, If, With, Choose, When, Otherwise } from 'tsx-control-statements/components';
 ```
+
+## Is it a drop-in replacement of `jsx-control-statements`?
+- Yes.
 
 ## Reasons to not use any control statements for jsx:
 - ~~Hard to statically type~~
