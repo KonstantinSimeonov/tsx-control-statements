@@ -134,7 +134,8 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
         // {body} - brackets are children 0 and 2, body is between
         const func = functionLoopBody.getChildAt(1);
         if (ts.isArrowFunction(func) || ts.isFunctionExpression(func)) {
-            return makeArrayFromCall([of, func]);
+            const transformedFunc = visitNodes(func, program, ctx) as any as ts.FunctionExpression;
+            return makeArrayFromCall([of, transformedFunc]);
         }
     }
 

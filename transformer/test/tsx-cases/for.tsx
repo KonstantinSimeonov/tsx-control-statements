@@ -5,6 +5,35 @@ import { For } from 'tsx-control-statements/components';
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var i: number, chap: string;
 
+export const CanUseControlStatementsInBody = {
+    actual: ({ words }) => (
+        <div>
+            <For of={words} body={(w, i) => (
+                  <Choose>
+                    <When condition={i % 2 === 0}>
+                        {w}
+                        <If condition={w.length <= 3}>
+                            stuff
+                        </If>
+                    </When>
+                    <Otherwise>
+                        {w + ` ` + w}
+                    </Otherwise>
+                  </Choose>
+                )} />
+        </div>
+    ),
+    expected: ({ words }) => <div>{words.map(
+        (w, i) => i % 2 === 0 ? w + (w.length <= 3 ? 'stuff' : '') : `${w} ${w}`)
+    }</div>,
+    dataSet: [
+        {
+            props: { words: ['big', 'papa', 'top', 'kek'] },
+            message: 'Control statements in for loop body are transformed'
+        }
+    ]
+}
+
 export const NoOf = {
     expected: () => null,
     actual: () => <For each="test">haha</For>,
@@ -25,13 +54,20 @@ export default {
     expected: ({ chaps }: { chaps: string[] }) => (
         <ol>
             <For each="chap" of={chaps} index="i">
-                <li key={chap}>{i}<strong>{chap}</strong></li>
+                <li key={chap}>{i}<strong>{chap}</strong>
+                    <If condition={chap.length > 10}>
+                        a long one!
+                    </If>
+                </li>
             </For>
         </ol>
     ),
     actual: ({ chaps }: { chaps: string[] }) => (
         <ol>
-            {chaps.map((chap, i) => <li key={chap}>{i}<strong>{chap}</strong></li>)}
+            {chaps.map((chap, i) => <li key={chap}>
+                {i}<strong>{chap}</strong>
+                {chap.length > 10 ? 'a long one!' : null}
+            </li>)}
         </ol>
     ),
     dataSet: [
