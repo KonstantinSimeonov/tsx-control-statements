@@ -21,6 +21,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 | 3.4.x              | tests _passing_        |
 | 3.5.x              | tests _passing_        |
 | 3.6.x              | tests _passing_        |
+| 3.7.x              | tests _passing_        |
 | next               | tests _passing_        |
 
 ## Drop-in replacement for jsx control statements
