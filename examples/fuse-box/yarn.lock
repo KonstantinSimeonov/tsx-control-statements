@@ -36,14 +36,10 @@ acorn-jsx@^4.0.1:
   dependencies:
     acorn "^5.0.3"
 
-acorn@^5.0.3:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.5.3.tgz#f473dd47e0277a08e28e9bec5aeeb04751f0b8c9"
-
-acorn@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-  integrity sha512-T/zvzYRfbVojPWahDsE5evJdHb3oJoQfFbsrKM7w5Zcs++Tr257tia3BmMP8XYVjp1S9RZXQMh7gao96BlqZOw==
+acorn@^5.0.3, acorn@^5.7.3:
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+  integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
 ajax-request@^1.2.0:
   version "1.2.3"
@@ -1742,10 +1738,10 @@ tslib@^1.8.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
 
-tsx-control-statements@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/tsx-control-statements/-/tsx-control-statements-2.12.0.tgz#13371d0d29a422e03c7708536d8e9ec14f6bbc9a"
-  integrity sha512-5eslQNtG2Bu1hcNae7bLqMAd4iFuCDG/6uB+WeMZOX/d7/dBRGjuUBUmEY+t5f1FFuMk0k63q8jmt049DwsjYQ==
+tsx-control-statements@^2.17.0:
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/tsx-control-statements/-/tsx-control-statements-2.17.1.tgz#1afc67e03c90d489537ed3a31ec0ad2116592e6b"
+  integrity sha512-KiacW90lksaaoRrh5A4P9CbnhU4Bxvb99IJ2QAsybe4kMv2lF9pbNCFRQI6IofLGMZIHQvw1jEei04fhiIcIxQ==
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
