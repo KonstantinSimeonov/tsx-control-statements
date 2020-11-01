@@ -93,6 +93,6 @@ export const ChooseFragment = {
             </Choose>
         </div>
     ),
-    expected: () => <div>123anotha one2</div>,
-    dataSet: [{ props: {}, message: 'yo' }]
+    expected: () => <div>1232anotha one</div>,
+    dataSet: [{ props: {}, message: 'When/Otherwise with more than 1 child should transpile to fragments' }]
 };

@@ -59,5 +59,5 @@ export const NoConditionIf = {
 export const IfFragment = {
     expected: () => <div><><p>1</p><p>2</p>3</></div>,
     actual: () => <div><If condition={true}><p>1</p><p>2</p>3</If></div>,
-    dataSet: [{}]
+    dataSet: [{ message: 'If with more than 1 child should transpile to a jsx fragment' }]
 };
