@@ -75,19 +75,30 @@ const getJsxElementBody = (
     .filter(isRelevantJsxNode)
     .map(
         node => ts.isJsxText(node)
-            ? ts.createLiteral(trim(node.getFullText()))
+            ? node
             : visitNodes(node, program, ctx)
     ).filter(Boolean) as ts.Expression[];
 
-// const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
+// @ts-ignore
+const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
+// @ts-ignore
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
 const nullJsxExpr = () => ts.createJsxExpression(undefined, ts.createNull());
 
 const createExpressionLiteral =
-    (expressions: ts.Expression[]): ts.ArrayLiteralExpression | ts.Expression =>
-        expressions.length === 1
-            ? ts.createJsxExpression(undefined, expressions[0])
-            : ts.createArrayLiteral(expressions);
+    (expressions: ts.Expression[], node: ts.Node): ts.ArrayLiteralExpression | ts.Expression => {
+        if (expressions.length === 1) {
+            const [expr] = expressions;
+            const jsxChild = ts.isJsxText(expr) ? ts.createStringLiteral(trim(expr.getFullText())) : expr;
+            return ts.createJsxExpression(undefined, jsxChild);
+        }
+
+        return ts.createJsxFragment(
+            ts.setOriginalNode(ts.createJsxOpeningFragment(), node),
+            expressions as any,
+            ts.setOriginalNode(ts.createJsxJsxClosingFragment(), node)
+        );
+    }
 
 const transformIfNode: JsxTransformation = (node, program, ctx) => {
     const { condition } = getJsxProps(node);
@@ -107,7 +118,7 @@ const transformIfNode: JsxTransformation = (node, program, ctx) => {
         undefined,
         ts.createConditional(
             condition,
-            createExpressionLiteral(body),
+            createExpressionLiteral(body, node),
             ts.createNull()
         )
     )
@@ -161,7 +172,7 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
         arrowFunctionArgs,
         undefined, // type
         undefined,
-        createExpressionLiteral(body)
+        createExpressionLiteral(body, node)
     );
 
     return makeArrayFromCall([of, arrowFunction]);
@@ -175,8 +186,8 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
             node =>
                 isRelevantJsxNode(node)
                 && [
-                        CTRL_NODE_NAMES.CASE,
-                        CTRL_NODE_NAMES.DEFAULT
+                    CTRL_NODE_NAMES.CASE,
+                    CTRL_NODE_NAMES.DEFAULT
                 ].includes(getTagNameString(node))
         ) as ts.JsxElement[])
         .map(node => {
@@ -215,7 +226,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
         ? [elements.slice(0, elements.length - 1), last]
         : [elements, null];
     const defaultCaseOrNull = defaultCase
-        ? createExpressionLiteral(defaultCase.nodeBody)
+        ? createExpressionLiteral(defaultCase.nodeBody, node)
         : ts.createNull();
 
     return ts.createJsxExpression(
@@ -223,7 +234,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
         cases.reduceRight(
             (conditionalExpr, { condition, nodeBody }) => ts.createConditional(
                 condition,
-                createExpressionLiteral(nodeBody),
+                createExpressionLiteral(nodeBody, node),
                 conditionalExpr
             ),
             defaultCaseOrNull
@@ -248,7 +259,7 @@ const transformWithNode: JsxTransformation = (node, program, ctx) => {
                 iifeArgs,
                 undefined,
                 undefined,
-                createExpressionLiteral(body)
+                createExpressionLiteral(body, node)
             ),
             undefined,
             iifeArgValues

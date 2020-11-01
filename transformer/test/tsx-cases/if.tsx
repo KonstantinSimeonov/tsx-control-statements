@@ -56,3 +56,8 @@ export const NoConditionIf = {
         dataSet: [{ props: {}, message: 'if without condition does not render anything' }]
 };
 
+export const IfFragment = {
+    expected: () => <div><><p>1</p><p>2</p>3</></div>,
+    actual: () => <div><If condition={true}><p>1</p><p>2</p>3</If></div>,
+    dataSet: [{}]
+};

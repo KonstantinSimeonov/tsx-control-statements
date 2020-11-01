@@ -82,3 +82,17 @@ export const MisplacedOtherwise = {
     dataSet: [{ props: {}, message: 'misplaced otherwise elements are skipped' }]
 };
 
+export const ChooseFragment = {
+    actual: () => (
+        <div>
+            123
+            <Choose>
+                <When condition={false}>1{'zdr'}</When>
+                <When condition={true}>2{'anotha one'}</When>
+                <Otherwise><p>9</p>3</Otherwise>
+            </Choose>
+        </div>
+    ),
+    expected: () => <div>123anotha one2</div>,
+    dataSet: [{ props: {}, message: 'yo' }]
+};
