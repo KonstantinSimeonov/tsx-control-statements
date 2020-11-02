@@ -8,11 +8,11 @@ export function Choose(props: { children?: any; }) {
 	return props.children;
 }
 
-export function When(props: { children?: any; condition: boolean; }) {
+export function When(props: { children?: any; condition: any; }) {
 	return props.children;
 }
 
-export function If(props:{ children?: any; condition: boolean; }) {
+export function If(props:{ children?: any; condition: any; }) {
 	return props.children;
 }
 
