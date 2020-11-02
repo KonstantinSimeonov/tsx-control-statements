@@ -70,32 +70,48 @@ const getJsxElementBody = (
     node: ts.Node,
     program: ts.Program,
     ctx: ts.TransformationContext
-): ts.Expression[] => node.getChildAt(1)
-    .getChildren()
-    .filter(isRelevantJsxNode)
-    .map(
-        node => ts.isJsxText(node)
-            ? node
-            : visitNodes(node, program, ctx)
-    ).filter(Boolean) as ts.Expression[];
+): ts.JsxChild[] =>
+    node.getChildAt(1)
+        .getChildren()
+        .filter(isRelevantJsxNode)
+        .map(
+            node => ts.isJsxText(node)
+                ? node
+                : visitNodes(node, program, ctx) as ts.JsxChild
+        ).filter(Boolean);
 
 // @ts-ignore
 const trace = <T>(item: T, ...logArgs: any[]) => console.log(item, ...logArgs) || item;
 // @ts-ignore
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
-const nullJsxExpr = () => ts.createJsxExpression(undefined, ts.createNull());
+const nullJsxExpr = (): ts.JsxChild => ts.createJsxExpression(undefined, ts.createNull());
+
+const hasOnlyComments = (expr: ts.JsxExpression) => {
+    let onlyComments = true;
+    expr.forEachChild(c =>
+        onlyComments = onlyComments && [
+            ts.SyntaxKind.LastPunctuation,
+            ts.SyntaxKind.FirstPunctuation,
+            ts.SyntaxKind.CloseBraceToken
+        ].includes(c.kind)
+    );
+    return onlyComments;
+};
 
 const createExpressionLiteral =
-    (expressions: ts.Expression[], node: ts.Node): ts.ArrayLiteralExpression | ts.Expression => {
+    (expressions: ts.JsxChild[], node: ts.Node): ts.JsxFragment | ts.Expression => {
         if (expressions.length === 1) {
             const [expr] = expressions;
+            if (ts.isJsxExpression(expr) && hasOnlyComments(expr)) {
+                return ts.createNull();
+            }
             const jsxChild = ts.isJsxText(expr) ? ts.createStringLiteral(trim(expr.getFullText())) : expr;
-            return ts.createJsxExpression(undefined, jsxChild);
+            return jsxChild;
         }
 
         return ts.createJsxFragment(
             ts.setOriginalNode(ts.createJsxOpeningFragment(), node),
-            expressions as any,
+            expressions,
             ts.setOriginalNode(ts.createJsxJsxClosingFragment(), node)
         );
     }
@@ -248,7 +264,7 @@ const transformWithNode: JsxTransformation = (node, program, ctx) => {
         key => ts.createParameter(undefined, undefined, undefined, key)
     );
     const iifeArgValues = Object.values(props);
-    const body = getJsxElementBody(node, program, ctx) as ts.Expression[];
+    const body = getJsxElementBody(node, program, ctx);
 
     return ts.createJsxExpression(
         undefined,
