@@ -1,7 +1,7 @@
 {
   "name": "tsx-control-statements",
   "private": false,
-  "version": "2.17.1",
+  "version": "2.20.0",
   "main": "transformer.js",
   "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
@@ -21,7 +21,6 @@
   "license": "WTFPL",
   "types": "index.ts",
   "scripts": {
-    "publish": "yarn build && npm login && npm publish",
     "build": "tsc --project ./tsconfig.json",
     "build:watch": "yarn build -- --watch",
     "test": "yarn test:compile && yarn test:run-compiled",
