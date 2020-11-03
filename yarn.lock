@@ -13043,6 +13043,11 @@ tsutils@^2.13.1, tsutils@^2.29.0:
   dependencies:
     tslib "^1.8.1"
 
+tsx-control-statements@^2.17.0:
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/tsx-control-statements/-/tsx-control-statements-2.21.0.tgz#0e7275accbe204958b0d9c4b8bc12bb3c7179d95"
+  integrity sha512-e3gW+VtcG0pNHNU5sm2gQEXpeSuvSeD0bgyN8phVDEon49lFqHwMgd/TE0wLTwnz1q4KM+K1H7OINCGc3+DeGg==
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
