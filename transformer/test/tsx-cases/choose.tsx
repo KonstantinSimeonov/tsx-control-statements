@@ -57,8 +57,9 @@ export const NoConditionWhen = {
         <div>
            123
            <Choose>
+                <
                 // @ts-ignore
-                <When>goshogosho</When>
+                When>goshogosho</When>
            </Choose>
            123
          </div>

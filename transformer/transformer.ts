@@ -40,7 +40,7 @@ const isRelevantJsxNode = (node: ts.Node): node is ts.JsxElement =>
     || ts.isJsxExpression(node)
     || ts.isJsxText(node) && node.getText() !== '';
 
-const getTagNameString = (node: ts.JsxElement): string => {
+const getTagNameString = (node: ts.JsxElement | ts.JsxSelfClosingElement): string => {
     if (ts.isJsxSelfClosingElement(node)) {
         return node.tagName.getFullText();
     }

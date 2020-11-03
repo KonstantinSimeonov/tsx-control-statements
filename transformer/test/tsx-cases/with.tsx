@@ -9,8 +9,10 @@ export default {
     actual: () => (
         <p>
             <With gosho={3} pesho={5} tosho={6}>
-                // @ts-ignore
-                {gosho + pesho + tosho}
+                {
+                  // @ts-ignore
+                  gosho + pesho + tosho
+                }
             </With>
         </p>
     ),
