@@ -6,6 +6,7 @@ dist/
 yarn-error.log
 .nyc_output/
 coverage/
+transformer/test/tsx-cases/*.js
 *.swp
 package-lock.json
 *.patch

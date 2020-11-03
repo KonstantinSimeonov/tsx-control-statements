@@ -1,0 +1,5 @@
+{
+    "extends": "./tsconfig-common.json",
+    "compilerOptions": { "outDir": "./tsc" },
+    "include": ["./compatibility-cases/*"]
+}

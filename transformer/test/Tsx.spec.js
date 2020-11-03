@@ -7,13 +7,13 @@ const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
 
 enzyme.configure({ adapter: new Adapter });
 
-fs.readdirSync(path.join(__dirname, 'tsc'))
-    .filter(fileName => fileName.startsWith('tsx-'))
-    .map(fileName => [fileName, Object.entries(require(`./tsc/${fileName}`))])
+fs.readdirSync(path.join(__dirname, 'tsx-cases'))
+    .filter(fileName => fileName.endsWith('.js'))
+    .map(fileName => [fileName, Object.entries(require(`./tsx-cases/${fileName}`))])
     .forEach(([fileName, fileExports]) => {
         const testSuites = fileExports.filter(([,fileExport]) => typeof fileExport === 'object');
         for (const [name, suite] of testSuites) {
-            const suiteName = name.replace('default', fileName.replace('.js', '').replace('tsx-', ''));
+            const suiteName = name.replace('default', fileName.replace('.js', ''));
             const {
                 expected: expectedComponent,
                 actual: assertedComponent,

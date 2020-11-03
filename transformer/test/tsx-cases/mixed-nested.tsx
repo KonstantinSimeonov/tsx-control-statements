@@ -12,7 +12,9 @@ export default {
                 <Otherwise>
                     <ul>
                         <For each="songName" of={songList}>
-                            <If condition={Boolean(songName)}>
+                            // @ts-ignore
+                            <If condition={songName}>
+                                // @ts-ignore
                                 <li key={songName}>{songName}</li>
                             </If>
                         </For>

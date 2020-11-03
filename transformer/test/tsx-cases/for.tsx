@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { For } from 'tsx-control-statements/components';
+import { For, Choose, When, Otherwise, If } from 'tsx-control-statements/components';
 
 // this is unnecessary for compilation, but fools visuals studio code
 // declare var i: number, chap: string;
 
 export const CanUseControlStatementsInBody = {
-    actual: ({ words }) => (
+  actual: ({ words }: { words: string[] }) => (
         <div>
             <For of={words} body={(w, i) => (
                   <Choose>
@@ -36,6 +36,7 @@ export const CanUseControlStatementsInBody = {
 
 export const NoOf = {
     expected: () => null,
+    // @ts-ignore
     actual: () => <For each="test">haha</For>,
     dataSet: [
         { props: {}, message: 'renders null' }
@@ -44,12 +45,15 @@ export const NoOf = {
 
 export const BadBodyProp = {
     expected: () => <p>123</p>,
+    // @ts-ignore
     actual: () => <p><For each="i" of={[1, 2, 3]} body={String}>{i}</For></p>,
     dataSet: [
         { props: {}, message: 'uses for children when body is bad' }
     ]
 }
 
+declare const chap: string;
+declare const i: number;
 export default {
     expected: ({ chaps }: { chaps: string[] }) => (
         <ol>
@@ -100,6 +104,7 @@ export const ForWithIterable = {
     actual: ({ xs }: { xs: Map<string, number> }) => (
         <ol>
             <For each="kvp" of={xs} index="i">
+                // @ts-ignore
                 <span key={kvp[0]}>pair {i} with key {kvp[0]} and value {kvp[1]}</span>
             </For>
         </ol>

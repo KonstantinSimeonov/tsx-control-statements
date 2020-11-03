@@ -51,6 +51,7 @@ export const EmptyIf = {
 };
 
 export const NoConditionIf = {
+        // @ts-ignore
        actual: () => <p>123<If>tuka ima tuka nema</If>neshto si</p>,
        expected: () =>  <p>123neshto si</p>,
        dataSet: [{ props: {}, message: 'if without condition does not render anything' }]
