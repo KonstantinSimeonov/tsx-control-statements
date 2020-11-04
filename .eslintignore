@@ -1,2 +1,4 @@
 node_modules/
-transformer/test/tsx-cases/*.js
+transformer/test/build/
+transformer/test/babel/
+transformer/transformer.js
