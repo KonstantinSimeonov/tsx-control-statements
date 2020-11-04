@@ -1,4 +1,0 @@
-{
-    "extends": "./tsconfig-common.json",
-    "include": ["./tsx-cases/*"]
-}

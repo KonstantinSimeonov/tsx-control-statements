@@ -21,12 +21,14 @@
   "license": "WTFPL",
   "types": "index.ts",
   "scripts": {
-    "build": "tsc --project ./tsconfig.json",
+    "build": "tsc -P tsconfig.json",
     "build:watch": "yarn build -- --watch",
     "test": "yarn test:compile && yarn test:run-compiled",
     "test:ci": "./runtests.sh",
-    "test:compile": "cd test && ./compile-cases.sh && cd ..",
-    "test:run-compiled": "mocha test/helpers/browser-env.js \"test/**/*.spec.js\"",
+    "test:compile": "yarn test:compile-tsc && yarn test:compile-babel",
+    "test:compile-tsc": "nyc ttsc -P test/tsconfig.json",
+    "test:compile-babel": "babel test/src --presets=es2015,react --plugins=\"jsx-control-statements\" --out-dir=test/babel",
+    "test:run": "mocha test/helpers/browser-env.js \"test/**/*.spec.js\"",
     "test:coverage": "nyc report --reporter=text-lcov | coveralls",
     "test:html-report": "nyc report --reporter=html"
   },

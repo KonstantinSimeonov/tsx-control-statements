@@ -13,7 +13,7 @@ for v in ${supported_tsc_versions[*]}; do
     yarn add --dev typescript@$v
     yarn tsc --version
     yarn test:compile
-    yarn test:run-compiled
+    yarn test:run
     test_exit_code=$?
     [[ $test_exit_code != 0 ]] && exit_code=1
 
