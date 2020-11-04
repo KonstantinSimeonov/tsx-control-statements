@@ -26,30 +26,6 @@ export default {
   ].map(([str, message]) => ({ props: { str }, message }))
 };
 
-export const EmptyChoose = {
-  actual: () => (
-    <div>
-      123<Choose></Choose>123
-    </div>
-  ),
-  expected: () => <div>123123</div>,
-  dataSet: [{ props: {}, message: 'empty choose is not rendered' }]
-};
-
-export const EmptyWhen = {
-  actual: props => (
-    <div>
-      123
-      <Choose>
-        <When condition={Object.keys(props).length === 0}></When>
-      </Choose>
-      123
-    </div>
-  ),
-  expected: () => <div>123123</div>,
-  dataSet: [{ props: {}, message: 'empty when is not rendered' }]
-};
-
 export const MisplacedOtherwise = {
   actual: () => (
     <div>

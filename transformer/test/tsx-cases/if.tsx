@@ -40,34 +40,8 @@ export const WithSelfClosingElementChild = {
     </div>
   ),
   dataSet: [
-    { props: { n: 1 }, message: 'works with self-closing children when condition is false' },
-    { props: { n: 5 }, message: 'works with self-closing children when condition is true' }
+    { props: { n: 1 }, message: 'works with self-closing children when condition is false' }
   ]
-};
-
-export const EmptyIf = {
-  actual: () => (
-    <p>
-      123<If condition={true}></If>neshto si
-    </p>
-  ),
-  expected: () => <p>123neshto si</p>,
-  dataSet: [{ props: {}, message: 'empty if does not render anything' }]
-};
-
-export const NoConditionIf = {
-  actual: () => (
-    <p>
-      123
-      {
-        // @ts-ignore
-        <If>tuka ima tuka nema</If>
-      }
-      neshto si
-    </p>
-  ),
-  expected: () => <p>123neshto si</p>,
-  dataSet: [{ props: {}, message: 'if without condition does not render anything' }]
 };
 
 export const IfFragment = {
