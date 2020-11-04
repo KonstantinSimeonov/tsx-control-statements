@@ -37,7 +37,7 @@
     "tslint-config-prettier": "^1.10.0",
     "tslint-react": "^3.2.0",
     "tsx-control-statements": "^2.17.0",
-    "uglifyjs-webpack-plugin": "1.2.5",
+    "uglifyjs-webpack-plugin": "2.2.0",
     "url-loader": "0.6.2",
     "webpack": "3.8.1",
     "webpack-dev-server": "2.11.3",
