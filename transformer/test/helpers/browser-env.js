@@ -9,21 +9,24 @@ const { window } = new JSDOM(`
 `);
 
 function copyProperties(src, target) {
-	const propertiesToDefine = Object.getOwnPropertyNames(src)
-		.filter(propKey => typeof target[propKey] === 'undefined')
-		.reduce((propMap, propKey) => ({
-			...propMap,
-			[propKey]: Object.getOwnPropertyDescriptor(src, propKey)
-		}), {});
+  const propertiesToDefine = Object.getOwnPropertyNames(src)
+    .filter(propKey => typeof target[propKey] === 'undefined')
+    .reduce(
+      (propMap, propKey) => ({
+        ...propMap,
+        [propKey]: Object.getOwnPropertyDescriptor(src, propKey)
+      }),
+      {}
+    );
 
-	Object.defineProperties(target, propertiesToDefine);
+  Object.defineProperties(target, propertiesToDefine);
 }
 
 const setupBrowserEnv = () => {
-	global.window = window;
-	global.document = window.document;
-	global.navigator = { userAgent: 'node.js' };
-	copyProperties(window, global);
+  global.window = window;
+  global.document = window.document;
+  global.navigator = { userAgent: 'node.js' };
+  copyProperties(window, global);
 };
 
 setupBrowserEnv();

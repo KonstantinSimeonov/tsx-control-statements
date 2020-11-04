@@ -21,7 +21,8 @@ module.exports = {
   ],
   rules: {
     'prettier/prettier': 2,
-    '@typescript-eslint/ban-ts-comment': 0
+    '@typescript-eslint/ban-ts-comment': 0,
+    'react/display-name': 0
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   }
