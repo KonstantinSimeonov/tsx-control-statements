@@ -11,7 +11,7 @@ export const CanUseControlStatementsInBody = {
       <For
         of={words}
         body={(w, i) => (
-          <Choose>
+          <Choose key={i}>
             <When condition={i % 2 === 0}>
               {w}
               <If condition={w.length <= 3}>stuff</If>
@@ -152,10 +152,10 @@ export const LoopBody = {
   expected: ({ xs }: { xs: number[] }) => (
     <ol>
       {Array.from(xs, (x, i) => (
-        <>
+        <React.Fragment key={i}>
           {x}
           <p>{x * i}</p>
-        </>
+        </React.Fragment>
       ))}
     </ol>
   ),
@@ -164,10 +164,10 @@ export const LoopBody = {
       <For
         of={xs}
         body={(x, i) => (
-          <>
+          <React.Fragment key={i}>
             {x}
             <p>{x * i}</p>
-          </>
+          </React.Fragment>
         )}
       />
     </ol>
