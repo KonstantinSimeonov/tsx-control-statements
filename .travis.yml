@@ -2,5 +2,5 @@ language: node_js
 node_js:
   - "14.11.0"
 install: yarn
-script: yarn test:ci
+script: yarn --cwd transformer/ test:ci
 after_success: yarn --cwd transformer/ test:coverage
