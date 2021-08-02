@@ -5,7 +5,7 @@ mkdir -p test-output
 lerna bootstrap
 yarn build
 
-readonly supported_tsc_versions=(3.4 3.5 3.6 3.7 3.8 3.9 4.0)
+readonly supported_tsc_versions=(3.4 3.5 3.6 3.7 3.8 3.9 4.0 4.1 4.2 4.3 latest)
 
 exit_code=0
 for v in ${supported_tsc_versions[*]}; do
