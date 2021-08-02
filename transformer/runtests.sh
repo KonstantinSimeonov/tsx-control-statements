@@ -11,7 +11,7 @@ exit_code=0
 for v in ${supported_tsc_versions[*]}; do
     echo "================= TESTING VERSION $v ======================="
     git checkout ..
-    yarn add --dev --network-concurrency 8 typescript@$v
+    yarn add typescript@$v
     yarn tsc --version
     yarn test:compile
     yarn test:run
