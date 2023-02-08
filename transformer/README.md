@@ -6,10 +6,11 @@
 
 Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-jsx-control-statements), but for the typescript compiler toolchain. **Works for both javascript and typescript.**
 
-| Typescript version range | `tsx-control-statements` version           |
-|:------------------------:|:-------------------------------------------|
-| `2.4.x` - `3.3.x`        | `v3.3.x`                                   |
-| >= `3.4.x`               | `v4.x`                                     |
+| Typescript version range | `tsx-control-statements` version  |
+|:------------------------:|:----------------------------------|
+|    `2.4.x` - `3.3.x`     | `v3.3.x`                          |
+|        >= `3.4.x`        | `v4.x` (with deprecated warnings) |
+|        >= `4.0.0`        | `v5.x`                            |
 
 ## Drop-in replacement for jsx control statements
 - No need to rewrite anything
