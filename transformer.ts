@@ -86,7 +86,8 @@ const getJsxElementBody = (
     .filter(Boolean);
 
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
-const nullJsxExpr = (): ts.JsxChild => ts.factory.createJsxExpression(undefined, ts.factory.createNull());
+const nullJsxExpr = (): ts.JsxChild =>
+  ts.factory.createJsxExpression(undefined, ts.factory.createNull());
 
 const hasOnlyComments = (expr: ts.JsxExpression) => {
   let onlyComments = true;
@@ -103,6 +104,15 @@ const hasOnlyComments = (expr: ts.JsxExpression) => {
   return onlyComments;
 };
 
+const createConditional = (args: Record<`true` | `false` | `condition`, ts.Expression>) =>
+  ts.factory.createConditionalExpression(
+    args.condition,
+    ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+    args.true, //createExpressionLiteral(body, node),
+    ts.factory.createToken(ts.SyntaxKind.ColonToken),
+    args.false //ts.factory.createNull()
+  );
+
 const createExpressionLiteral = (
   expressions: ts.JsxChild[],
   node: ts.Node
@@ -112,7 +122,9 @@ const createExpressionLiteral = (
     if (ts.isJsxExpression(expr) && hasOnlyComments(expr)) {
       return ts.factory.createNull();
     }
-    const jsxChild = ts.isJsxText(expr) ? ts.factory.createStringLiteral(trim(expr.getFullText())) : expr;
+    const jsxChild = ts.isJsxText(expr)
+      ? ts.factory.createStringLiteral(trim(expr.getFullText()))
+      : expr;
     return jsxChild;
   }
 
@@ -139,14 +151,22 @@ const transformIfNode: JsxTransformation = (node, program, ctx) => {
 
   return ts.factory.createJsxExpression(
     undefined,
-    ts.createConditional(condition, createExpressionLiteral(body, node), ts.factory.createNull())
+    createConditional({
+      condition,
+      true: createExpressionLiteral(body, node),
+      false: ts.factory.createNull()
+    })
   );
 };
 
 const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
   ts.factory.createJsxExpression(
     undefined,
-    ts.factory.createCallExpression(ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'), undefined, args)
+    ts.factory.createCallExpression(
+      ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'),
+      undefined,
+      args
+    )
   );
 
 const transformForNode: JsxTransformation = (node, program, ctx) => {
@@ -173,7 +193,9 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
 
   const arrowFunctionArgs = [each, index]
     .map(
-      arg => arg && ts.factory.createParameterDeclaration(undefined, undefined, arg.getText().slice(1, -1))
+      arg =>
+        arg &&
+        ts.factory.createParameterDeclaration(undefined, undefined, arg.getText().slice(1, -1))
     )
     .filter(Boolean);
 
@@ -189,17 +211,17 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
   return makeArrayFromCall([of, arrowFunction]);
 };
 
-const CHOOSE_TAG_NAMES: readonly string[] = [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT]
+const CHOOSE_TAG_NAMES: readonly string[] = [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT];
 
 const transformChooseNode: JsxTransformation = (node, program, ctx) => {
-  const elements = (node
-    .getChildAt(1)
-    .getChildren()
-    .filter(
-      node =>
-        isRelevantJsxNode(node) &&
-        CHOOSE_TAG_NAMES.includes(getTagNameString(node))
-    ) as ts.JsxElement[])
+  const elements = (
+    node
+      .getChildAt(1)
+      .getChildren()
+      .filter(
+        node => isRelevantJsxNode(node) && CHOOSE_TAG_NAMES.includes(getTagNameString(node))
+      ) as ts.JsxElement[]
+  )
     .map(node => {
       const tagName = getTagNameString(node);
       const { condition } = getJsxProps(node);
@@ -240,13 +262,17 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
       : [elements, null];
   const defaultCaseOrNull = defaultCase
     ? createExpressionLiteral(defaultCase.nodeBody, node)
-    : ts.factory.createNull()
+    : ts.factory.createNull();
 
   return ts.factory.createJsxExpression(
     undefined,
     cases.reduceRight(
       (conditionalExpr, { condition, nodeBody }) =>
-        ts.createConditional(condition, createExpressionLiteral(nodeBody, node), conditionalExpr),
+        createConditional({
+          condition, 
+          true: createExpressionLiteral(nodeBody, node),
+          false: conditionalExpr
+        }),
       defaultCaseOrNull
     )
   );
@@ -284,7 +310,7 @@ const getTransformation = (node: ts.Node): JsxTransformation => {
     node.getChildren().some(child => STUB_PACKAGE_REGEXP.test(child.getFullText()));
 
   if (isStubsImport) {
-    return ts.factory.createEmptyStatement
+    return ts.factory.createEmptyStatement;
   }
 
   if (!ts.isJsxElement(node) && !ts.isJsxSelfClosingElement(node)) {
