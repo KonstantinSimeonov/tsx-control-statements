@@ -2,8 +2,6 @@
 
 mkdir -p test-output
 
-npm run build
-
 readonly supported_tsc_versions=(4.3 4.4 4.5 4.6 4.7 4.8 4.9)
 
 exit_code=0

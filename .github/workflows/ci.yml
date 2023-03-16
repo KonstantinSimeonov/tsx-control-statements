@@ -1,0 +1,17 @@
+name: CI
+
+on: push
+
+jobs:
+  tsc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests
+        run: ./runtests.sh
