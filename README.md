@@ -157,10 +157,7 @@ const RandomStuff = ({ str }) => <article>
 ## Cookbook
 
 #### Bundlers and scaffolding tools
-- **[fuse-box](./examples/fuse-box)**
-  - The unit test cases for this project are bundled with `fuse-box` ([link](./test/fuse.js)).
-- **[webpack](./examples/webpack)**
-- **[create-react-app](./examples/my-app)**
+**TODO** <sub><sub>sighs</sub></sub>
 
 #### Testing
 - **[ava](https://github.com/avajs/ava/blob/master/docs/recipes/typescript.md)**, **[mocha](https://github.com/mochajs/mocha)** or anything other that can use **ts-node** - **ts-node** supports [programatically adding custom transformers](https://github.com/TypeStrong/ts-node#programmatic-only-options) so it can be used to run test suites.
