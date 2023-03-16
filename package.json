@@ -19,7 +19,6 @@
     "url": "https://github.com/KonstantinSimeonov/tsx-control-statements"
   },
   "license": "WTFPL",
-  "types": "index.ts",
   "scripts": {
     "build": "tsc -P tsconfig.json",
     "build:watch": "npm run build -- --watch",
