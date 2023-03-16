@@ -1,11 +1,11 @@
 const { JSDOM } = require('jsdom');
 
 const { window } = new JSDOM(`
-	<!DOCTYPE html>
-	<html>
-		<head></head>
-		<body></body>
-	</html>
+  <!DOCTYPE html>
+  <html>
+    <head></head>
+    <body></body>
+  </html>
 `);
 
 function copyProperties(src, target) {

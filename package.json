@@ -31,7 +31,8 @@
     "test:run": "mocha --exit test/helpers/browser-env.js \"test/**/*.spec.js\"",
     "test:coverage": "nyc report --reporter=text-lcov | coveralls",
     "test:html-report": "nyc report --reporter=html",
-    "link:self": "npm link && npm link tsx-control-statements"
+    "link:self": "npm link && npm link tsx-control-statements",
+    "format:all": "npx prettier --write './**/*.{ts,js,tsx,jsx}'"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",

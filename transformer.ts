@@ -269,7 +269,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
     cases.reduceRight(
       (conditionalExpr, { condition, nodeBody }) =>
         createConditional({
-          condition, 
+          condition,
           true: createExpressionLiteral(nodeBody, node),
           false: conditionalExpr
         }),
