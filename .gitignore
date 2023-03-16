@@ -2,11 +2,7 @@ node_modules/
 transformer.js
 transformer.d.ts
 dist/
-.vscode/
-yarn-error.log
 .nyc_output/
 coverage/
 transformer/test/tsx-cases/*.js
-*.swp
-package-lock.json
 *.patch
