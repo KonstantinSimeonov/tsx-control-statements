@@ -112,7 +112,7 @@ const createExpressionLiteral = (
     if (ts.isJsxExpression(expr) && hasOnlyComments(expr)) {
       return ts.factory.createNull();
     }
-    const jsxChild = ts.isJsxText(expr) ? ts.createStringLiteral(trim(expr.getFullText())) : expr;
+    const jsxChild = ts.isJsxText(expr) ? ts.factory.createStringLiteral(trim(expr.getFullText())) : expr;
     return jsxChild;
   }
 
