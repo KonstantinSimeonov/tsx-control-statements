@@ -189,6 +189,8 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
   return makeArrayFromCall([of, arrowFunction]);
 };
 
+const CHOOSE_TAG_NAMES: readonly string[] = [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT]
+
 const transformChooseNode: JsxTransformation = (node, program, ctx) => {
   const elements = (node
     .getChildAt(1)
@@ -196,7 +198,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
     .filter(
       node =>
         isRelevantJsxNode(node) &&
-        [CTRL_NODE_NAMES.CASE, CTRL_NODE_NAMES.DEFAULT].includes(getTagNameString(node))
+        CHOOSE_TAG_NAMES.includes(getTagNameString(node))
     ) as ts.JsxElement[])
     .map(node => {
       const tagName = getTagNameString(node);
