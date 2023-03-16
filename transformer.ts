@@ -86,7 +86,7 @@ const getJsxElementBody = (
     .filter(Boolean);
 
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
-const nullJsxExpr = (): ts.JsxChild => ts.createJsxExpression(undefined, ts.createNull());
+const nullJsxExpr = (): ts.JsxChild => ts.createJsxExpression(undefined, ts.factory.createNull());
 
 const hasOnlyComments = (expr: ts.JsxExpression) => {
   let onlyComments = true;
@@ -110,7 +110,7 @@ const createExpressionLiteral = (
   if (expressions.length === 1) {
     const [expr] = expressions;
     if (ts.isJsxExpression(expr) && hasOnlyComments(expr)) {
-      return ts.createNull();
+      return ts.factory.createNull();
     }
     const jsxChild = ts.isJsxText(expr) ? ts.createStringLiteral(trim(expr.getFullText())) : expr;
     return jsxChild;
@@ -139,7 +139,7 @@ const transformIfNode: JsxTransformation = (node, program, ctx) => {
 
   return ts.createJsxExpression(
     undefined,
-    ts.createConditional(condition, createExpressionLiteral(body, node), ts.createNull())
+    ts.createConditional(condition, createExpressionLiteral(body, node), ts.factory.createNull())
   );
 };
 
@@ -240,7 +240,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
       : [elements, null];
   const defaultCaseOrNull = defaultCase
     ? createExpressionLiteral(defaultCase.nodeBody, node)
-    : ts.createNull();
+    : ts.factory.createNull()
 
   return ts.createJsxExpression(
     undefined,
@@ -284,7 +284,7 @@ const getTransformation = (node: ts.Node): JsxTransformation => {
     node.getChildren().some(child => STUB_PACKAGE_REGEXP.test(child.getFullText()));
 
   if (isStubsImport) {
-    return ts.createEmptyStatement;
+    return ts.factory.createEmptyStatement
   }
 
   if (!ts.isJsxElement(node) && !ts.isJsxSelfClosingElement(node)) {
