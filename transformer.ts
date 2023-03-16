@@ -173,7 +173,7 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
 
   const arrowFunctionArgs = [each, index]
     .map(
-      arg => arg && ts.createParameter(undefined, undefined, undefined, arg.getText().slice(1, -1))
+      arg => arg && ts.factory.createParameterDeclaration(undefined, undefined, arg.getText().slice(1, -1))
     )
     .filter(Boolean);
 
