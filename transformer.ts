@@ -163,7 +163,7 @@ const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
   ts.factory.createJsxExpression(
     undefined,
     ts.factory.createCallExpression(
-      ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'),
+      ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier('Array'), 'from'),
       undefined,
       args
     )
