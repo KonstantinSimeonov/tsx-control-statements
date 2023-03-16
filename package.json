@@ -1,29 +1,66 @@
 {
-  "name": "root",
-  "version": "0.0.0",
+  "name": "tsx-control-statements",
+  "private": false,
+  "version": "5.0.0",
+  "main": "transformer.js",
+  "ts-main": "transformer.ts",
   "author": "Konstantin Simeonov <kon.simeonov@protonmail.com>",
+  "keywords": [
+    "control-statements",
+    "typescript",
+    "jsx",
+    "tsx",
+    "if",
+    "loop",
+    "react "
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KonstantinSimeonov/tsx-control-statements"
+  },
+  "license": "WTFPL",
   "scripts": {
-    "postinstall": "lerna --loglevel debug bootstrap",
-    "test:ci": "lerna --loglevel debug run test:ci"
+    "build": "tsc -P tsconfig.json",
+    "build:watch": "npm run build -- --watch",
+    "test": "npm run test:compile && npm run test:run-compiled",
+    "test:ci": "./runtests.sh",
+    "test:compile": "npm run test:compile-tsc && npm run test:compile-babel",
+    "test:compile-tsc": "nyc ttsc -P test/tsconfig.json",
+    "test:compile-babel": "babel test/src --presets=@babel/preset-react,@babel/preset-env --plugins=\"jsx-control-statements\" --out-dir=test/babel",
+    "test:run": "mocha --exit test/helpers/browser-env.js \"test/**/*.spec.js\"",
+    "test:coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test:html-report": "nyc report --reporter=html",
+    "link:self": "npm link && npm link tsx-control-statements",
+    "format:all": "npx prettier --write './**/*.{ts,js,tsx,jsx}'"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.6.1",
-    "@typescript-eslint/parser": "^4.6.1",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.5",
-    "lerna": "^3.18.1",
-    "prettier": "^2.1.2"
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@testing-library/react": "^14.0.0",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^16.18.16",
+    "@types/react": "^16.9.55",
+    "babel-plugin-jsx-control-statements": "^4.1.2",
+    "chai": "^4.3.7",
+    "coveralls": "^3.1.1",
+    "jsdom": "^21.1.1",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-node": "^9.0.0",
+    "ttypescript": "^1.5.15",
+    "typescript": "^4.9.5"
   },
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "examples/*",
-      "transformer/"
-    ],
-    "nohoist": [
-      "**/@types/**"
+  "peerDependencies": {
+    "typescript": ">=4.9"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
     ]
   }
 }

@@ -1,0 +1,11 @@
+test/
+dist/
+transformer.d.ts
+tsconfig.json
+node_modules/
+coverage/
+.nyc_output/
+test-output/
+runtests.sh
+bump-tsc.sh
+.github/

@@ -1,0 +1,15 @@
+name: "Node env prep"
+description: "Checkout, setup node and run npm i"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "16"
+        cache: "npm"
+
+    - name: Install
+      run: npm i
+      shell: bash
