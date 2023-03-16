@@ -17,7 +17,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
   - Control statements transpile to type-correct typescript before type checking
 - Compile control statements in javascript `.js` and `.jsx` files
   - `"allowJs"` should be set to `true` in your typescript configuration
-- Run the test suite: `yarn && yarn --cwd transformer build && yarn test`. It includes:
+- Run the test suite: `npm i && npm run build && npm run test`. It includes:
   - Compatibility tests with `jsx-control-statements` (i.e. both produce the same output html)
   - Tests for correct transpilation
   - Tests for typechecking

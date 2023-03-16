@@ -22,10 +22,10 @@
   "types": "index.ts",
   "scripts": {
     "build": "tsc -P tsconfig.json",
-    "build:watch": "yarn build -- --watch",
-    "test": "yarn test:compile && yarn test:run-compiled",
+    "build:watch": "npm run build -- --watch",
+    "test": "npm run test:compile && npm run test:run-compiled",
     "test:ci": "./runtests.sh",
-    "test:compile": "yarn test:compile-tsc && yarn test:compile-babel",
+    "test:compile": "npm run test:compile-tsc && npm run test:compile-babel",
     "test:compile-tsc": "nyc ttsc -P test/tsconfig.json",
     "test:compile-babel": "babel test/src --presets=es2015,react --plugins=\"jsx-control-statements\" --out-dir=test/babel",
     "test:run": "mocha test/helpers/browser-env.js \"test/**/*.spec.js\"",
