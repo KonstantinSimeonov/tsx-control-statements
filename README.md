@@ -1,6 +1,6 @@
 # tsx-control-statements
 
-[![Build Status](https://www.travis-ci.com/KonstantinSimeonov/tsx-control-statements.svg?branch=master)](https://www.travis-ci.com/KonstantinSimeonov/tsx-control-statements) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master)
+[![CI](https://github.com/KonstantinSimeonov/tsx-control-statements/actions/workflows/ci.yml/badge.svg)](https://github.com/KonstantinSimeonov/tsx-control-statements/actions/workflows/ci.yml) [![Coverage Status](https://coveralls.io/repos/github/KonstantinSimeonov/tsx-control-statements/badge.svg?branch=master)](https://coveralls.io/github/KonstantinSimeonov/tsx-control-statements?branch=master)
 
 [![NPM](https://nodei.co/npm/tsx-control-statements.png)](https://npmjs.org/package/tsx-control-statements)
 
