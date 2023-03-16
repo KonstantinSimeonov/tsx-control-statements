@@ -146,7 +146,7 @@ const transformIfNode: JsxTransformation = (node, program, ctx) => {
 const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
   ts.factory.createJsxExpression(
     undefined,
-    ts.createCall(ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'), undefined, args)
+    ts.factory.createCallExpression(ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'), undefined, args)
   );
 
 const transformForNode: JsxTransformation = (node, program, ctx) => {
@@ -262,7 +262,7 @@ const transformWithNode: JsxTransformation = (node, program, ctx) => {
 
   return ts.factory.createJsxExpression(
     undefined,
-    ts.createCall(
+    ts.factory.createCallExpression(
       ts.factory.createArrowFunction(
         undefined,
         undefined,
