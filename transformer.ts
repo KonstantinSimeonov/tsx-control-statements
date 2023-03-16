@@ -86,7 +86,7 @@ const getJsxElementBody = (
     .filter(Boolean);
 
 const trim = (from: string) => from.replace(/^\r?\n[\s\t]*/, '').replace(/\r?\n[\s\t]*$/, '');
-const nullJsxExpr = (): ts.JsxChild => ts.createJsxExpression(undefined, ts.factory.createNull());
+const nullJsxExpr = (): ts.JsxChild => ts.factory.createJsxExpression(undefined, ts.factory.createNull());
 
 const hasOnlyComments = (expr: ts.JsxExpression) => {
   let onlyComments = true;
@@ -137,14 +137,14 @@ const transformIfNode: JsxTransformation = (node, program, ctx) => {
     return nullJsxExpr();
   }
 
-  return ts.createJsxExpression(
+  return ts.factory.createJsxExpression(
     undefined,
     ts.createConditional(condition, createExpressionLiteral(body, node), ts.factory.createNull())
   );
 };
 
 const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
-  ts.createJsxExpression(
+  ts.factory.createJsxExpression(
     undefined,
     ts.createCall(ts.createPropertyAccess(ts.createIdentifier('Array'), 'from'), undefined, args)
   );
@@ -242,7 +242,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
     ? createExpressionLiteral(defaultCase.nodeBody, node)
     : ts.factory.createNull()
 
-  return ts.createJsxExpression(
+  return ts.factory.createJsxExpression(
     undefined,
     cases.reduceRight(
       (conditionalExpr, { condition, nodeBody }) =>
@@ -255,12 +255,12 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
 const transformWithNode: JsxTransformation = (node, program, ctx) => {
   const props = getJsxProps(node);
   const iifeArgs = Object.keys(props).map(key =>
-    ts.createParameter(undefined, undefined, undefined, key)
+    ts.factory.createParameterDeclaration(undefined, undefined, key)
   );
   const iifeArgValues = Object.values(props);
   const body = getJsxElementBody(node, program, ctx);
 
-  return ts.createJsxExpression(
+  return ts.factory.createJsxExpression(
     undefined,
     ts.createCall(
       ts.createArrowFunction(
