@@ -12,6 +12,7 @@ for v in ${supported_tsc_versions[*]}; do
     git checkout ..
     npm i --save-dev typescript@$v
     ./node_modules/.bin/tsc --version
+    npm run link:self
     npm run test:compile
     npm run test:run
     test_exit_code=$?
