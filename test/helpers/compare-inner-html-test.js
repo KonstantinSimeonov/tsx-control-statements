@@ -1,11 +1,11 @@
 const { expect } = require('chai');
-const enzyme = require('enzyme');
 const React = require('react');
+const { render } = require(`@testing-library/react`)
 
 module.exports = ({ message, assertedComponent, expectedComponent, props }) =>
   it(message, () => {
     const [expectedNode, actualNode] = [expectedComponent, assertedComponent].map(component =>
-      enzyme.mount(React.createElement(component, props)).getDOMNode()
+      render(React.createElement(component, props)).baseElement
     );
 
     if (expectedNode !== actualNode) {

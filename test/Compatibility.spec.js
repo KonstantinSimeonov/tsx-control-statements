@@ -1,10 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const enzyme = require('enzyme');
-const Adapter = require('enzyme-adapter-react-16');
 const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
-
-enzyme.configure({ adapter: new Adapter() });
 
 const testFiles = fs.readdirSync(path.join(__dirname, 'babel'));
 
