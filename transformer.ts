@@ -177,7 +177,7 @@ const transformForNode: JsxTransformation = (node, program, ctx) => {
     )
     .filter(Boolean);
 
-  const arrowFunction = ts.createArrowFunction(
+  const arrowFunction = ts.factory.createArrowFunction(
     undefined,
     undefined,
     arrowFunctionArgs,
@@ -263,7 +263,7 @@ const transformWithNode: JsxTransformation = (node, program, ctx) => {
   return ts.factory.createJsxExpression(
     undefined,
     ts.createCall(
-      ts.createArrowFunction(
+      ts.factory.createArrowFunction(
         undefined,
         undefined,
         iifeArgs,
