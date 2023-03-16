@@ -116,10 +116,10 @@ const createExpressionLiteral = (
     return jsxChild;
   }
 
-  return ts.createJsxFragment(
-    ts.setOriginalNode(ts.createJsxOpeningFragment(), node),
+  return ts.factory.createJsxFragment(
+    ts.setOriginalNode(ts.factory.createJsxOpeningFragment(), node),
     expressions,
-    ts.setOriginalNode(ts.createJsxJsxClosingFragment(), node)
+    ts.setOriginalNode(ts.factory.createJsxJsxClosingFragment(), node)
   );
 };
 
