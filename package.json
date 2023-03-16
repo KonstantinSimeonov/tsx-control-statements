@@ -28,7 +28,7 @@
     "test:compile": "npm run test:compile-tsc && npm run test:compile-babel",
     "test:compile-tsc": "nyc ttsc -P test/tsconfig.json",
     "test:compile-babel": "babel test/src --presets=es2015,react --plugins=\"jsx-control-statements\" --out-dir=test/babel",
-    "test:run": "mocha test/helpers/browser-env.js \"test/**/*.spec.js\"",
+    "test:run": "mocha --exit test/helpers/browser-env.js \"test/**/*.spec.js\"",
     "test:coverage": "nyc report --reporter=text-lcov | coveralls",
     "test:html-report": "nyc report --reporter=html",
     "link:self": "npm link && npm link tsx-control-statements"
