@@ -17,10 +17,10 @@ export const ChooseNumbers = {
     </div>
   ),
   dataSet: [
-    [1, 'renders first When'],
-    [2, 'renders second When'],
-    [10, 'renders third When'],
-    [42, 'does not render any When']
+    [1, `renders first When`],
+    [2, `renders second When`],
+    [10, `renders third When`],
+    [42, `does not render any When`]
   ].map(([n, message]) => ({ props: { n }, message }))
 };
 
@@ -28,14 +28,14 @@ export const ChooseWithOtherwise = {
   component: ({ name }) => (
     <div>
       <Choose>
-        <When condition={name === 'gosho'}>gosho in da house</When>
+        <When condition={name === `gosho`}>gosho in da house</When>
         <Otherwise>gosho pie bira sig</Otherwise>
       </Choose>
     </div>
   ),
   dataSet: [
-    ['gosho', 'renders child of When'],
-    ['pesho', 'renders child of Otherwise']
+    [`gosho`, `renders child of When`],
+    [`pesho`, `renders child of Otherwise`]
   ].map(([name, message]) => ({ props: { name }, message }))
 };
 
@@ -43,10 +43,10 @@ export const ChooseMultipleChildren = {
   component: ({ name }) => (
     <div>
       <Choose>
-        <When condition={name === 'ivan'}>
+        <When condition={name === `ivan`}>
           <h1>kek</h1>
           <p>ivan is here</p>
-          {name + ' is haskell dev'}
+          {name + ` is haskell dev`}
         </When>
         <Otherwise>
           <h2>topkek</h2>
@@ -57,8 +57,8 @@ export const ChooseMultipleChildren = {
     </div>
   ),
   dataSet: [
-    ['ivan', 'renders children of When'],
-    ['hristofor', 'renders children of Otherwise']
+    [`ivan`, `renders children of When`],
+    [`hristofor`, `renders children of Otherwise`]
   ].map(([name, message]) => ({ props: { name }, message }))
 };
 
@@ -83,10 +83,10 @@ export const ChooseNested = {
     </div>
   ),
   dataSet: [
-    ['', 'When -> When'],
-    ['ja', 'When -> Otherwise'],
-    [Array.from({ length: 30 }).fill('a').join(''), 'Otherwise -> When'],
-    ['horse', 'Otherwise -> Otherwise']
+    [``, `When -> When`],
+    [`ja`, `When -> Otherwise`],
+    [Array.from({ length: 30 }).fill(`a`).join(``), `Otherwise -> When`],
+    [`horse`, `Otherwise -> Otherwise`]
   ].map(([name, message]) => ({ props: { name }, message: `renders ${message}` }))
 };
 
@@ -111,6 +111,6 @@ export const NoOtherwise = {
     </div>
   ),
   dataSet: [1, 2, 3, 7]
-    .map(n => ({ props: { n }, message: `renders one of the 'Whens'` }))
-    .concat([{ props: { n: 10 }, message: 'renders nothing' }])
+    .map(n => ({ props: { n }, message: `renders one of the Whens` }))
+    .concat([{ props: { n: 10 }, message: `renders nothing` }])
 };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { If } from 'tsx-control-statements/components';
 
 export default {
@@ -9,17 +8,17 @@ export default {
     </p>
   ),
   expected: ({ songList }: { songList: string[] }) => (
-    <p>{songList.includes(`Gery-Nikol - I'm the Queen`) ? 'good taste in music' : null}</p>
+    <p>{songList.includes(`Gery-Nikol - I'm the Queen`) ? `good taste in music` : null}</p>
   ),
   dataSet: [
-    [['Iron Maiden - The Monad (Horse & Penguin cover)', 'Britney - Toxic'], 'renders text'],
+    [[`Iron Maiden - The Monad (Horse & Penguin cover)`, `Britney - Toxic`], `renders text`],
     [
       [
-        'Iron Maiden - The Monad (Horse & Penguin cover)',
-        'Britney - Toxic',
+        `Iron Maiden - The Monad (Horse & Penguin cover)`,
+        `Britney - Toxic`,
         `Gery-Nikol - I'm the Queen`
       ],
-      'does not render text'
+      `does not render text`
     ]
   ].map(([songList, message]) => ({ props: { songList }, message }))
 };
@@ -40,7 +39,7 @@ export const WithSelfClosingElementChild = {
     </div>
   ),
   dataSet: [
-    { props: { n: 1 }, message: 'works with self-closing children when condition is false' }
+    { props: { n: 1 }, message: `works with self-closing children when condition is false` }
   ]
 };
 
@@ -61,7 +60,7 @@ export const IfFragment = {
       </If>
     </div>
   ),
-  dataSet: [{ message: 'If with more than 1 child should transpile to a jsx fragment' }]
+  dataSet: [{ message: `If with more than 1 child should transpile to a jsx fragment` }]
 };
 
 export const IfWithComments = {

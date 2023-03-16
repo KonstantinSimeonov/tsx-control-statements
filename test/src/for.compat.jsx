@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import * as React from "react"
 // defo not overworking myself
 const nextKey = () => Math.random() + String(Math.random() * 10000 * Math.random());
 
@@ -14,8 +13,8 @@ export const ForChildrenExpressions = {
     </article>
   ),
   dataSet: [
-    [[], 'same with []'],
-    [['gosho', 'pesho', 'gg'], 'same with non-empty array']
+    [[], `same with []`],
+    [[`gosho`, `pesho`, `gg`], `same with non-empty array`]
   ].map(([words, message]) => ({ props: { words }, message }))
 };
 
@@ -27,7 +26,7 @@ export const ForLongNames = {
       </For>
     </ul>
   ),
-  dataSet: [{ props: {}, message: 'works with longer bindings names' }]
+  dataSet: [{ props: {}, message: `works with longer bindings names` }]
 };
 
 export const ForIndex = {
@@ -38,7 +37,7 @@ export const ForIndex = {
       </For>
     </p>
   ),
-  dataSet: [{ props: {}, message: 'index binding works' }]
+  dataSet: [{ props: {}, message: `index binding works` }]
 };
 
 export const ForKeyIndex = {
@@ -49,7 +48,7 @@ export const ForKeyIndex = {
       </For>
     </ul>
   ),
-  dataSet: [{ props: {}, message: 'can use index binding as key' }]
+  dataSet: [{ props: {}, message: `can use index binding as key` }]
 };
 
 export const ForEmptyArray = {
@@ -60,7 +59,7 @@ export const ForEmptyArray = {
       </For>
     </ul>
   ),
-  dataSet: [{ props: {}, message: 'works with empty array' }]
+  dataSet: [{ props: {}, message: `works with empty array` }]
 };
 
 export const ForNested = {
@@ -85,7 +84,7 @@ export const ForNested = {
     [[1, 2], []],
     [
       [4, 2, 1],
-      ['i', 'hate', 'nested', 'ctrl', 'flow']
+      [`i`, `hate`, `nested`, `ctrl`, `flow`]
     ]
   ].map(([xs, ys]) => ({ props: { xs, ys }, message: `works for [${xs}] and [${ys}]` }))
 };

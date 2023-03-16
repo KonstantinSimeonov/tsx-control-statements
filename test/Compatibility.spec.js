@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const compareInnerHTMLTest = require('./helpers/compare-inner-html-test');
+const fs = require(`fs`);
+const path = require(`path`);
+const compareInnerHTMLTest = require(`./helpers/compare-inner-html-test`);
 
-const testFiles = fs.readdirSync(path.join(__dirname, 'babel'));
+const testFiles = fs.readdirSync(path.join(__dirname, `babel`));
 
 for (const name of testFiles) {
   const babelTests = require(`./babel/${name}`);

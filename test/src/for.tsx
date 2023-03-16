@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { For, Choose, When, Otherwise, If } from 'tsx-control-statements/components';
 
 // this is unnecessary for compilation, but fools visuals studio code
@@ -24,13 +23,13 @@ export const CanUseControlStatementsInBody = {
   ),
   expected: ({ words }: { words: string[] }) => (
     <div>
-      {words.map((w, i) => (i % 2 === 0 ? w + (w.length <= 3 ? 'stuff' : '') : `${w} ${w}`))}
+      {words.map((w, i) => (i % 2 === 0 ? w + (w.length <= 3 ? `stuff` : ``) : `${w} ${w}`))}
     </div>
   ),
   dataSet: [
     {
-      props: { words: ['big', 'papa', 'top', 'kek'] },
-      message: 'Control statements in for loop body are transformed'
+      props: { words: [`big`, `papa`, `top`, `kek`] },
+      message: `Control statements in for loop body are transformed`
     }
   ]
 };
@@ -39,7 +38,7 @@ export const NoOf = {
   expected: (): null => null,
   // @ts-ignore
   actual: () => <For each="test">haha</For>,
-  dataSet: [{ props: {}, message: 'renders null' }]
+  dataSet: [{ props: {}, message: `renders null` }]
 };
 
 export const BadBodyProp = {
@@ -52,7 +51,7 @@ export const BadBodyProp = {
       </For>
     </p>
   ),
-  dataSet: [{ props: {}, message: 'uses for children when body is bad' }]
+  dataSet: [{ props: {}, message: `uses for children when body is bad` }]
 };
 
 declare const chap: string;
@@ -75,14 +74,14 @@ export default {
         <li key={chap}>
           {i}
           <strong>{chap}</strong>
-          {chap.length > 10 ? 'a long one!' : null}
+          {chap.length > 10 ? `a long one!` : null}
         </li>
       ))}
     </ol>
   ),
   dataSet: [
-    [[], 'renders empty ol'],
-    [['steeve joobs', 'bil gaytes', 'lightlin naakov'], 'renders a li for every chap']
+    [[], `renders empty ol`],
+    [[`steeve joobs`, `bil gaytes`, `lightlin naakov`], `renders a li for every chap`]
   ].map(([chaps, message]) => ({ props: { chaps }, message }))
 };
 
@@ -94,7 +93,7 @@ export const EmptyFor = {
     </ul>
   ),
   actual: () => <ul>transformerfactory</ul>,
-  dataSet: [{ props: { peshovci: [1, 2, 3] }, message: 'empty for renders nothing' }]
+  dataSet: [{ props: { peshovci: [1, 2, 3] }, message: `empty for renders nothing` }]
 };
 
 export const ForWithIterable = {
@@ -113,17 +112,17 @@ export const ForWithIterable = {
         {
           // @ts-ignore
           <span key={kvp[0]}>
-            pair{' '}
+            pair{` `}
             {
               // @ts-ignore
               i
-            }{' '}
-            with key{' '}
+            }{` `}
+            with key{` `}
             {
               // @ts-ignore
               kvp[0]
-            }{' '}
-            and value{' '}
+            }{` `}
+            and value{` `}
             {
               // @ts-ignore
               kvp[1]
@@ -134,16 +133,16 @@ export const ForWithIterable = {
     </ol>
   ),
   dataSet: [
-    { props: { xs: new Map() }, message: 'renders no pairs for empty iterator' },
+    { props: { xs: new Map() }, message: `renders no pairs for empty iterator` },
     {
       props: {
         xs: new Map([
-          ['a', 2],
-          ['c', 15],
-          ['d', 69]
+          [`a`, 2],
+          [`c`, 15],
+          [`d`, 69]
         ])
       },
-      message: 'uses the elements yielded by the iterator'
+      message: `uses the elements yielded by the iterator`
     }
   ]
 };
@@ -175,22 +174,22 @@ export const LoopBody = {
   dataSet: [
     {
       props: { xs: [1, 5, 13] },
-      message: 'executes all iterations when provided with a function for body'
+      message: `executes all iterations when provided with a function for body`
     },
-    { props: { xs: [] }, message: 'does not crash with empty input' },
+    { props: { xs: [] }, message: `does not crash with empty input` },
     {
       props: {
         get xs() {
           // this is called more than once and should not be stateful
           return new Map([
-            [1, 'dsf'],
-            [2, 'zdr'],
-            [5, 'krp'],
-            [8, 'kyp']
+            [1, `dsf`],
+            [2, `zdr`],
+            [5, `krp`],
+            [8, `kyp`]
           ]).keys();
         }
       },
-      message: 'arrow body works with iterators'
+      message: `arrow body works with iterators`
     }
   ]
 };

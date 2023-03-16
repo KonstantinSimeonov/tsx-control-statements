@@ -3,20 +3,20 @@ import * as React from 'react';
 export const WithOneVariable = {
   component: ({ n }) => (
     <div>
-      <With even={n % 2 === 0}>{even ? 'kek' : 'topkek'}</With>
+      <With even={n % 2 === 0}>{even ? `kek` : `topkek`}</With>
     </div>
   ),
   dataSet: [
-    [2, 'binding value is true'],
-    [1, 'binding value is false']
+    [2, `binding value is true`],
+    [1, `binding value is false`]
   ].map(([n, message]) => ({ props: { n }, message }))
 };
 
 export const WithManyVariables = {
   component: ({ x, firstName, lastName, people }) => (
     <div>
-      <With salary={x + 42} fullName={firstName + ' ' + lastName} employeesCount={people.length}>
-        <b>{fullName}</b> is a promising young entepreneur from Kazichene. He currently has{' '}
+      <With salary={x + 42} fullName={firstName + ` ` + lastName} employeesCount={people.length}>
+        <b>{fullName}</b> is a promising young entepreneur from Kazichene. He currently has{` `}
         {employeesCount} employees and pays each of them {salary} per month.
       </With>
     </div>
@@ -25,11 +25,11 @@ export const WithManyVariables = {
     {
       props: {
         x: 3,
-        firstName: 'remove',
-        secondName: 'ceiling',
-        people: ['penka', 'kaka ginka', 'lightlin naakov']
+        firstName: `remove`,
+        secondName: `ceiling`,
+        people: [`penka`, `kaka ginka`, `lightlin naakov`]
       },
-      message: 'works for multiple bindings'
+      message: `works for multiple bindings`
     }
   ]
 };
@@ -40,7 +40,7 @@ export const WithNoVariables = {
       <With>This {thing} is idiotic</With>
     </div>
   ),
-  dataSet: [{ props: { thing: 'control statements thing' }, message: 'works with no variables' }]
+  dataSet: [{ props: { thing: `control statements thing` }, message: `works with no variables` }]
 };
 
 export const WithNested = {
@@ -63,7 +63,7 @@ export const WithNested = {
   dataSet: [
     {
       props: { xs: [1, 2, 3, 4, 5, 6, 42, 69] },
-      message: 'works when some idiot nests 3 Withs'
+      message: `works when some idiot nests 3 Withs`
     }
   ]
 };

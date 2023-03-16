@@ -10,7 +10,7 @@ const ListFive = ({ messages }) => (
 
 const selfClosingElements = [
   <img src="https://cukii.me/img/Ripples-larry.svg" />,
-  <ListFive messages={'123456'.split('')} />,
+  <ListFive messages={`123456`.split(``)} />,
   <input type="text" placeholder="fun" />
 ];
 
@@ -25,8 +25,8 @@ export const IfChildElements = {
     </div>
   ),
   dataSet: [
-    { props: { condition: true }, message: 'renders links' },
-    { props: { condition: false }, message: 'does not render links' }
+    { props: { condition: true }, message: `renders links` },
+    { props: { condition: false }, message: `does not render links` }
   ]
 };
 
@@ -37,8 +37,8 @@ export const IfSelfClosingChildElements = {
     </section>
   ),
   dataSet: [
-    { props: { condition: true }, message: 'renders self-closing children' },
-    { props: { condition: false }, message: 'does not render self-closing' }
+    { props: { condition: true }, message: `renders self-closing children` },
+    { props: { condition: false }, message: `does not render self-closing` }
   ]
 };
 
@@ -53,8 +53,8 @@ export const IfChildExpressions = {
     </div>
   ),
   dataSet: [
-    [7, 8, false, 'does not render child expressions'],
-    [7, 8, true, 'renders child expressions']
+    [7, 8, false, `does not render child expressions`],
+    [7, 8, true, `renders child expressions`]
   ].map(([a, b, condition, message]) => ({ props: { a, b, condition }, message }))
 };
 
@@ -86,8 +86,8 @@ export const IfConditionIsExpressions = {
     </article>
   ),
   dataSet: [
-    ['gosho', 'vancho', 'boolean expressions as conditions work'],
-    ['', 'vancho', 'boolean expressions as conditions work']
+    [`gosho`, `vancho`, `boolean expressions as conditions work`],
+    [``, `vancho`, `boolean expressions as conditions work`]
   ].map(([name1, name2, message]) => ({ props: { name1, name2 }, message }))
 };
 
@@ -102,9 +102,9 @@ export const NestedIfs = {
     </div>
   ),
   dataSet: [
-    [0, 1, 'does not render nested content'],
-    [3, 1, 'renders nested content correctly'],
-    [3, 2, 'renders nested content correctly']
+    [0, 1, `does not render nested content`],
+    [3, 1, `renders nested content correctly`],
+    [3, 2, `renders nested content correctly`]
   ].map(([a, b, message]) => ({ props: { a, b }, message }))
 };
 
@@ -115,7 +115,7 @@ export const EmptyIfs = {
       <If condition={b % 2 === 0}></If>
     </p>
   ),
-  dataSet: [{ props: {}, message: 'renders nothing' }]
+  dataSet: [{ props: {}, message: `renders nothing` }]
 };
 
 export const EmptyNestedIfs = {
@@ -132,7 +132,7 @@ export const EmptyNestedIfs = {
     [0, 2],
     [1, 2],
     [1, 3]
-  ].map(([a, b]) => ({ props: { a, b }, message: 'never do this. please' }))
+  ].map(([a, b]) => ({ props: { a, b }, message: `never do this. please` }))
 };
 
 export const IfMultipleProps = {
@@ -144,7 +144,7 @@ export const IfMultipleProps = {
     </p>
   ),
   dataSet: [
-    { props: { condition: true }, message: 'renders content' },
-    { props: { condition: false }, message: 'does not render content' }
+    { props: { condition: true }, message: `renders content` },
+    { props: { condition: false }, message: `does not render content` }
   ]
 };

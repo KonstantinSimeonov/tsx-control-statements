@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { With } from 'tsx-control-statements/components';
 
 // this is unnecessary for compilation, but fools visuals studio code
@@ -18,6 +17,6 @@ export default {
   ),
   expected: () => <p>{14}</p>,
   dataSet: [
-    { props: {}, message: 'bindings defined in With are available in the children expressions' }
+    { props: {}, message: `bindings defined in With are available in the children expressions` }
   ]
 };

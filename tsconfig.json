@@ -17,7 +17,6 @@
         "strict": true,
         "pretty": true,
         "outDir": "./",
-        "jsx": "react",
         "skipLibCheck": true
     },
     "files": [
