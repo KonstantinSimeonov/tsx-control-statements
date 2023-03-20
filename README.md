@@ -158,12 +158,13 @@ const RandomStuff = ({ str }) => <article>
 ## Cookbook
 
 #### Bundlers and scaffolding tools
-**TODO** <sub><sub>sighs</sub></sub>
+- `webpack` with [`ts-loader`](https://github.com/TypeStrong/ts-loader#getcustomtransformers)
+- `rollup` with [typescript plugin](https://github.com/rollup/plugins/tree/master/packages/typescript#transformers)
+- `parcel` - [this](https://github.com/coreoz/parcel-transformer-ttypescript) might work but don't count on it
 
 #### Testing
-- **[ava](https://github.com/avajs/ava/blob/master/docs/recipes/typescript.md)**, **[mocha](https://github.com/mochajs/mocha)** or anything other that can use **ts-node** - **ts-node** supports [programatically adding custom transformers](https://github.com/TypeStrong/ts-node#programmatic-only-options) so it can be used to run test suites.
-  - [mocha example](./examples/webpack/package.json)
-- **jest** - I couldn't find a way to pass a custom transformer to **ts-jest**. A solution to this is to compile the test files prior to running them with **jest**.
+- `ava`, `mocha` or anything other that can use `ts-node` - `ts-node` supports [programatically adding custom transformers](https://github.com/TypeStrong/ts-node#programmatic-only-options) so it can be used to run test suites.
+- `jest` using `ts-jest` like [that](https://kulshekhar.github.io/ts-jest/docs/getting-started/options/astTransformers)
 
 #### Importing the transformer in your build configs:
 ```ts
