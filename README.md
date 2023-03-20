@@ -10,7 +10,8 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 |:------------------------:|:-------------------------------------------|
 | `2.4.x` - `3.3.x`        | `v3.3.x`                                   |
 | `3.4.x` - `4.6.x`        | `v4.x`                                     |
-| >= `4.9`                 | `v5.x`                                     |
+| `4.9`                    | `v5.0`                                     |
+| `5.x`                    | `v5.1`                                     |
 
 ## Drop-in replacement for jsx control statements
 - No need to rewrite anything
