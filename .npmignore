@@ -9,3 +9,4 @@ test-output/
 runtests.sh
 bump-tsc.sh
 .github/
+compile.js

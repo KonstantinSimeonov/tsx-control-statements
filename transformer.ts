@@ -43,6 +43,14 @@ type TS<N, R = ts.Node> = (
 type Transformation = TS<ts.Node>;
 type JsxTransformation = TS<ts.JsxElement>;
 
+const warn = (node: ts.Node, ...args: readonly unknown[]) => {
+  const file = node.getSourceFile()
+  const pos = file.getLineAndCharacterOfPosition(node.pos)
+  const location = `${file.fileName}:${pos.line}:${pos.character}`
+  console.warn(`WARN(tsx-control-statements):`, ...args)
+  console.warn(location, `\n`)
+}
+
 const isRelevantJsxNode = (node: ts.Node): node is ts.JsxElement =>
   ts.isJsxElement(node) ||
   ts.isJsxSelfClosingElement(node) ||
@@ -68,7 +76,13 @@ const getJsxProps = (node: ts.JsxElement): PropMap => {
     .getChildAt(0) // some kinda ts api derp
     .getChildren()
     .filter(ts.isJsxAttribute)
-    .map(x => ({ [x.getChildAt(0).getText()]: x.getChildAt(2) as ts.Expression }));
+    .map(x => {
+      const propValue = x.getChildAt(2);
+      // ts.JSXExpression has 3 children - {, value, }
+      // string values are just "value", no children
+      const value = ts.isJsxExpression(propValue) ? propValue.getChildAt(1) : propValue;
+      return { [x.getChildAt(0).getText()]: value as ts.Expression };
+    });
 
   return Object.assign({}, ...props);
 };
@@ -138,14 +152,14 @@ const createExpressionLiteral = (
 const transformIfNode: JsxTransformation = (node, program, ctx) => {
   const { condition } = getJsxProps(node);
   if (!condition) {
-    console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CONDITIONAL} missing condition props`);
+    warn(node, `"condition" prop of ${CTRL_NODE_NAMES.CONDITIONAL} is missing`);
     return nullJsxExpr();
   }
 
   const body = getJsxElementBody(node, program, ctx);
 
   if (body.length === 0) {
-    console.warn(`tsx-ctrl: empty ${CTRL_NODE_NAMES.CONDITIONAL}`);
+    warn(node, `Empty ${CTRL_NODE_NAMES.CONDITIONAL}`);
     return nullJsxExpr();
   }
 
@@ -171,23 +185,27 @@ const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
 
 const transformForNode: JsxTransformation = (node, program, ctx) => {
   const { each, of, index, body: functionLoopBody } = getJsxProps(node);
+
+  if (!each) {
+    warn(node, `"each" property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
+    return nullJsxExpr();
+  }
+
   if (!of) {
-    console.warn(`tsx-ctrl: 'of' property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
+    warn(node, `"of" property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
     return nullJsxExpr();
   }
 
   if (functionLoopBody) {
-    // {body} - brackets are children 0 and 2, body is between
-    const func = functionLoopBody.getChildAt(1);
-    if (ts.isArrowFunction(func) || ts.isFunctionExpression(func)) {
-      const transformedFunc = visitNodes(func, program, ctx) as ts.FunctionExpression;
+    if (ts.isArrowFunction(functionLoopBody) || ts.isFunctionExpression(functionLoopBody)) {
+      const transformedFunc = visitNodes(functionLoopBody, program, ctx) as ts.FunctionExpression;
       return makeArrayFromCall([of, transformedFunc]);
     }
   }
 
   const body = getJsxElementBody(node, program, ctx);
   if (body.length === 0) {
-    console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.FOREACH}`);
+    warn(node, `Empty ${CTRL_NODE_NAMES.FOREACH}`);
     return nullJsxExpr();
   }
 
@@ -222,27 +240,27 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
         node => isRelevantJsxNode(node) && CHOOSE_TAG_NAMES.includes(getTagNameString(node))
       ) as ts.JsxElement[]
   )
-    .map(node => {
-      const tagName = getTagNameString(node);
-      const { condition } = getJsxProps(node);
-      const nodeBody = getJsxElementBody(node, program, ctx);
+    .map(jsxNode => {
+      const tagName = getTagNameString(jsxNode);
+      const { condition } = getJsxProps(jsxNode);
+      const nodeBody = getJsxElementBody(jsxNode, program, ctx);
 
       return { condition, nodeBody, tagName };
     })
-    .filter((node, index, array) => {
-      if (node.nodeBody.length === 0) {
-        console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.CASE}`);
+    .filter((parsedNode, index, array) => {
+      if (parsedNode.nodeBody.length === 0) {
+        warn(node, `Empty ${CTRL_NODE_NAMES.CASE}`);
         return false;
       }
 
-      if (!node.condition && node.tagName !== CTRL_NODE_NAMES.DEFAULT) {
-        console.warn(`tsx-ctrl: ${CTRL_NODE_NAMES.CASE} without condition will be skipped`);
+      if (!parsedNode.condition && parsedNode.tagName !== CTRL_NODE_NAMES.DEFAULT) {
+        warn(node, `${CTRL_NODE_NAMES.CASE} without condition won't be rendered`);
         return false;
       }
 
-      if (node.tagName === CTRL_NODE_NAMES.DEFAULT && index !== array.length - 1) {
-        console.log(
-          `tsx-ctrl: ${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`
+      if (parsedNode.tagName === CTRL_NODE_NAMES.DEFAULT && index !== array.length - 1) {
+        warn(node, 
+          `${CTRL_NODE_NAMES.DEFAULT} must be the last node in a ${CTRL_NODE_NAMES.SWITCH} element!`
         );
         return false;
       }
@@ -251,7 +269,7 @@ const transformChooseNode: JsxTransformation = (node, program, ctx) => {
     });
 
   if (elements.length === 0) {
-    console.warn(`tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
+    warn(node, `tsx-ctrl: Empty ${CTRL_NODE_NAMES.SWITCH}`);
     return nullJsxExpr();
   }
 

@@ -25,7 +25,7 @@
     "test": "npm run test:compile && npm run test:run-compiled",
     "test:ci": "./runtests.sh",
     "test:compile": "npm run test:compile-tsc && npm run test:compile-babel",
-    "test:compile-tsc": "nyc ttsc -P test/tsconfig.json",
+    "test:compile-tsc": "node compile.js",
     "test:compile-babel": "babel test/src --presets=@babel/preset-react,@babel/preset-env --plugins=\"jsx-control-statements\" --out-dir=test/babel",
     "test:run": "mocha --exit test/helpers/browser-env.js \"test/**/*.spec.js\"",
     "test:coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -53,7 +53,7 @@
     "react-dom": "^18.2.0",
     "ts-node": "^9.0.0",
     "ttypescript": "^1.5.15",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   },
   "peerDependencies": {
     "typescript": ">=4.9"
