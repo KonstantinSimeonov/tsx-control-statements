@@ -2,7 +2,7 @@
 
 mkdir -p test-output
 
-readonly supported_tsc_versions=(4.9)
+readonly supported_tsc_versions=(5.0)
 
 exit_code=0
 for v in ${supported_tsc_versions[*]}; do
