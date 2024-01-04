@@ -11,7 +11,7 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 | `2.4.x` - `3.3.x`        | `v3.3.x`                                   |
 | `3.4.x` - `4.6.x`        | `v4.x`                                     |
 | `4.9`                    | `v5.0`                                     |
-| `5.x`                    | `v5.1`                                     |
+| `5.x`                    | `>= v5.1`                                  |
 
 ## Drop-in replacement for jsx control statements
 - No need to rewrite anything
@@ -45,23 +45,21 @@ Basically [jsx-control-statements](https://www.npmjs.com/package/babel-plugin-js
 import { If } from 'tsx-control-statements/components';
 
 const SongRelatedThingy = ({ songList }: { songList: string[] }) => (
-    <p>
-        <If condition={songList.includes('Gery-Nikol - Im the Queen')}>
-            good taste in music
-        </If>
-    </p>
-)
+  <p>
+    <If condition={songList.includes('Gery-Nikol - Im the Queen')}>
+      good taste in music
+    </If>
+  </p>
+);
 
 // will transpile to
 const SongRelatedThingy = ({ songList }) => (
-    <p>
-        {
-            songList.includes('Gery-Nikol - Im the Queen')
-                ? 'good taste in music'
-                : null
-        }
-    </p>
-)
+  <p>
+    {songList.includes('Gery-Nikol - Im the Queen')
+      ? 'good taste in music'
+      : null}
+  </p>
+);
 ```
 
 ### With - Immediately invoked function expression
@@ -69,16 +67,16 @@ const SongRelatedThingy = ({ songList }) => (
 ```tsx
 import { With } from 'tsx-control-statements/components';
 
-const Sum = () => <p>
+const Sum = () => (
+  <p>
     <With a={3} b={5} c={6}>
-        {a + b + c}
+      {a + b + c}
     </With>
-</p>
+  </p>
+);
 
 // becomes
-const Sum = () => <p>
-    {((a, b, c) => a + b + c))(3, 5, 6)}
-</p>
+const Sum = () => <p>{((a, b, c) => a + b + c)(3, 5, 6)}</p>;
 ```
 
 ### For - `Array.from` calls
@@ -86,73 +84,80 @@ More flexible than `[].map`, since it can be provided with an iterator or an arr
 ```tsx
 import { For } from 'tsx-control-statements/components';
 
-// more type-safe for, the typechecker knows the types of the "name" and "i" bindings
-const Names = ({ names }: { names: string[] }) => <ol>
-    <For of={names} body={(name, i) => (
+// more type-safe for, the typechecker knows
+// the types of the "name" and "i" bindings
+const Names = ({ names }: { names: string[] }) => (
+  <ol>
+    <For
+      of={names}
+      body={(name, i) => (
         <li key={name}>
-            {i}<string>{name}</strong>
+          {i}
+          <strong>{name}</strong>
         </li>
-    )} />
-</ol>
+      )}
+    />
+  </ol>
+);
 
 // jsx-control-statements compatible
-const Names = ({ names }: { names: string[] }) => <ol>
+const Names = ({ names }: { names: string[] }) => (
+  <ol>
     <For each="name" of={names} index="i">
-        <li key={name}>
-            {i}<strong>{name}</strong>
-        </li>
+      <li key={name}>
+        {i}
+        <strong>{name}</strong>
+      </li>
     </For>
-</ol>
+  </ol>
+);
 
 // both of the above will transpile to:
-const Names = ({ names }) => <ol>
-    {
-        Array.from(names, (name, i) => (
-            <li key={name}>
-                {i}<strong>{name}</strong>
-            </li>
-        )
-    }
-</ol>
+const Names = ({ names }) => (
+  <ol>
+    {Array.from(names, (name, i) => (
+      <li key={name}>
+        {i}
+        <strong>{name}</strong>
+      </li>
+    ))}
+  </ol>
+);
 ```
 
 ### Choose/When/Otherwise - nested ternary operators, emulates switch/case.
 
 ```tsx
 import {
-    Choose,
-    When,
-    Otherwise
+  Choose,
+  When,
+  Otherwise
 } from 'tsx-control-statements/components';
 
-const RandomStuff = ({ str }: { str: string }) => <article>
+const RandomStuff = ({ str }: { str: string }) => (
+  <article>
     <Choose>
-        <When condition={str === 'ivan'}>
-            ivancho
-            </When>
-        <When condition={str === 'sarmi'}>
-            <h1>yum!</h1>
-        </When>
-        {/*
-          * Otherwise tag is optional,
-          * if not provided, null will be rendered
-          */}
-        <Otherwise>
-            im the queen da da da da
-        </Otherwise>
+      <When condition={str === 'ivan'}>ivancho</When>
+      <When condition={str === 'sarmi'}>
+        <h1>yum!</h1>
+      </When>
+      {/* Otherwise tag is optional,
+        * if not provided, null will be rendered */}
+      <Otherwise>im the queen da da da da</Otherwise>
     </Choose>
-</article>
+  </article>
+);
 
 // transpiles to
-const RandomStuff = ({ str }) => <article>
-    {
-        str === 'ivan'
-            ? 'ivancho'
-            : (str === 'sarmi'
-                ? React.createElement('h1', null, 'yum!')
-                : 'im the queen da da da da')
-    }
-</article>
+const RandomStuff = ({ str }) => (
+  <article>
+    {str === 'ivan'
+      ? 'ivancho'
+      : str === 'sarmi'
+        ? React.createElement('h1', null, 'yum!')
+        : 'im the queen da da da da'}
+  </article>
+);
 ```
 
 ## Cookbook
