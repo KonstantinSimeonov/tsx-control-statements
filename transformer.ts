@@ -186,8 +186,8 @@ const makeArrayFromCall = (args: ts.Expression[]): ts.JsxExpression =>
 const transformForNode: JsxTransformation = (node, program, ctx) => {
   const { each, of, index, body: functionLoopBody } = getJsxProps(node);
 
-  if (!each) {
-    warn(node, `"each" property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
+  if (!each && !functionLoopBody) {
+    warn(node, `"each" or "body" property of ${CTRL_NODE_NAMES.FOREACH} is missing`);
     return nullJsxExpr();
   }
 
